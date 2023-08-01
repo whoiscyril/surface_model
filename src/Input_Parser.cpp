@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream> // Include this header for std::istringstream
 #include <stdexcept>
+#include <array>
+
 
 int echo_input(std::string filename)
 {
@@ -158,46 +160,41 @@ return input_buckingham_potentials;
 
 }
 
-// void get_lattice_constants(double& a, double& b, double& c, double& alpha, double& beta, double& gamma)
+std::vector<double> get_lattice_constants(std::string filename)
+{
+    std::string line;
+    std::vector<double> lattice_constants;
+    std::ifstream in(filename, std::ios_base::in);
+    if (!in) {
+        throw std::runtime_error("Error opening file: " + filename);
+
+    }
+while (std::getline(in, line)) {
+    // Check if the line starts with "frac"
+    if (line.compare(0, 4, "cell") == 0 && !line.empty()) {
+        while (std::getline(in, line))
+        {
+        std::istringstream iss(line);
+
+        // Parse the atom data and store it in the Atom struct
+        double val;
+        while (iss >> val)
+        {
+            lattice_constants.push_back(val);
+        }
+    }
+}
+}
+
+// for (const auto& val : lattice_constants)
 // {
-//     std::vector<Buckingham> input_buckingham_potentials;
-//     std::string line;
-//     std::ifstream in(filename, std::ios_base::in);
-//     if (!in) {
-//         throw std::runtime_error("Error opening file: " + filename);
-
-//     }
-// while (std::getline(in, line)) {
-//     // Check if the line starts with "frac"
-//     if (line.compare(0, 10, "buckingham") == 0 && !line.empty()) {
-//         while (std::getline(in, line))
-//         {
-//         std::istringstream iss(line);
-//         Buckingham potential;
-
-//         // Parse the atom data and store it in the Atom struct
-//         if (iss >> potential.atom1_label >> potential.atom1_type >> potential.atom2_label >> potential.atom2_type >> potential.A >> potential.rho >> potential.C >> potential.cut_off1 >> potential.cut_off2) {
-//             input_buckingham_potentials.push_back(potential);
-//         } 
-//         else if (line.empty()) {
-//             break;
-//         }
-//         else 
-//         {
-//             throw std::runtime_error("Error parsing atom potentials: " + line);
-//         }
-//     }
+//     std::cout << val << std::endl;
 // }
-// }
+    
 
-// // for (const auto& potential : input_buckingham_potentials)
-// // {
-// //          std:: cout<<" " <<potential.atom1_label <<" " <<potential.atom1_type << " " <<potential.atom2_label <<" " <<potential.atom2_type <<" " <<potential.A << " " <<potential.rho <<" " <<potential.C <<" " <<potential.cut_off1 <<" " <<potential.cut_off2 << std::endl;
-// // }
+in.close();
+return lattice_constants;
 
-// in.close();
-// return input_buckingham_potentials;
-
-// }
+}
 
 

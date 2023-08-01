@@ -4,10 +4,13 @@
 #include <string>
 #include "Struct_Atom.h" // Include the Atom struct definition here
 #include <vector>
+#include <array>
 
 // int echo_input(std::string filename);
 std::vector<Atom> get_input_coordinates(std::string filename);
 std::vector<Specie> get_input_species(std::string filename);
 std::vector<Buckingham> get_input_buckingham(std::string filename);
+std::vector<double> get_lattice_constants(std::string filename);
+
 
 #endif
