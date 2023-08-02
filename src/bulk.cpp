@@ -3,6 +3,9 @@
 #include "Input_Parser.h"
 #include <iostream>
 #include <cmath>
+#include <math.h>
+#include <Simple_Math.h>
+#include <Energy.h>
 
 double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species, std::vector<Buckingham> potentials)
 {
@@ -76,6 +79,13 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 	}
 
 	//Now Convert fractional to cartesian
+	std::vector<Atom> cell = atom_positions;
+	for (auto& elem : cell)
+	{
+		elem.x *= a;
+		elem.y *= b;
+		elem.z *= c;
+	}
 
 	for (auto& elem : bulk_supercell)
 	{
@@ -83,11 +93,19 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 		elem.y *= b;
 		elem.z *= c;
 	}
-	std::cout << bulk_supercell.size() << std::endl;
+
+	// std::cout << bulk_supercell.size() << std::endl;
 	// for (auto& elem : bulk_supercell)
 	// {
 	// 	std::cout << elem.x << " " << elem.y << " " << elem.z << std::endl;
 	// }
 
+
+	//Calculate the short-range potential energy
+
+	double short_range_energy = 0.0;
+	short_range_energy = calc_short_range_buckingham_potential(cell, bulk_supercell, buckingham_potentials);
+
+	//TODO : CALCULATE ELECTROSTATIC ENERGY
 	return energy;
 }
