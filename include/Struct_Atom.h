@@ -19,7 +19,7 @@ struct Atom {
 struct Specie {
   std::string label;
   std::string type;
-  std::string charge;
+  double charge;
 };
 
 struct Buckingham{

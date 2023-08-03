@@ -71,6 +71,8 @@ while (std::getline(in, line)) {
     	atom.index = ctn;
     	 // std :: cout << atom.index << " " << atom.label << " " << atom.type << " " << atom.x << " " << atom.y << " " << atom.z << std::endl;
     }
+
+
     in.close();
 	return input_coordinates;
 
