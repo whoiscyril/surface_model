@@ -115,7 +115,6 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 	double eta = 0.0;
 	double volume = 0.0;
 	volume = a * b * c;
-	eta = pow((cell.size() * 1.123 * pow(M_PI, 3.0) / pow(volume, 2.0) ), 1.0/6.0);
 	// std::cout << volume << " " << eta << std::endl;
 
 	//Add charge to input coord
@@ -147,28 +146,4 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 	// 	std::cout << elem.label << " " << elem.type << " " << elem.x << " " << elem.y << " " << elem.z << " " << elem.q << std::endl;
 	// }
 
-	double rcut = 0.0;
-	rcut = pow( -log(10E-18) / eta ,1.0/2.0);
-	std::cout << eta << std::endl;
-	double real_energy = 0.0;
-	for (const auto& elem1 : cell)
-	{
-		for (const auto& elem2 : bulk_supercell)
-		{
-			double energy = 0.0;
-			double distance = get_distance(elem1, elem2);
-			if (distance > 0.1 && distance <= rcut)
-			{
-			std::cout << "Distance: " << distance << std::endl;
-			energy = (elem1.q * elem2.q) / distance * erfc(pow(eta, 1.0/2.0) * distance);
-			std::cout << elem1.q * elem2.q <<" " <<energy << std::endl;
-			real_energy += energy;
-		}
-		}
-	}
-
-	std::cout << real_energy << std::endl;
-
-	//Real part
-	return energy;
 }
