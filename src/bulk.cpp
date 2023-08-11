@@ -109,14 +109,6 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 	/*
 	CALCULATE ELECTROSTATIC ENERGY
 	*/
-
-	//Short-range real space contribution
-
-	double eta = 0.0;
-	double volume = 0.0;
-	volume = a * b * c;
-	// std::cout << volume << " " << eta << std::endl;
-
 	//Add charge to input coord
 
 	for (auto& elem1 : cell)
@@ -139,11 +131,8 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 			} 
 		}
 	}
+	energy = calc_electrostatics_3D(cell);
+	return energy;
 
-
-	// for (const auto& elem : cell)
-	// {
-	// 	std::cout << elem.label << " " << elem.type << " " << elem.x << " " << elem.y << " " << elem.z << " " << elem.q << std::endl;
-	// }
 
 }

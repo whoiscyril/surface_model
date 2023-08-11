@@ -14,5 +14,6 @@ double get_distance(const Atom& atom1, const Atom& atom2);
 double vmag(const std::vector<double> v);
 double vmag(const Eigen::Vector3d v);
 double rad2deg(double radian);
-
+double len(double x, double y, double z);
+double dp(double x, double y, double z, double h, double k, double l);
 #endif // MATRIX_FUNCTIONS_H	

@@ -3,23 +3,15 @@ cell
 
 frac
 Ba core 0.5 0.5 0.5
-Ba shel 0.5 0.5 0.5
 Sn core 0 0 0 
-Sn shel 0 0 0 
 O core 0 0.5 0
-O shel 0 0.5 0
 O core 0 0 0.5
-O shel 0 0 0.5
 O core 0.5 0 0
-O shel 0.5 0 0 
 
 species
-Ba core  -7.203
-Ba shel  9.203
-Sn core  2.42
-Sn shel  1.58
-O  core  0.389
-O  shel  -2.389
+Ba core  2.0
+Sn core  4.0
+O  core  -2.0
 
 buckingham
 O shel O shel 9547.960 0.2192 32.0 0.00 12.00

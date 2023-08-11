@@ -1,6 +1,7 @@
 #ifndef STRUCT_ATOM_H
 #define STRUCT_ATOM_H
 #include <string>
+#include <tuple>
 
 struct Atom {
     int value;

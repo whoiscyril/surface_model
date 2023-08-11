@@ -52,3 +52,11 @@ double vmag(const Eigen::Vector3d v)
 {
     return v.norm();
 }
+double len(double x, double y, double z)
+{
+    return sqrt(x*x + y*y + z*z);
+}
+double dp(double x, double y, double z, double h, double k, double l)
+{
+    return x*h+y*k+z*l;
+}
