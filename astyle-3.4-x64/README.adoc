@@ -1,0 +1,16 @@
+= Artistic Style
+
+Artistic Style is a source code indenter, formatter, and beautifier for the C, C++, C++/CLI, Objective‑C, C# and Java programming languages. 
+Written in C++, it can be used from the command line or incorporated as a library in another program. 
+Options can be entered from the command line or from an option file. 
+The library version can be called from programs written in languages other that C++.
+
+== Repositories
+
+The home of Artistic Style is http://sourceforge.net/projects/astyle/. As nowadays git is more accepted for collaborate development, this git repo is used for day to day development and pull requests.
+The SVN repo and download section at SF.net will be updated regularly.
+
+== Maintainers
+
+Artistic Style is maintained and updated by Andre Simon. 
+Previous maintainer: Jim Pattee. The original author was Tal Davidson, Israel.  

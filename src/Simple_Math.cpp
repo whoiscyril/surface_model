@@ -7,7 +7,8 @@
 #include <iostream>
 
 
-std::tuple<double, double, double> rad2deg(const std::tuple<double, double, double>& angles) {
+std::tuple<double, double, double> rad2deg(const std::tuple<double, double, double>& angles)
+{
     double roll_r, pitch_r, yaw_r;
     std::tie(roll_r, pitch_r, yaw_r) = angles;
     double roll_d = roll_r * 180.0 / M_PI;
@@ -17,7 +18,8 @@ std::tuple<double, double, double> rad2deg(const std::tuple<double, double, doub
 }
 
 
-double get_distance(const Atom& atom1, const Atom& atom2) {
+double get_distance(const Atom& atom1, const Atom& atom2)
+{
     double dx = atom1.x - atom2.x;
     double dy = atom1.y - atom2.y;
     double dz = atom1.z - atom2.z;
