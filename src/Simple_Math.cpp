@@ -94,10 +94,10 @@ double dp(double x, double y, double z, double h, double k, double l)
 
 
 
-        std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
-        std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
+        // std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
+        // std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
 
-        std::cout << transformation_matrix << std::endl;
+        // std::cout << transformation_matrix << std::endl;
         return transformation_matrix;
 
 
