@@ -80,19 +80,19 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
 
     //Now Convert fractional to cartesian
     std::vector<Atom> cell = atom_positions;
-    for (auto& elem : cell)
-    {
-        elem.x *= a;
-        elem.y *= b;
-        elem.z *= c;
-    }
+    // for (auto& elem : cell)
+    // {
+    //     elem.x *= a;
+    //     elem.y *= b;
+    //     elem.z *= c;
+    // }
 
-    for (auto& elem : bulk_supercell)
-    {
-        elem.x *= a;
-        elem.y *= b;
-        elem.z *= c;
-    }
+    // for (auto& elem : bulk_supercell)
+    // {
+    //     elem.x *= a;
+    //     elem.y *= b;
+    //     elem.z *= c;
+    // }
 
     // std::cout << bulk_supercell.size() << std::endl;
     // for (auto& elem : bulk_supercell)
@@ -131,7 +131,8 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
             }
         }
     }
-    energy = calc_electrostatics_3D(cell);
+    std::vector<double> lattice_vectors = get_lattice_constants("input.in");
+    energy = calc_electrostatics_3D(cell, lattice_vectors);
     return energy;
 
 

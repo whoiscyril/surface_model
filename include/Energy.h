@@ -7,6 +7,6 @@ double calc_short_range_buckingham_potential (const std::vector<Atom>& cell,
         const std::vector<Atom>& bulk_supercell,
         const std::vector<Buckingham>& buckingham_potentials);
 
-double calc_electrostatics_3D(const std::vector<Atom>& cell);
+double calc_electrostatics_3D(const std::vector<Atom>& cell, std::vector<double> lattice_constants);
 
 #endif

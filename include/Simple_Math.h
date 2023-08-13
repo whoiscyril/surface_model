@@ -16,4 +16,5 @@ double vmag(const Eigen::Vector3d v);
 double rad2deg(double radian);
 double len(double x, double y, double z);
 double dp(double x, double y, double z, double h, double k, double l);
+Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs);
 #endif // MATRIX_FUNCTIONS_H	

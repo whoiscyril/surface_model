@@ -62,3 +62,45 @@ double dp(double x, double y, double z, double h, double k, double l)
 {
     return x*h+y*k+z*l;
 }
+
+    Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs)
+    {
+        //first calculate angles
+        Eigen::MatrixXd transformation_matrix(3,3);
+        Eigen::VectorXd temp(9);
+        Eigen::Vector3d a1, a2, a3;
+        double alpha, beta, gamma;
+        double reci_alpha;
+        a1.setZero();
+        a2.setZero();
+        a3.setZero();
+
+        a1 = lvecs.row(0);
+        a2 = lvecs.row(1);
+        a3 = lvecs.row(2);
+
+        alpha = acos(a2.normalized().dot(a3.normalized()));
+        beta = acos(a1.normalized().dot(a3.normalized()));
+        gamma = acos(a1.normalized().dot(a2.normalized()));
+
+        reci_alpha = acos( (cos(beta) * cos(gamma) - cos(alpha)) / (sin(beta) * sin(gamma)));
+
+        transformation_matrix << 
+        a1.norm(), a2.norm() * std::cos(gamma), a3.norm() * std::cos(beta),
+        0.0, a2.norm() * std::sin(gamma), -a3.norm() * std::sin(beta) * std::cos(reci_alpha),
+        0.0, 0.0, a3.norm() * std::sin(beta) * std::sin(reci_alpha);
+
+
+
+
+
+        std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
+        std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
+
+        std::cout << transformation_matrix << std::endl;
+        return transformation_matrix;
+
+
+
+
+    }

@@ -104,40 +104,83 @@ double calc_short_range_buckingham_potential (const std::vector<Atom>& cell,
     return short_range_energy;
 }
 
-double calc_electrostatics_3D(const std::vector<Atom>& cell)
+double calc_electrostatics_3D(const std::vector<Atom>& cell, std::vector<double> lattice_constants)
 {
+
+    //First convert lattice constants from vectors to Eigen matrix
+
+    Eigen::Matrix3d lvecs;
+    Eigen::Matrix3d trans;
+    lvecs.setZero();
+    lvecs = Eigen::Map<Eigen::Matrix<double, 3, 3, Eigen::RowMajor>>(lattice_constants.data());
+
+    trans = frac2cart(cell, lvecs);
+
+    for (const auto& elem : cell)
+    {
+        Eigen::Vector3d frac;
+        Eigen::Vector3d cart;
+        frac << elem.x, elem.y, elem.z;
+        cart = trans * frac;
+        std::cout << frac << std::endl;
+        std::cout << cart << std::endl;
+
+    }
+
+
+
+
+    // std::cout << lvecs << std::endl;
+    Eigen::Vector3d a1, a2, a3;
+    Eigen::Vector3d g1, g2, g3;
+    a1.setZero();
+    a2.setZero();
+    a3.setZero();
+
+    a1 = lvecs.row(0);
+    a2 = lvecs.row(1);
+    a3 = lvecs.row(2);
+
+    double V = a1.dot(a2.cross(a3));
+
+    g1 = (2. * M_PI / V) * (a2.cross(a3));
+    g2 = (2. * M_PI / V) * (a3.cross(a1));
+    g3 = (2. * M_PI / V) * (a1.cross(a2));
+
     double total_energy = 0.0;
     double real_energy = 0.0;
     double reciprocal_energy =0.0;
-    double self_energy;
-
-    double rmax;
-    double gmax;
-    double kappa;
-
-    int real_max_image;
-    int reciprocal_max_image;
+    double self_energy = 0.0;
+    double rmax = 0.;
+    double gmax = 0.;
+    double kappa = 0.;
+    int real_max_image = 0;
+    int reciprocal_max_image = 0;
 
 
     double accuracy = 10E-30;
-    int N = 5;
+    int N = cell.size();
     double w = 1.0;
-    double V = 4.*4.*4.;
 
-    // kappa = 1.4;
+    // std::cout << N << std::endl;
+
+
+
     kappa = pow((N * w * pow(M_PI, 3.0)) / pow(V, 2.0), -1.0/6.0);
     rmax = pow(-log(accuracy) / pow(kappa,2.0),1.0/2.0);
     gmax = 2.0 * kappa * pow((-log(accuracy)),1.0/2.0);
-    // rmax = 100;
-    // gmax = 100;
+
+    int rmaxx = ceil(rmax/a1.norm());
+    int rmaxy = ceil(rmax/a2.norm());
+    int rmaxz = ceil(rmax/a3.norm());
+    int recimaxx = ceil(gmax/g1.norm());
+    int recimaxy = ceil(gmax/g2.norm());
+    int recimaxz = ceil(gmax/g3.norm());
 
     real_max_image = ceil(rmax/4.);
     reciprocal_max_image = ceil(gmax/(2.0 * M_PI /4.));
 
-    // real_max_image = 100;
-    // reciprocal_max_image = 100;
-    int rx, ry, rz;
-    int rrx, rry, rrz;
+
 
 
     //Real space energy
@@ -148,15 +191,15 @@ double calc_electrostatics_3D(const std::vector<Atom>& cell)
     {
         for (const auto& elem2 : cell)
         {
-            for (int ri = -real_max_image; ri <= real_max_image ; ++ri)
+            for (int ri = -rmaxx; ri <= rmaxx ; ++ri)
             {
-                for (int rj = -real_max_image; rj <= real_max_image; ++rj)
+                for (int rj = -rmaxy; rj <= rmaxy; ++rj)
                 {
-                    for (int rk = -real_max_image; rk <= real_max_image; ++rk)
+                    for (int rk = -rmaxz; rk <= rmaxz; ++rk)
                     {
-                        double distancex = elem1.x - elem2.x + ri * 4.;
-                        double distancey = elem1.y - elem2.y + rj * 4.;
-                        double distancez = elem1.z - elem2.z + rk * 4.;
+                        double distancex = elem1.x - elem2.x + ri * a1.norm();
+                        double distancey = elem1.y - elem2.y + rj * a2.norm();
+                        double distancez = elem1.z - elem2.z + rk * a3.norm();
                         if (len(distancex, distancey, distancez) <= rmax)
                         {
                             if(ri == 0 && rj ==0 && rk==0)
@@ -180,21 +223,20 @@ double calc_electrostatics_3D(const std::vector<Atom>& cell)
     }
 
     // Reciprocal space energy
-
     double gx, gy, gz;
     for (const auto& elem1 : cell)
     {
         for(const auto& elem2 : cell)
         {
-            for (int rrx = -reciprocal_max_image ; rrx <= reciprocal_max_image; ++rrx)
+            for (int rrx = -recimaxx ; rrx <= recimaxx; ++rrx)
             {
-                for (int rry = -reciprocal_max_image; rry <= reciprocal_max_image; ++rry)
+                for (int rry = -recimaxy; rry <= recimaxy; ++rry)
                 {
-                    for (int rrz = -reciprocal_max_image; rrz <= reciprocal_max_image; ++rrz)
+                    for (int rrz = -recimaxz; rrz <= recimaxz; ++rrz)
                     {
-                        gx = 2. * M_PI * rrx/4.;
-                        gy = 2. * M_PI * rry/4.;
-                        gz = 2. * M_PI * rrz/4.;
+                        gx = 2. * M_PI * rrx/a1.norm();
+                        gy = 2. * M_PI * rry/a2.norm();
+                        gz = 2. * M_PI * rrz/a3.norm();
                         if(len(gx, gy, gz) <=gmax)
                         {
                             if(rrx == 0 && rry == 0 && rrz ==0)
@@ -223,7 +265,7 @@ double calc_electrostatics_3D(const std::vector<Atom>& cell)
 
 
     total_energy = (real_energy + self_energy + reciprocal_energy) * 14.39964390675221758120;
-    std::cout <<std::setprecision(10) << total_energy  <<std::endl;
+    // std::cout <<std::setprecision(10) << total_energy  <<std::endl;
     // std::cout << kappa <<std::endl;
     return total_energy;
 
