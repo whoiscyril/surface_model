@@ -286,8 +286,11 @@ double calc_short_range_buckingham_potential (const std::vector<Atom>& cell,
 double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> lattice_constants)
 {
     //Setting global parameters
+    double total_electrostatic_energy_3D = 0.;
+    const double toeV = 14.39964390675221758120;
     using std::endl;
     using std::cout;
+    int natom = cell.size();
     //First convert lattice constants from vectors to Eigen matrix
 
     Eigen::Matrix3d lvecs;
@@ -296,32 +299,56 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
     lvecs = Eigen::Map<Eigen::Matrix<double, 3, 3, Eigen::RowMajor>>(lattice_constants.data());
     trans = frac2cart(cell, lvecs);
 
+
     //Setting real space parameters
-    // int rmax = 50;
-    int nmax = 20;
-    // cout << lvecs << endl;
     Eigen::Vector3d a1 = lvecs.row(0);
     Eigen::Vector3d a2 = lvecs.row(1);
     Eigen::Vector3d a3 = lvecs.row(2);
 
+
     //Setting reciprocal space parameters
-    double V = a1.dot(a2.cross(a3));
-    // int gmax = 50;
-    int kmax = 20;
+    long double V = a1.dot(a2.cross(a3));
+    // cout << V << endl;
+
+
+    // cout << V << endl;
     Eigen::Vector3d g1 = (2 * M_PI / V) * (a2.cross(a3));
     Eigen::Vector3d g2 = (2 * M_PI / V) * (a3.cross(a1));
     Eigen::Vector3d g3 = (2 * M_PI / V) * (a1.cross(a2));
 
+    double kappa = 1./2.04154;
+    // double kappa = sqrt(0.220395);
+    // long double kappa = pow(((natom * 0.8 * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    double rcut = 50.;
+    double kcut = 50.;
 
-    int natom = cell.size();
-    // double kappa = 1./2.08296;
-    double kappa = sqrt(0.184449);
-    // double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V * V), 1./6.);
-    double rmax = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    double gmax = 2.*kappa*sqrt((-log(10E-17)));
 
-    cout << "rmax" << rmax << endl;
-    cout << "gmax" << gmax << endl;
+    // cout << "rmax" << rcut << endl;
+    // cout << "gmax" << kcut << endl;
+
+    int nmax_x = ceil(rcut/a1.norm());
+    int nmax_y = ceil(rcut/a2.norm());
+    int nmax_z = ceil(rcut/a3.norm());
+    // int kmax_x = ceil(kcut/g1.norm());
+    // int kmax_y = ceil(kcut/g2.norm());
+    // int kmax_z = ceil(kcut/g3.norm());
+    int kmax_x = 6;
+    int kmax_y = 6;
+    int kmax_z = 6;
+    // cout << g1 << endl;
+    // cout << g2 << endl;
+    // cout << g3 << endl;
+
+
+    // cout << rcut << endl;
+    // cout << kcut << endl;
+
+    // cout << natom << endl;
+
+    // cout << nmax_x << " " << nmax_y << " " <<nmax_z<<endl;
+    // cout << kmax_x << " " <<kmax_y << " " <<kmax_z<<endl;
 
 
 
@@ -336,12 +363,14 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
     {
         for (const auto& elem2 : cell)
         {
-            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
-            for (int i = -nmax; i < nmax; i++)
+            rij << (elem1.x - elem2.x), (elem1.y - elem2.y), (elem1.z - elem2.z);
+            // cout << rij << endl;
+            // cout << trans * rij << endl;
+            for (int i = -nmax_x; i <= nmax_x; i++)
             {
-                for (int j = -nmax; j < nmax; j++)
+                for (int j = -nmax_y; j <= nmax_y; j++)
                 {
-                    for (int k = -nmax; k < nmax; k++)
+                    for (int k = -nmax_z; k <= nmax_z; k++)
                     {
                         // double distx = elem1.x - elem2.x + i * 5.;
                         // double disty = elem1.y - elem2.y + j * 5.;
@@ -349,8 +378,9 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
                         n << i, j, k;
                         rijn = rij + n;
                         rijn = trans * rijn;
+                        // rijn = rij + n;
                         // double rijn = len(distx, disty, distz);
-                        if (rijn.norm() < rmax)
+                        if (rijn.norm() < rcut)
                         {
                             if (i ==0 && j==0 && k ==0 )
                             {
@@ -374,32 +404,50 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
 
         }
     }
-
+    Eigen::Vector3d distvecs;
+    Eigen::Vector3d kvecs;
+    cout << kcut << endl;
     //Reciprocal contribution
-    double reciprocal_energy = 0.;
+    long double reciprocal_energy = 0.;
     for (const auto& elem1 : cell)
     {
         for (const auto& elem2 : cell)
         {
-            for (int i = -kmax; i < kmax; i++)
+            rijn << (elem1.x - elem2.x) * a1 + (elem1.y - elem2.y) * a2 + (elem1.z - elem2.z) * a3;
+
+            // cout << " --------after-------" << endl;
+            // cout <<trans*rij << endl;
+            for (int i = -kmax_x; i <= kmax_x; i++)
             {
-                for (int j =-kmax; j < kmax; j++)
+                for (int j =-kmax_y; j <= kmax_y; j++)
                 {
-                    for (int k=-kmax; k < kmax; k++)
+                    for (int k=-kmax_z; k <= kmax_z; k++)
                     {
-                        double kx = (2. * M_PI / 5.) * i;
-                        double ky = (2. * M_PI / 5.) * j;
-                        double kz = (2. * M_PI / 5.) * k;
-                        Eigen::Vector3d kvecs;
-                        Eigen::Vector3d distvecs;
-                        distvecs << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+                        // double kx = (2. * M_PI / 5.) * i;
+                        // double ky = (2. * M_PI / 5.) * j;
+                        // double kz = (2. * M_PI / 5.) * k;
                         // cout << distvecs << endl;
-                        kvecs << kx, ky, kz;
-                        distvecs = trans * distvecs;
+                        // kvecs << kx, ky, kz;
+                        // cout << distvecs << endl;
+                        kvecs << 0, 0, 0;
+                        kvecs = (g1 * i) + (g2 * j) + (g3 * k);
+                        // kvecs << g1[0] * i + g2[0] * i + g3[0]*i, g1[0] * j + g2[0] * j + g3[0]*j, g1[0] * k + g2[0] * k + g3[0]*k;
+                        // kvecs[0] = i * g1[0] + j * g2[0] + k * g3[0];
+                        // kvecs[1] = i * g1[1] + j * g2[1] + k * g3[1];
+                        // kvecs[2] = i * g1[2] + j * g2[2] + k * g3[2];
+
+                        // cout << "=====begin=======" << endl;
+                        // cout << g1 << endl;
+                        // cout << g1 * i << endl;
+                        // cout << "=====finish=======" << endl;
                         // cout << kvecs << endl;
-                        double kk = kvecs.norm() * kvecs.norm();
+                        long double kk = kvecs[0] * kvecs[0] + kvecs[1] * kvecs[1] + kvecs[2] * kvecs[2];
+                        // double kk = kvecs.norm() * kvecs.norm();
+                        // cout << kvecs.norm() << " " <<kk << endl;
                         // double kijn = len(kx, ky, kz);
-                        if (kvecs.norm() <= gmax)
+                        // cout << "=================" << endl;
+                        // cout << kvecs << endl;
+                        if (kvecs.norm() <= kcut)
                         {
                             
                             if (i == 0 && j == 0 && k == 0)
@@ -408,10 +456,15 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
                             }
                             else
                             {
+                                // cout << kvecs[0] << " " << kvecs[1] << " " << kvecs[2] << endl;
                                 // double kk = dp(kx,ky,kz,kx,ky,kz);
                                 // reciprocal_energy += 0.5 / (M_PI * V) * (elem1.q * elem2.q * 4. * M_PI * M_PI / kijn*kijn) * exp(-kijn*kijn/(4.*kappa*kappa)) * cos(kx*(elem1.x - elem2.x) + ky * (elem1.y - elem2.y) + kz * (elem1.z - elem2.z));
                                 // cout << reciprocal_energy << endl;
-                                reciprocal_energy +=  (2. * M_PI / V) * elem1.q * elem2.q * std::exp(-kk/(4.*kappa * kappa)) / kk * std::cos(kvecs.dot(distvecs));
+                                // cout << rijn[0] << " " << rijn[1] << " " << rijn[2] << endl;
+                                // cout << kvecs[0] << " " << kvecs[1] << " " << kvecs[2] << " " << rijn[0] << " " << rijn[1] << " " << rijn[2] << " " << kvecs.dot(rijn) << endl;
+                                reciprocal_energy +=  (2. * M_PI / V) * elem1.q * elem2.q * std::exp(-kk/(4.*kappa * kappa)) * std::cos(kvecs.dot(rijn))/ kk;
+                                // cout << -kk/(4.*kappa * kappa) << endl;
+                                // cout << reciprocal_energy * toeV << " " <<  i <<" " << j << " " << k << endl;
                             }
                         }
 
@@ -428,14 +481,16 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
     {
         self_energy += (-kappa / sqrt(M_PI)) * elem.q * elem.q;
     }
-    cout << self_energy * 14.39964390675221758120 << endl;
-    cout << reciprocal_energy * 14.39964390675221758120 << endl;
+    cout <<"self " <<self_energy * 14.39964390675221758120 << endl;
+    cout << "reci " << reciprocal_energy * 14.39964390675221758120  << endl;
 
-    cout << real_energy * 14.39964390675221758120 << endl;
-    cout << (reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
-    cout << std::setprecision(10) <<(real_energy+reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
-    cout << kappa << "  " << 1/kappa << endl;
-    return real_energy;
+    cout <<"real " <<real_energy * 14.39964390675221758120 << endl;
+    cout << "reci + self " << (reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
+    cout << "total "<<std::setprecision(10) <<(real_energy+reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
+    // cout << kappa << "  " << 1/kappa << endl;
+    // total_electrostatic_energy_3D = (real_energy + reciprocal_energy + self_energy) * toeV;
+    // cout<<total_electrostatic_energy_3D << endl;
+    return total_electrostatic_energy_3D;
 
 
 

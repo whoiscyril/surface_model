@@ -7,29 +7,111 @@
 ********************************************************************************
 * Version = 6.1.2 * Last modified =   3rd November 2022                        *
 ********************************************************************************
+
+  Ewald parameters :  Eta               =     0.220395 Angs-2
+                      Real space radius =    11.196897 Angs
+                      Recip space radius=     4.935478 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.220395 Angs-2
+                      Real space radius =    11.196897 Angs
+                      Recip space radius=     4.935478 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.220395 Angs-2
+                      Real space radius =    11.196897 Angs
+                      Recip space radius=     4.935478 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
 *  single       - perform a single point run                                   *
+*  nosymmetry   - turn off symmetry after initial structure generation         *
+*  full         - generate full unit cell when symmetry is removed             *
 ********************************************************************************
-* BaSnO3 test                                                                  *
+* Example of defect impurity calc : Li substituted into MgO                    *
 ********************************************************************************
 
 
-  Job Started  at 18:37.46  7th August     2023                               
+  Job Started  at 20:40.34 16th August     2023                               
 
   Number of CPUs =     1
 
 
   Total number of configurations input =      1
 
+  Ewald parameters :  Eta               =     0.220395 Angs-2
+                      Real space radius =    11.196897 Angs
+                      Recip space radius=     4.935478 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
 ********************************************************************************
 *  Input for Configuration =   1                                               *
 ********************************************************************************
 
-  Formula = BaSnO3                                                      
+  Formula = OMg                                                         
 
-  Number of irreducible atoms/shells =      10
+  Number of irreducible atoms/shells =       3
 
 
-  Total number atoms/shells =      10
+  Total number atoms/shells =       3
 
   Dimensionality = 3               :  Bulk   
 
@@ -37,17 +119,17 @@
 
   Cartesian lattice vectors (Angstroms) :
 
-        5.000000    0.000000    0.000000
-        0.000000    5.000000    0.000000
-        0.000000    0.000000    5.000000
+        4.000000    0.000000    0.000000
+        0.000000    4.000000    4.000000
+        0.000000    0.000000    4.000000
 
   Cell parameters (Angstroms/Degrees):
 
-  a =       5.0000    alpha =  90.0000
-  b =       5.0000    beta  =  90.0000
-  c =       5.0000    gamma =  90.0000
+  a =       4.0000    alpha =  45.0000
+  b =       5.6569    beta  =  90.0000
+  c =       4.0000    gamma =  90.0000
 
-  Initial cell volume =         125.000000 Angs**3
+  Initial cell volume =          64.000000 Angs**3
 
   Temperature of configuration =   0.00     K 
 
@@ -59,16 +141,9 @@
    No.  Atomic       x           y          z         Charge      Occupancy
         Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
-      1 Ba    c    0.500000    0.500000    0.500000     2.00000    1.000000    
-      2 Sn    c    0.000000    0.000000    0.000000     4.00000    1.000000    
-      3 O     c    0.000000    0.500000    0.000000    -2.00000    1.000000    
-      4 O     c    0.000000    0.000000    0.500000    -2.00000    1.000000    
-      5 O     c    0.500000    0.000000    0.000000    -2.00000    1.000000    
-      6 Ba    s    0.500000    0.500000    0.500000     0.00000    1.000000    
-      7 Sn    s    0.000000    0.000000    0.000000     0.00000    1.000000    
-      8 O     s    0.000000    0.500000    0.000000     0.00000    1.000000    
-      9 O     s    0.000000    0.000000    0.500000     0.00000    1.000000    
-     10 O     s    0.500000    0.000000    0.000000     0.00000    1.000000    
+      1 O     c    0.500000    0.500000    0.500000    -2.00000    1.000000    
+      2 Mg    c    0.000000    0.000000    0.000000     2.00000    1.000000    
+      3 O     s    0.500000    0.500000    0.500000     0.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -83,19 +158,17 @@
   Species    Type    Atomic    Atomic    Charge       Radii (Angs)     Library
                      Number     Mass       (e)     Cova   Ionic  VDW   Symbol
 --------------------------------------------------------------------------------
-    Ba       Core       56     137.33   2.000000   1.340  0.000  2.000          
-    Sn       Core       50     118.71   4.000000   1.460  0.000  2.180          
     O        Core        8      16.00  -2.000000   0.730  0.000  1.360          
+    Mg       Core       12      24.31   2.000000   1.100  0.000  1.640          
     O        Shell       8       0.00   0.000000   0.730  0.000  0.000          
-    Ba       Shell      56       0.00   0.000000   1.340  0.000  0.000          
-    Sn       Shell      50       0.00   0.000000   1.460  0.000  0.000          
+    Li       Core        3       0.00   0.000000   0.680  0.000  0.000          
 --------------------------------------------------------------------------------
 
 
   Lattice summation method               =    Ewald          (3-D)
                                          =    Parry          (2-D)
                                          =    Saunders et al (1-D)
-  Accuracy factor for lattice sums       =   18.000
+  Accuracy factor for lattice sums       =   12.000
 
 
   Analytic derivatives to be used
@@ -110,25 +183,19 @@
 Atom  Types   Potential      Parameter       Value         Units   Cutoffs(Ang)
   1     2                                                            Min /  Max 
 --------------------------------------------------------------------------------
-O    s O    s Buckingham    Buckingham A     9547.9600    eV        0.000 12.000
-                            Buckingham rho  0.21920000    Ang       
-                            Buckingham C     32.000000    eV*Ang^6  
---------------------------------------------------------------------------------
-O    s Ba   s Buckingham    Buckingham A     873.82901    eV        0.000 12.000
-                            Buckingham rho  0.38630000    Ang       
+Mg   c O    s Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
+                            Buckingham rho  0.30000000    Ang       
                             Buckingham C     0.0000000    eV*Ang^6  
 --------------------------------------------------------------------------------
-O    s Sn   s Buckingham    Buckingham A     1056.8000    eV        0.000 12.000
-                            Buckingham rho  0.36830000    Ang       
+Li   c O    s Buckingham    Buckingham A     816.30000    eV        0.000  8.000
+                            Buckingham rho  0.26086000    Ang       
                             Buckingham C     0.0000000    eV*Ang^6  
 --------------------------------------------------------------------------------
-Ba   c Ba   s Spring (c-s)  Spring k 2       459.20000    eV*Ang^-2 0.000  0.800
-                            Spring k 4       0.0000000    eV*Ang^-4 
+O    s O    s Buckingham    Buckingham A     1280.0000    eV        0.000 10.000
+                            Buckingham rho  0.30000000    Ang       
+                            Buckingham C     27.880000    eV*Ang^6  
 --------------------------------------------------------------------------------
-Sn   c Sn   s Spring (c-s)  Spring k 2       2037.8000    eV*Ang^-2 0.000  0.800
-                            Spring k 4       0.0000000    eV*Ang^-4 
---------------------------------------------------------------------------------
-O    c O    s Spring (c-s)  Spring k 2       23.090000    eV*Ang^-2 0.000  0.800
+O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
                             Spring k 4       0.0000000    eV*Ang^-4 
 --------------------------------------------------------------------------------
 
@@ -137,23 +204,40 @@ O    c O    s Spring (c-s)  Spring k 2       23.090000    eV*Ang^-2 0.000  0.800
 ********************************************************************************
 
 
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
+  Ewald parameters :  Eta               =     0.235803 Angs-2
+                      Real space radius =    10.824888 Angs
+                      Recip space radius=     5.105091 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000     0.00000
+   0.00000     1.57080     0.00000
+   0.00000    -1.57080     1.57080
+
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           8.03723436 eV    
-  Monopole - monopole (real) =         -33.49588353 eV    
-  Monopole - monopole (recip)=        -109.09015584 eV    
-  Monopole - monopole (total)=        -142.58603937 eV    
+  Interatomic potentials     =           0.39103661 eV    
+  Monopole - monopole (real) =          -3.78403870 eV    
+  Monopole - monopole (recip)=         -28.68419020 eV    
+  Monopole - monopole (total)=         -32.46822890 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =        -134.54880501 eV    
+  Total lattice energy       =         -32.07719229 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =          -12981.9029 kJ/(mole unit cells)
+  Total lattice energy       =           -3094.9587 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
-  XYZ File written as 1.xyz
-
-
-  Peak dynamic memory used =       1.81 MB 
+  Peak dynamic memory used =       1.79 MB 
 
 
   Timing analysis for GULP :
@@ -161,14 +245,10 @@ O    c O    s Spring (c-s)  Spring k 2       23.090000    eV*Ang^-2 0.000  0.800
 --------------------------------------------------------------------------------
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
-  Calculation of real space energy and derivatives                0.0003
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0103
+  Total CPU time                                                  0.0043
 --------------------------------------------------------------------------------
 
 
-  Dump file written as 1.res
-
-
-  Job Finished at 18:37.46  7th August     2023                               
+  Job Finished at 20:40.34 16th August     2023                               
 

@@ -1,28 +1,14 @@
 cell
-5 0 0
-0 5 0
-0 0 5
-
+4 0 0
+1 4 6
+0 0 4
 
 
 frac
-Ba core 0.5 0.5 0.5
-Sn core 0 0 0 
-O core 0 0.5 0
-O core 0 0 0.5
-O core 0.5 0 0
+O  core 0.5 0.5 0.5  
+Mg core 0.0 0.0 0.0  
 
 species
-Ba core  2.0
-Sn core  4.0
-O  core  -2.0
+O core -2.0
+Mg core 2.0
 
-buckingham
-O shel O shel 9547.960 0.2192 32.0 0.00 12.00
-Ba shel O shel 873.82901 0.3863 0 0 12
-Sn shel O shel 1056.8 0.3683 0 0 12
-
-spring
-Ba 459.2
-Sn 2037.8
-O 23.09

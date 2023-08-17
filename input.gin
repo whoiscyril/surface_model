@@ -1,34 +1,20 @@
-single
+single verbose full nosym
 title
-BaSnO3 test
+Example of defect impurity calc : Li substituted into MgO
 end
-cell
-5 5 5 90.000000  90.000000 90
+vectors
+4 0 0
+0 4 4
+0 0 4
 frac
-Ba core 0.5 0.5 0.5
-Sn core 0 0 0 
-O core 0 0.5 0
-O core 0 0 0.5
-O core 0.5 0 0
-size 6 12
-centre 0.5 1 1
-vacancy 0.5 1 1
-species
-Ba core  2.0
-Sn core  4.0
-O  core  -2.0
-buckingham
-O shel O shel 9547.960 0.2192 32.0 0.00 12.00
-Ba shel O shel 873.82901 0.3863 0 0 12
-Sn shel O shel 1056.8 0.3683 0 0 12
-spring
-Ba 459.2
-Sn 2037.8
-O 23.09
-xtol 8
-gtol 6
-ftol 10
-accuracy 18
-move_2a_to_1
-output xyz 1.xyz
-dump every 1.res
+O  core 0.5 0.5 0.5  -2.0 
+Mg core 0.0 0.0 0.0  2.00000
+buck
+Mg core O shel 1280.0 0.3 0.0 0.0 8.0
+buck
+Li core O shel 816.3 0.26086 0.0 0.0 8.0
+buck
+O shel O shel 1280.0 0.3 27.88 0.0 10.0
+spri
+O 74.92
+
