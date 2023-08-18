@@ -3,9 +3,10 @@ title
 Example of defect impurity calc : Li substituted into MgO
 end
 vectors
-4 0 0
-0 4 4
-0 0 4
+5 0 0 
+0 5 0
+0 0 5
+
 frac
 O  core 0.5 0.5 0.5  -2.0 
 Mg core 0.0 0.0 0.0  2.00000

@@ -8,35 +8,35 @@
 * Version = 6.1.2 * Last modified =   3rd November 2022                        *
 ********************************************************************************
 
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
+  Ewald parameters :  Eta               =     0.141053 Angs-2
+                      Real space radius =    13.996121 Angs
+                      Recip space radius=     3.948383 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
+  Ewald parameters :  Eta               =     0.141053 Angs-2
+                      Real space radius =    13.996121 Angs
+                      Recip space radius=     3.948383 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
+
+  Ewald parameters :  Eta               =     0.141053 Angs-2
+                      Real space radius =    13.996121 Angs
+                      Recip space radius=     3.948383 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 *  single       - perform a single point run                                   *
 *  nosymmetry   - turn off symmetry after initial structure generation         *
 *  full         - generate full unit cell when symmetry is removed             *
@@ -45,62 +45,62 @@
 ********************************************************************************
 
 
-  Job Started  at 20:40.34 16th August     2023                               
+  Job Started  at 17:20.41 18th August     2023                               
 
   Number of CPUs =     1
 
 
   Total number of configurations input =      1
 
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
+  Ewald parameters :  Eta               =     0.141053 Angs-2
+                      Real space radius =    13.996121 Angs
+                      Recip space radius=     3.948383 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
-
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
-
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
+
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
+
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
 ********************************************************************************
 *  Input for Configuration =   1                                               *
@@ -119,17 +119,17 @@
 
   Cartesian lattice vectors (Angstroms) :
 
-        4.000000    0.000000    0.000000
-        0.000000    4.000000    4.000000
-        0.000000    0.000000    4.000000
+        5.000000    0.000000    0.000000
+        0.000000    5.000000    0.000000
+        0.000000    0.000000    5.000000
 
   Cell parameters (Angstroms/Degrees):
 
-  a =       4.0000    alpha =  45.0000
-  b =       5.6569    beta  =  90.0000
-  c =       4.0000    gamma =  90.0000
+  a =       5.0000    alpha =  90.0000
+  b =       5.0000    beta  =  90.0000
+  c =       5.0000    gamma =  90.0000
 
-  Initial cell volume =          64.000000 Angs**3
+  Initial cell volume =         125.000000 Angs**3
 
   Temperature of configuration =   0.00     K 
 
@@ -204,37 +204,37 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
 ********************************************************************************
 
 
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
-  Ewald parameters :  Eta               =     0.235803 Angs-2
-                      Real space radius =    10.824888 Angs
-                      Recip space radius=     5.105091 Angs-1
+  Ewald parameters :  Eta               =     0.150914 Angs-2
+                      Real space radius =    13.531110 Angs
+                      Recip space radius=     4.084073 Angs-1
 
   Reciprocal lattice vectors :
 
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000    -1.57080     1.57080
+   1.25664     0.00000     0.00000
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.25664
 
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           0.39103661 eV    
-  Monopole - monopole (real) =          -3.78403870 eV    
-  Monopole - monopole (recip)=         -28.68419020 eV    
-  Monopole - monopole (total)=         -32.46822890 eV    
+  Interatomic potentials     =          -0.00129865 eV    
+  Monopole - monopole (real) =          -1.42269840 eV    
+  Monopole - monopole (recip)=         -22.02427279 eV    
+  Monopole - monopole (total)=         -23.44697119 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =         -32.07719229 eV    
+  Total lattice energy       =         -23.44826984 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           -3094.9587 kJ/(mole unit cells)
+  Total lattice energy       =           -2262.3996 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
   Peak dynamic memory used =       1.79 MB 
@@ -246,9 +246,9 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0043
+  Total CPU time                                                  0.0042
 --------------------------------------------------------------------------------
 
 
-  Job Finished at 20:40.34 16th August     2023                               
+  Job Finished at 17:20.41 18th August     2023                               
 

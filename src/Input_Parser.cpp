@@ -184,56 +184,45 @@ std::vector<double> get_lattice_constants(std::string filename)
     std::string line;
     std::vector<double> lattice_constants;
     std::ifstream in(filename, std::ios_base::in);
-    std::vector<double> lattice_vectors;
+
     if (!in)
     {
         throw std::runtime_error("Error opening file: " + filename);
-
     }
+
     int ctn = 0;
-    line = " ";
 
     while (std::getline(in, line))
     {
-        if (line.compare(0,4,"cell") == 0 && !line.empty())
+        if (line.compare(0, 4, "cell") == 0 && !line.empty())
         {
-            while(std::getline(in,line))
+            while (std::getline(in, line) && !line.empty())
             {
-                if (!line.empty())
-                {
-                    ctn+=1;
-                }
-                else if (line.empty())
-                {
-                    break;
-                }
+                ctn += 1;
             }
+            break; // Exit the outer loop once the required lines are counted
         }
     }
 
+    in.clear();  // Clear the EOF flag and error flags
+    in.seekg(0); // Move the file pointer to the beginning of the file
 
-
-    in.clear();
-    in.seekg(0);
-
-    while (std::getline(in,line))
+    while (std::getline(in, line))
     {
-        if (line.compare(0,4,"cell") ==0 && !line.empty())
+        if (line.compare(0, 4, "cell") == 0 && !line.empty())
         {
             if (ctn == 1)
             {
                 while (std::getline(in, line) && !line.empty())
                 {
                     std::istringstream iss(line);
-                    // std::cout << line << std::endl;
-                    // Parse the atom data and store it in the Atom struct
                     double val;
                     while (iss >> val)
                     {
-                        // std::cout << val << std::endl;
                         lattice_constants.push_back(val);
                     }
                 }
+                in.close();
                 return lattice_constants;
             }
             else if (ctn == 3)
@@ -242,12 +231,13 @@ std::vector<double> get_lattice_constants(std::string filename)
                 {
                     std::istringstream iss(line);
                     double val;
-                    while (iss>>val)
+                    while (iss >> val)
                     {
-                        lattice_vectors.push_back(val);
+                        lattice_constants.push_back(val);
                     }
                 }
-                return lattice_vectors;
+                in.close();
+                return lattice_constants;
             }
             else
             {
@@ -258,7 +248,7 @@ std::vector<double> get_lattice_constants(std::string filename)
     }
 
     in.close();
+    throw std::runtime_error("Cell structure not found in the file");
 }
-
 
 
