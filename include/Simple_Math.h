@@ -17,4 +17,5 @@ double rad2deg(double radian);
 double len(double x, double y, double z);
 double dp(double x, double y, double z, double h, double k, double l);
 Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs);
+Eigen::Matrix3d lattice_vectors(Eigen::Vector3d& lattice_constants, Eigen::Vector3d& lattice_angles);
 #endif // MATRIX_FUNCTIONS_H	

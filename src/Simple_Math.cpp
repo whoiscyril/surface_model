@@ -63,44 +63,61 @@ double dp(double x, double y, double z, double h, double k, double l)
     return x*h+y*k+z*l;
 }
 
-    Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs)
-    {
-        //first calculate angles
-        Eigen::MatrixXd transformation_matrix(3,3);
-        Eigen::VectorXd temp(9);
-        Eigen::Vector3d a1, a2, a3;
-        double alpha, beta, gamma;
-        double reci_alpha;
-        a1.setZero();
-        a2.setZero();
-        a3.setZero();
+Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs)
+{
+    //first calculate angles
+    Eigen::MatrixXd transformation_matrix(3,3);
+    Eigen::VectorXd temp(9);
+    Eigen::Vector3d a1, a2, a3;
+    double alpha, beta, gamma;
+    double reci_alpha;
+    a1.setZero();
+    a2.setZero();
+    a3.setZero();
 
-        a1 = lvecs.row(0);
-        a2 = lvecs.row(1);
-        a3 = lvecs.row(2);
+    a1 = lvecs.row(0);
+    a2 = lvecs.row(1);
+    a3 = lvecs.row(2);
 
-        alpha = acos(a2.normalized().dot(a3.normalized()));
-        beta = acos(a1.normalized().dot(a3.normalized()));
-        gamma = acos(a1.normalized().dot(a2.normalized()));
+    alpha = acos(a2.normalized().dot(a3.normalized()));
+    beta = acos(a1.normalized().dot(a3.normalized()));
+    gamma = acos(a1.normalized().dot(a2.normalized()));
 
-        reci_alpha = acos( (cos(beta) * cos(gamma) - cos(alpha)) / (sin(beta) * sin(gamma)));
+    reci_alpha = acos( (cos(beta) * cos(gamma) - cos(alpha)) / (sin(beta) * sin(gamma)));
 
-        transformation_matrix << 
-        a1.norm(), a2.norm() * std::cos(gamma), a3.norm() * std::cos(beta),
-        0.0, a2.norm() * std::sin(gamma), -a3.norm() * std::sin(beta) * std::cos(reci_alpha),
-        0.0, 0.0, a3.norm() * std::sin(beta) * std::sin(reci_alpha);
-
-
-
-
-
-        // std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
-        // std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
-
-        // std::cout << transformation_matrix << std::endl;
-        return transformation_matrix;
+    transformation_matrix <<
+                          a1.norm(), a2.norm() * std::cos(gamma), a3.norm() * std::cos(beta),
+                                  0.0, a2.norm() * std::sin(gamma), -a3.norm() * std::sin(beta) * std::cos(reci_alpha),
+                                  0.0, 0.0, a3.norm() * std::sin(beta) * std::sin(reci_alpha);
 
 
 
 
-    }
+
+    // std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
+    // std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
+
+    // std::cout << transformation_matrix << std::endl;
+    return transformation_matrix;
+
+}
+//function that takes in lattice constants and angles and return lattice vectors;
+
+Eigen::Matrix3d lattice_vectors(Eigen::Vector3d& lattice_constants, Eigen::Vector3d& lattice_angles)
+{
+    Eigen::Matrix3d lattice_vectors;
+
+    double cos_alpha = std::cos(lattice_angles[0] * M_PI / 180.0);
+    double cos_beta = std::cos(lattice_angles[1] * M_PI / 180.0);
+    double cos_gamma = std::cos(lattice_angles[2] * M_PI / 180.0);
+    double sin_gamma = std::sin(lattice_angles[2] * M_PI / 180.0);
+
+    lattice_vectors << lattice_constants[0], 0, 0,
+                    lattice_constants[1] * cos_gamma, lattice_constants[1] * sin_gamma, 0,
+                    lattice_constants[2] * cos_beta, lattice_constants[2] * (cos_alpha - cos_beta * cos_gamma) / sin_gamma,
+                    lattice_constants[2] * std::sqrt(1.0 - cos_alpha * cos_alpha - cos_beta * cos_beta - cos_gamma * cos_gamma +
+                            2.0 * cos_alpha * cos_beta * cos_gamma) / sin_gamma;
+
+
+    return lattice_vectors;
+}

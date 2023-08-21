@@ -1,5 +1,6 @@
 #include "Input_Parser.h"
 #include "Struct_Atom.h"
+#include "distributor.h"
 #include <fstream>
 #include <iostream>
 #include <sstream> // Include this header for std::istringstream
@@ -223,6 +224,7 @@ std::vector<double> get_lattice_constants(std::string filename)
                     }
                 }
                 in.close();
+
                 return lattice_constants;
             }
             else if (ctn == 3)
@@ -237,6 +239,7 @@ std::vector<double> get_lattice_constants(std::string filename)
                     }
                 }
                 in.close();
+                //need fixing
                 return lattice_constants;
             }
             else

@@ -2,6 +2,8 @@
 #define STRUCT_ATOM_H
 #include <string>
 #include <tuple>
+#include <Eigen/Dense>
+
 
 struct Atom
 {
@@ -17,6 +19,19 @@ struct Atom
     {
         return std::tie(label, x, y, z) < std::tie(other.label, other.x, other.y, other.z);
     }
+};
+
+struct UnitCell
+{
+    Eigen::Vector3d lattice_constants;
+    Eigen::Vector3d lattice_angles;
+    std::vector<Atom> coordinates_cart;
+    std::vector<Atom> coordinates_frac;
+    Eigen::Matrix3d lattice_vectors;
+    Eigen::Matrix3d reciprocal_vectors;
+    double volume;
+
+    UnitCell(const std::string& filename);
 };
 
 struct Specie

@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/Users/uccazxu/Desktop/surface/surface_model/program"
-  "/Users/uccazxu/Desktop/surface/surface_model/program.pdb"
+  "/Users/uccazxu/Desktop/surface_model/surface_model/program"
+  "/Users/uccazxu/Desktop/surface_model/surface_model/program.pdb"
   "CMakeFiles/program.dir/main.cpp.o"
   "CMakeFiles/program.dir/main.cpp.o.d"
   "CMakeFiles/program.dir/src/Energy.cpp.o"
@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/program.dir/src/Struct_Atom.cpp.o.d"
   "CMakeFiles/program.dir/src/bulk.cpp.o"
   "CMakeFiles/program.dir/src/bulk.cpp.o.d"
+  "CMakeFiles/program.dir/src/distributor.cpp.o"
+  "CMakeFiles/program.dir/src/distributor.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

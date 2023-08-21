@@ -140,7 +140,7 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
     long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
     double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
     double kcut = 2.*kappa*sqrt((-log(10E-17)));
- 
+
 
 
     int nmax_x = ceil(rcut/a1.norm());
@@ -155,7 +155,7 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
     //real space contribution
 
     double real_energy = 0.;
-    
+
     Eigen::Vector3d rij;
     Eigen::Vector3d n;
     Eigen::Vector3d rijn;
@@ -180,11 +180,11 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
                                 if (rijn.norm() > 0.1)
                                 {
                                     real_energy += 0.5 * elem1.q * elem2.q * erfc(kappa * rijn.norm()) / rijn.norm();
-   
+
                                 }
 
                             }
-                            else 
+                            else
                             {
                                 real_energy += 0.5 * elem1.q * elem2.q * erfc(kappa * rijn.norm()) / rijn.norm();
 
@@ -221,7 +221,7 @@ double calc_electrostatics_3D( std::vector<Atom>& cell, std::vector<double> latt
 
                         if (kvecs.norm() <= kcut)
                         {
-                            
+
                             if (i == 0 && j == 0 && k == 0)
                             {
                                 continue;
