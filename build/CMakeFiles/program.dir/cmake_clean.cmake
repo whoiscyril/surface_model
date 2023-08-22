@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/Users/uccazxu/Desktop/surface_model/surface_model/program"
-  "/Users/uccazxu/Desktop/surface_model/surface_model/program.pdb"
+  "/Users/uccazxu/Desktop/surface/surface_model/program"
+  "/Users/uccazxu/Desktop/surface/surface_model/program.pdb"
   "CMakeFiles/program.dir/main.cpp.o"
   "CMakeFiles/program.dir/main.cpp.o.d"
   "CMakeFiles/program.dir/src/Energy.cpp.o"

@@ -1,0 +1,32 @@
+single verbose
+title
+BaSnO3 test
+end
+cell
+5 5 5 90.000000  90.000000 90
+frac
+Ba core 0.5 0.5 0.5
+Ba shel 0.5 0.5 0.5
+Sn core 0 0 0
+Sn shel 0 0 0
+O core 0 0.5 0
+O shel 0 0.5 0
+O core 0 0 0.5
+O shel 0 0 0.5
+O core 0.5 0 0
+O shel 0.5 0 0
+species
+Ba core  -7.203
+Ba shel  9.203
+Sn core  2.42
+Sn shel  1.58
+O  core  0.389
+O  shel  -2.389
+buckingham
+O shel O shel 9547.960 0.2192 32.0 0.00 12.00
+Ba shel O shel 873.82901 0.3863 0 0 12
+Sn shel O shel 1056.8 0.3683 0 0 12
+spring
+Ba 459.2
+Sn 2037.8
+O 23.09

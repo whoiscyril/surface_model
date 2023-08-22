@@ -133,12 +133,37 @@ UnitCell::UnitCell(const std::string& filename)
     reciprocal_vectors.row(2) = 2. * M_PI * lattice_vectors.row(0).cross(lattice_vectors.row(1)) / volume;
 
 
+//Populate short-range potential information
+
+    in.clear();
+    in.seekg(0);
+
+    line = ' ';
+
+    while (std::getline(in, line))
+    {
+        if (line.compare(0, 10, "buckingham") == 0 && !line.empty())
+        {
+            while(std::getline(in, line))
+            {
+                std::istringstream iss(line);
+                Buckingham potential;
+                if (iss >> potential.atom1_label >> potential.atom1_type >> potential.atom2_label >> potential.atom2_type >> potential.A >> potential.rho >> potential.C >> potential.cut_off1 >> potential.cut_off2)
+                {
+                    buckingham_potentials.push_back(potential);
+                }
+                else if (line.empty())
+                {
+                    break;
+                }
+                else
+                {
+                    throw std::runtime_error("Error parsing atom potentials");
+                }
+            }
+        }
 
 
-
-
-
-
-
+    }
 
 }

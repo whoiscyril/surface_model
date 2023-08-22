@@ -20,27 +20,6 @@ struct Atom
         return std::tie(label, x, y, z) < std::tie(other.label, other.x, other.y, other.z);
     }
 };
-
-struct UnitCell
-{
-    Eigen::Vector3d lattice_constants;
-    Eigen::Vector3d lattice_angles;
-    std::vector<Atom> coordinates_cart;
-    std::vector<Atom> coordinates_frac;
-    Eigen::Matrix3d lattice_vectors;
-    Eigen::Matrix3d reciprocal_vectors;
-    double volume;
-
-    UnitCell(const std::string& filename);
-};
-
-struct Specie
-{
-    std::string label;
-    std::string type;
-    double charge;
-};
-
 struct Buckingham
 {
     std::string atom1_label;
@@ -53,4 +32,28 @@ struct Buckingham
     double cut_off1;
     double cut_off2;
 };
+
+struct UnitCell
+{
+    Eigen::Vector3d lattice_constants;
+    Eigen::Vector3d lattice_angles;
+    std::vector<Atom> coordinates_cart;
+    std::vector<Atom> coordinates_frac;
+    Eigen::Matrix3d lattice_vectors;
+    Eigen::Matrix3d reciprocal_vectors;
+
+    std::vector<Buckingham> buckingham_potentials;
+    double volume;
+
+    UnitCell(const std::string& filename);
+};
+
+struct Specie
+{
+    std::string label;
+    std::string type;
+    double charge;
+};
+
+
 #endif // 

@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
     std::string filename = "input.in";
     std::vector<double> lattice_constants;
     // //Creating the bulk model
-    // // bulk_energy(get_input_coordinates(filename), get_input_species(filename), get_input_buckingham(filename));
+    bulk_energy(get_input_coordinates(filename), get_input_species(filename), get_input_buckingham(filename));
     // lattice_constants=get_lattice_constants(filename);
 
     // UnitCell unitcell;
@@ -39,17 +39,19 @@ int main(int argc, char const *argv[])
     // // std::cout << unitcell.coordinates_frac.type << std::endl;
 
     // // The members of unitcell should now be populated based on the data from the parser
-    UnitCell unitcell(filename);
-
-    // std::cout << unitcell.lattice_constants << std::endl;
-    // std::cout << unitcell.lattice_angles << std::endl;
+    // UnitCell unitcell(filename);
+    // for (const auto& elem : unitcell.buckingham_potentials)
+    // std::cout << elem.atom1_label <<" " << elem.atom1_type <<" " <<elem.atom2_label <<" " << elem.atom2_type<<" " <<
+    // elem.A << " " << elem.rho <<" " << elem.C << " " << 
+    //             elem.cut_off1 << " " << elem.cut_off2 << std::endl;
+    // // std::cout << unitcell.lattice_angles << std::endl;
 
     // for (const auto& elem : unitcell.coordinates_cart)
     // {
     //     std::cout << elem.label << " " << elem.type << " " << elem.x << " " << elem.y <<" " <<elem.z << " " << elem.q<< std::endl;
     // }
-    std::cout << unitcell.lattice_vectors << std::endl;
-    std::cout << unitcell.reciprocal_vectors << std::endl;
-    std:: cout << unitcell.volume << std::endl;
+    // std::cout << unitcell.lattice_vectors << std::endl;
+    // std::cout << unitcell.reciprocal_vectors << std::endl;
+    // std:: cout << unitcell.volume << std::endl;
     return 0;
 }
