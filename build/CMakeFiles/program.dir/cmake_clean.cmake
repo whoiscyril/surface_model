@@ -13,6 +13,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/program.dir/src/Struct_Atom.cpp.o.d"
   "CMakeFiles/program.dir/src/bulk.cpp.o"
   "CMakeFiles/program.dir/src/bulk.cpp.o.d"
+  "CMakeFiles/program.dir/src/derivatives.cpp.o"
+  "CMakeFiles/program.dir/src/derivatives.cpp.o.d"
   "CMakeFiles/program.dir/src/distributor.cpp.o"
   "CMakeFiles/program.dir/src/distributor.cpp.o.d"
 )

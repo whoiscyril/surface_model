@@ -7,98 +7,16 @@
 ********************************************************************************
 * Version = 6.1.2 * Last modified =   3rd November 2022                        *
 ********************************************************************************
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-*  single       - perform a single point run                                   *
-********************************************************************************
-* Example of defect impurity calc : Li substituted into MgO                    *
+*  gradient     - perform gradient run                                         *
+*  conp         - constant pressure calculation                                *
 ********************************************************************************
 
-
-  Job Started  at 19:05.34 22nd August     2023                               
+  Job Started  at 16:56.31 23rd August     2023                               
 
   Number of CPUs =     1
 
 
   Total number of configurations input =      1
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
 
 ********************************************************************************
 *  Input for Configuration =   1                                               *
@@ -140,7 +58,7 @@
         Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
       1 O     c    0.500000    0.500000    0.500000    -2.00000    1.000000    
-      2 Mg    c    0.000000    0.000000    0.000000     2.00000    1.000000    
+      2 Mg    c    0.000000 *  0.000000 *  0.100000 *   2.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -188,38 +106,60 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
 ********************************************************************************
 
 
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
-  Ewald parameters :  Eta               =     0.220395 Angs-2
-                      Real space radius =    11.196897 Angs
-                      Recip space radius=     4.935478 Angs-1
-
-  Reciprocal lattice vectors :
-
-   1.57080     0.00000     0.00000
-   0.00000     1.57080     0.00000
-   0.00000     0.00000     1.57080
-
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           0.09897668 eV    
-  Monopole - monopole (real) =          -2.15085848 eV    
-  Monopole - monopole (recip)=         -27.15785551 eV    
-  Monopole - monopole (total)=         -29.30871399 eV    
+  Interatomic potentials     =           0.12300301 eV    
+  Monopole - monopole (real) =          -2.34944819 eV    
+  Monopole - monopole (recip)=         -27.25197543 eV    
+  Monopole - monopole (total)=         -29.60142362 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =         -29.20973731 eV    
+  Total lattice energy       =         -29.47842061 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           -2818.2931 kJ/(mole unit cells)
+  Total lattice energy       =           -2844.2170 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
+
+
+  Final Cartesian lattice vectors (Angstroms) :
+
+        4.000000    0.000000    0.000000
+        0.000000    4.000000    0.000000
+        0.000000    0.000000    4.000000
+
+
+  Final cell parameters and derivatives :
+
+--------------------------------------------------------------------------------
+       a            4.000000 Angstrom     dE/de1(xx)     9.981086 eV/strain
+       b            4.000000 Angstrom     dE/de2(yy)     9.981086 eV/strain
+       c            4.000000 Angstrom     dE/de3(zz)     8.273290 eV/strain
+       alpha       90.000000 Degrees      dE/de4(yz)     0.000000 eV/strain
+       beta        90.000000 Degrees      dE/de5(xz)    -0.000000 eV/strain
+       gamma       90.000000 Degrees      dE/de6(xy)     0.000000 eV/strain
+--------------------------------------------------------------------------------
+
+  Primitive cell volume =            64.000000 Angs**3
+
+  Density of cell =      1.045897 g/cm**3
+
+  Non-primitive cell volume =            64.000000 Angs**3
+
+
+  Final internal derivatives :
+
+--------------------------------------------------------------------------------
+   No.  Atomic          a             b             c           Radius
+        Label          (eV)          (eV)          (eV)        (eV/Angs)
+--------------------------------------------------------------------------------
+      1 O     c       0.000000      0.000000      0.000000      0.000000
+      2 Mg    c      -0.000000     -0.000000     -5.202386      0.000000
+--------------------------------------------------------------------------------
+  Maximum abs         0.000000      0.000000      5.202386      0.000000
+--------------------------------------------------------------------------------
+
+
+  Time to end of gradients =       0.0039 seconds
+
 
   Peak dynamic memory used =       1.78 MB 
 
@@ -230,9 +170,9 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0044
+  Total CPU time                                                  0.0039
 --------------------------------------------------------------------------------
 
 
-  Job Finished at 19:05.34 22nd August     2023                               
+  Job Finished at 16:56.31 23rd August     2023                               
 

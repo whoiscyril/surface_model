@@ -273,6 +273,30 @@ src/bulk.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/bulk.cpp.s
 .PHONY : src/bulk.cpp.s
 
+src/derivatives.o: src/derivatives.cpp.o
+.PHONY : src/derivatives.o
+
+# target to build an object file
+src/derivatives.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/derivatives.cpp.o
+.PHONY : src/derivatives.cpp.o
+
+src/derivatives.i: src/derivatives.cpp.i
+.PHONY : src/derivatives.i
+
+# target to preprocess a source file
+src/derivatives.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/derivatives.cpp.i
+.PHONY : src/derivatives.cpp.i
+
+src/derivatives.s: src/derivatives.cpp.s
+.PHONY : src/derivatives.s
+
+# target to generate assembly for a file
+src/derivatives.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/derivatives.cpp.s
+.PHONY : src/derivatives.cpp.s
+
 src/distributor.o: src/distributor.cpp.o
 .PHONY : src/distributor.o
 
@@ -324,6 +348,9 @@ help:
 	@echo "... src/bulk.o"
 	@echo "... src/bulk.i"
 	@echo "... src/bulk.s"
+	@echo "... src/derivatives.o"
+	@echo "... src/derivatives.i"
+	@echo "... src/derivatives.s"
 	@echo "... src/distributor.o"
 	@echo "... src/distributor.i"
 	@echo "... src/distributor.s"

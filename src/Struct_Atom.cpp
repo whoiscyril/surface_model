@@ -167,3 +167,17 @@ UnitCell::UnitCell(const std::string& filename)
     }
 
 }
+
+UnitCell::UnitCell() : lattice_constants(Eigen::Vector3d::Zero()), lattice_angles(Eigen::Vector3d::Zero()),
+                       lattice_vectors(Eigen::Matrix3d::Zero()), reciprocal_vectors(Eigen::Matrix3d::Zero()),
+                       volume(0.0)
+{
+    // Initialize other members to default values
+    // For example, populate coordinates_frac and coordinates_cart
+    // Populate other members as needed
+    // ...
+    // You can use similar initialization logic as in the other constructor
+
+    // For example, populating coordinates_frac and coordinates_cart
+
+}

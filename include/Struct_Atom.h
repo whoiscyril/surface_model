@@ -14,6 +14,7 @@ struct Atom
     double x, y, z, q, o;
     double rad;
     double dp_x, dp_y, dp_z;
+    double d1x, d1y, d1z;
 
     bool operator<(const Atom& other) const
     {
@@ -45,7 +46,10 @@ struct UnitCell
     std::vector<Buckingham> buckingham_potentials;
     double volume;
 
+
     UnitCell(const std::string& filename);
+    UnitCell();
+
 };
 
 struct Specie

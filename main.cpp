@@ -2,14 +2,18 @@
 #include "Input_Parser.h"
 #include "Struct_Atom.h"
 #include "distributor.h"
+#include "derivatives.h"
 #include <Eigen/Dense>
 #include <iostream>
 int main(int argc, char const *argv[])
 {
     std::string filename = "input.in";
     std::vector<double> lattice_constants;
+    UnitCell unitcell(filename);
+    calc_forces(unitcell);
     // //Creating the bulk model
-    bulk_energy(get_input_coordinates(filename), get_input_species(filename), get_input_buckingham(filename));
+    // bulk_energy(get_input_coordinates(filename), get_input_species(filename), get_input_buckingham(filename));
+
     // lattice_constants=get_lattice_constants(filename);
 
     // UnitCell unitcell;
