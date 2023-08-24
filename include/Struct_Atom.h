@@ -14,7 +14,7 @@ struct Atom
     double x, y, z, q, o;
     double rad;
     double dp_x, dp_y, dp_z;
-    double d1x, d1y, d1z;
+    double fx, fy, fz;
 
     bool operator<(const Atom& other) const
     {
