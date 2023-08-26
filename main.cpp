@@ -11,6 +11,8 @@ int main(int argc, char const *argv[])
     std::vector<double> lattice_constants;
     UnitCell unitcell(filename);
     calc_forces(unitcell);
+    // double energy = calc_short_range_buckingham_potential(unitcell);
+    // std::cout << energy << std::endl;
     // //Creating the bulk model
     // bulk_energy(get_input_coordinates(filename), get_input_species(filename), get_input_buckingham(filename));
 
