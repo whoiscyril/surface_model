@@ -117,7 +117,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
 
     }
 
-
+    //both of these contributions below were missing a factor of 2;
 
     //Now calculate electrostatic contributions to force
     const double toeV = 14.39964390675221758120;
@@ -132,13 +132,13 @@ UnitCell calc_forces(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    // double kappa = sqrt(0.220395);
-    // double rcut = 11.196897;
-    // double kcut = 4.935478;
+    double kappa = 1./2.04154;
+    double rcut = 12.7729;
+    double kcut = 6.12922;
 
     int nmax_x = ceil(rcut/a1.norm());
     int nmax_y = ceil(rcut/a2.norm());
@@ -167,6 +167,8 @@ UnitCell calc_forces(UnitCell unitcell_init)
                     {
                         n << i * a, j * b, k * c;
                         rijn = rij + n;
+                    double r_norm = rijn.norm();
+                    double r_sqr = r_norm * r_norm;
                         // Eigen::Vector3d prefactor = rijn/pow(rijn.norm(), 3.);
                         // double erfcterm = erfc(k * rijn.norm()) + (2. * kappa / sqrt(M_PI) ) * rijn.norm() * exp(-kappa*kappa*rijn.norm() * rijn.norm());
                         if (rijn.norm() <= rcut)
@@ -175,7 +177,11 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             {
                                 if (rijn.norm() > 0.1)
                                 {
-                                            real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-rijn.squaredNorm()*kappa * kappa)/rijn.norm())-(erfc(rijn.norm() * kappa )/rijn.squaredNorm()))/rijn.norm();
+                                    real_deriv += rijn * toeV * (0.5 * elem1.q * elem2.q) *
+                                      ((-2. * kappa / sqrt(M_PI)) *
+                                       (exp(-r_sqr * kappa * kappa) / r_norm) -
+                                       (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                                            // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
                                     // real_deriv +=  (-rijn / rijn.norm()) * (-0.5 * elem1.q * elem2.q / (rijn.norm() * rijn.norm()))
                                                     // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm()));
                                     // real_deriv += toeV * elem1.q * elem2.q * prefactor * erfcterm;
@@ -183,7 +189,11 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             }
                             else
                             {
-                                            real_deriv += rijn * toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-rijn.squaredNorm()*kappa * kappa)/rijn.norm())-(erfc(rijn.norm() * kappa )/rijn.squaredNorm()))/rijn.norm();
+                                    real_deriv += rijn * toeV * (0.5 * elem1.q * elem2.q) *
+                                      ((-2. * kappa / sqrt(M_PI)) *
+                                       (exp(-r_sqr * kappa * kappa) / r_norm) -
+                                       (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                                            // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
                                     // real_deriv += (-rijn / rijn.norm()) * (-0.5 * elem1.q * elem2.q / (rijn.norm() * rijn.norm()))
                                                     // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm())); 
                                     // real_deriv += toeV * elem1.q * elem2.q * prefactor * erfcterm;
@@ -195,7 +205,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                 }
             }
         }
-        std::cout <<  real_deriv[0] * a <<" " <<  real_deriv[1] * b << " " <<  real_deriv[2] * c << std::endl;
+        std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
 
     }
     rijn.setZero();
@@ -229,7 +239,8 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             }
                             else
                             {
-                                reci_deriv += toeV *  kvecs * toeV *((2.*M_PI)/V)*elem1.q*elem2.q*exp(-0.25 * kk/kappa/kappa)/kk * -sin(kvecs.dot(rijn));
+                                reci_deriv += kvecs*toeV * ((2. * M_PI)/ V) * elem1.q * elem2.q * exp(-kk/(4 * kappa * kappa))/kk * -sin(kvecs.dot(rijn));
+                                // reci_deriv += toeV *  kvecs * toeV *((2.*M_PI)/V)*elem1.q*elem2.q*exp(-0.25 * kk/kappa/kappa)/kk * -sin(kvecs.dot(rijn));
                                 // reci_deriv += -((2. * M_PI * elem1.q * elem2.q) / (V * kk)) * kvecs
                                             // * exp(-kk/4. * kappa * kappa) * -sin(kvecs.dot(rijn));
                                             // std::cout << elem1.label<< " "<< elem2.label << " " << rijn.norm() << std::endl;
@@ -240,7 +251,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
             }
 
         }
-        std::cout << reci_deriv[0] * a <<" " << reci_deriv[1] * b << " " << reci_deriv[2] * c << std::endl;
+        std::cout << reci_deriv[0] <<" " << reci_deriv[1]  << " " << reci_deriv[2]  << std::endl;
 
     }
 
