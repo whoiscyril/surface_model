@@ -104,7 +104,7 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
         }
 
     }
-
+        std::cout << 0.5 * short_range_energy << std::endl;
         return 0.5 * short_range_energy;
 }
 // double calc_short_range_buckingham_potential (const std::vector<Atom>& cell,
@@ -211,6 +211,7 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
         using std::cout;
         int natom = unitcell.coordinates_frac.size();
 
+        // cout << unitcell.lattice_vectors << endl;
         // Setting real space parameters
         Eigen::Vector3d a1 = unitcell.lattice_vectors.row(0);
         Eigen::Vector3d a2 = unitcell.lattice_vectors.row(1);
@@ -223,17 +224,26 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
         double c2 = unitcell.lattice_constants[1];
         double c3 = unitcell.lattice_constants[2];
 
-        long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-        double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-        double kcut = 2.*kappa*sqrt((-log(10E-17)));
+        // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+        // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+        // double kcut = 2.*kappa*sqrt((-log(10E-17)));
+        long double kappa = 1/2.39958;
+        double rcut = 15.013;
+        double kcut = 5.21468;
 
-        int nmax_x = ceil(rcut/a1.norm());
-        int nmax_y = ceil(rcut/a2.norm());
-        int nmax_z = ceil(rcut/a3.norm());
-        int kmax_x = ceil(kcut/g1.norm());
-        int kmax_y = ceil(kcut/g2.norm());
-        int kmax_z = ceil(kcut/g3.norm());
+        // int nmax_x = ceil(rcut/a1.norm());
+        // int nmax_y = ceil(rcut/a2.norm());
+        // int nmax_z = ceil(rcut/a3.norm());
+        // int kmax_x = ceil(kcut/g1.norm());
+        // int kmax_y = ceil(kcut/g2.norm());
+        // int kmax_z = ceil(kcut/g3.norm());
 
+        int nmax_x = 3;
+        int nmax_y = 3;
+        int nmax_z = 2;
+        int kmax_x = 2;
+        int kmax_y = 4;
+        int kmax_z = 4;
         //real space contribution
 
         double real_energy = 0.;
@@ -252,8 +262,8 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
                     {
                         for (int k = -nmax_z; k <= nmax_z; k++)
                         {
-
-                            n << i * c1, j * c2, k * c3;
+                            n.setZero();
+                            n = i * a1 + j * a2 + k * a3;
                             rijn = rij + n;
                             if (rijn.norm() < rcut)
                             {
@@ -262,6 +272,7 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
                                     if (rijn.norm() > 0.1)
                                     {
                                         real_energy += 0.5 * elem1.q * elem2.q * erfc(kappa * rijn.norm()) / rijn.norm();
+                                        std::cout << rijn.norm() << " " << erfc(rijn.norm() * kappa) << std::endl;
 
                                     }
 
@@ -269,6 +280,7 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
                                 else
                                 {
                                     real_energy += 0.5 * elem1.q * elem2.q * erfc(kappa * rijn.norm()) / rijn.norm();
+                                        std::cout << rijn.norm() << " " << erfc(rijn.norm() * kappa) << std::endl;
 
                                 }
                             }
@@ -330,13 +342,14 @@ double calc_short_range_buckingham_potential (const UnitCell unitcell)
         {
             self_energy += (-kappa / sqrt(M_PI)) * elem.q * elem.q;
         }
-        // cout <<"self " <<self_energy * 14.39964390675221758120 << endl;
-        // cout << "reci " << reciprocal_energy * 14.39964390675221758120  << endl;
+        cout <<"self " <<self_energy * 14.39964390675221758120 << endl;
+        cout << "reci " << reciprocal_energy * 14.39964390675221758120  << endl;
 
-        // cout <<"real " <<real_energy * 14.39964390675221758120 << endl;
-        // cout << "reci + self " << (reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
+        cout <<"real " <<real_energy * 14.39964390675221758120 << endl;
+        cout << "reci + self " << (reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
         // cout << "total "<<std::setprecision(10) <<(real_energy+reciprocal_energy + self_energy) * 14.39964390675221758120 <<endl;
         total_electrostatic_energy_3D = self_energy + reciprocal_energy + real_energy;
+        // std::cout << total_electrostatic_energy_3D * toeV << std::endl;
         return total_electrostatic_energy_3D * toeV;
 
     }

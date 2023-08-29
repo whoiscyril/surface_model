@@ -7,15 +7,96 @@
 ********************************************************************************
 * Version = 6.1.2 * Last modified =   3rd November 2022                        *
 ********************************************************************************
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
 *  gradient     - perform gradient run                                         *
+*  conp         - constant pressure calculation                                *
 ********************************************************************************
 
-  Job Started  at 17:33.41 25th August     2023                               
+  Job Started  at 20:26.03 29th August     2023                               
 
   Number of CPUs =     1
 
 
   Total number of configurations input =      1
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
 
 ********************************************************************************
 *  Input for Configuration =   1                                               *
@@ -28,28 +109,36 @@
 
   Total number atoms/shells =       2
 
-  Dimensionality = 0               :  Cluster
+  Dimensionality = 3               :  Bulk   
 
 
-  Charge on cluster =   0.000000
 
+  Cartesian lattice vectors (Angstroms) :
 
-  Initial cluster dipoles : x =      0.000000 e.Angs
-                            y =      0.000000 e.Angs
-                            z =      0.000000 e.Angs
+        4.000000    0.000000    0.000000
+        0.000000    5.000000    0.000000
+        3.000000    0.000000    5.196152
+
+  Cell parameters (Angstroms/Degrees):
+
+  a =       4.0000    alpha =  90.0000
+  b =       5.0000    beta  =  60.0000
+  c =       6.0000    gamma =  90.0000
+
+  Initial cell volume =         103.923048 Angs**3
 
   Temperature of configuration =   0.00     K 
 
-  Symmetry number =      1
+  Pressure of configuration =         0.000 GPa 
 
-  Cartesian coordinates of cluster :
+  Fractional coordinates of asymmetric unit :
 
 --------------------------------------------------------------------------------
    No.  Atomic       x           y          z         Charge      Occupancy
-        Label      (Angs)      (Angs)     (Angs)        (e)         (Frac)  
+        Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
-      1 O     c      2.0000 *    2.0000 *    2.0000 *   0.00000    1.000000    
-      2 Mg    c      0.0000 *    0.0000 *    0.8000 *   0.00000    1.000000    
+      1 O     c    0.200000    0.500000    0.500000    -2.00000    1.000000    
+      2 Mg    c    0.300000 *  0.000000 *  0.100000 *   2.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -64,14 +153,16 @@
   Species    Type    Atomic    Atomic    Charge       Radii (Angs)     Library
                      Number     Mass       (e)     Cova   Ionic  VDW   Symbol
 --------------------------------------------------------------------------------
-    O        Core        8      16.00   0.000000   0.730  1.000  1.360          
-    Mg       Core       12      24.31   0.000000   1.100  1.000  1.640          
+    O        Core        8      16.00  -2.000000   0.730  0.000  1.360          
+    Mg       Core       12      24.31   2.000000   1.100  0.000  1.640          
 --------------------------------------------------------------------------------
 
 
-  Accuracy factor for short range sums = 12.000
+  Lattice summation method               =    Ewald          (3-D)
+                                         =    Parry          (2-D)
+                                         =    Saunders et al (1-D)
+  Accuracy factor for lattice sums       =   12.000
 
-  Electrostatics method = Direct Coulomb
 
   Analytic derivatives to be used
 
@@ -95,33 +186,79 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
 ********************************************************************************
 
 
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
+  Ewald parameters :  Eta               =     0.159532 Angs-2
+                      Real space radius =    13.160579 Angs
+                      Recip space radius=     4.199059 Angs-1
+
+  Reciprocal lattice vectors :
+
+   1.57080     0.00000    -0.90690
+   0.00000     1.25664     0.00000
+   0.00000     0.00000     1.20920
+
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           0.04564267 eV    
-  Monopole - monopole (real) =           0.00000000 eV    
+  Interatomic potentials     =           0.03886053 eV    
+  Monopole - monopole (real) =          -2.00870501 eV    
+  Monopole - monopole (recip)=         -22.56743815 eV    
+  Monopole - monopole (total)=         -24.57614316 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           0.04564267 eV    
+  Total lattice energy       =         -24.53728263 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =               4.4038 kJ/mol
---------------------------------------------------------------------------------
-
-
-
-  Final Cartesian derivatives :
-
---------------------------------------------------------------------------------
-   No.  Atomic          x             y             z           Radius
-        Label       (eV/Angs)     (eV/Angs)     (eV/Angs)      (eV/Angs)
---------------------------------------------------------------------------------
-      1 O     c      -0.099036     -0.099036     -0.059422      0.000000
-      2 Mg    c       0.099036      0.099036      0.059422      0.000000
---------------------------------------------------------------------------------
-  Maximum abs         0.099036      0.099036      0.059422      0.000000
+  Total lattice energy       =           -2367.4727 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
 
-  Time to end of gradients =       0.0036 seconds
+  Final Cartesian lattice vectors (Angstroms) :
+
+        4.000000    0.000000    0.000000
+        0.000000    5.000000    0.000000
+        3.000000    0.000000    5.196152
+
+
+  Final cell parameters and derivatives :
+
+--------------------------------------------------------------------------------
+       a            4.000000 Angstrom     dE/de1(xx)    -4.051172 eV/strain
+       b            5.000000 Angstrom     dE/de2(yy)    13.873199 eV/strain
+       c            6.000000 Angstrom     dE/de3(zz)    14.311180 eV/strain
+       alpha       90.000000 Degrees      dE/de4(yz)     0.000000 eV/strain
+       beta        60.000000 Degrees      dE/de5(xz)     1.089740 eV/strain
+       gamma       90.000000 Degrees      dE/de6(xy)    -0.000000 eV/strain
+--------------------------------------------------------------------------------
+
+  Primitive cell volume =           103.923048 Angs**3
+
+  Density of cell =      0.644105 g/cm**3
+
+  Non-primitive cell volume =           103.923048 Angs**3
+
+
+  Final internal derivatives :
+
+--------------------------------------------------------------------------------
+   No.  Atomic          a             b             c           Radius
+        Label          (eV)          (eV)          (eV)        (eV/Angs)
+--------------------------------------------------------------------------------
+      1 O     c       0.000000      0.000000      0.000000      0.000000
+      2 Mg    c      -2.365804     -0.000000    -12.344154      0.000000
+--------------------------------------------------------------------------------
+  Maximum abs         2.365804      0.000000     12.344154      0.000000
+--------------------------------------------------------------------------------
+
+
+  Time to end of gradients =       0.0038 seconds
 
 
   Peak dynamic memory used =       1.78 MB 
@@ -133,9 +270,9 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0036
+  Total CPU time                                                  0.0038
 --------------------------------------------------------------------------------
 
 
-  Job Finished at 17:33.41 25th August     2023                               
+  Job Finished at 20:26.03 29th August     2023                               
 

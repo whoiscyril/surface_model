@@ -14,6 +14,15 @@ UnitCell calc_forces(UnitCell unitcell_init)
     // std::cout << total_energy << std::endl;
     std::vector<Atom> atoms = unitcell_init.coordinates_cart;
     Eigen::Vector3d lattice_constants = unitcell_init.lattice_constants;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
+    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
+    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+
 
     double a = lattice_constants[0];
     double b = lattice_constants[1];
@@ -36,9 +45,9 @@ UnitCell calc_forces(UnitCell unitcell_init)
     }
 
 
-    int maxx = ceil(cutoff/a);
-    int maxy = ceil(cutoff/b);
-    int maxz = ceil(cutoff/c);
+    int maxx = ceil(cutoff/v1.norm());
+    int maxy = ceil(cutoff/v2.norm());
+    int maxz = ceil(cutoff/v3.norm());
 
 
     Eigen::Vector3d rij;
@@ -62,7 +71,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                     for (int k = -maxz; k <= maxz; ++k)
                     {
                         rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
-                        n << i * a, j * b, k * c;
+                        n = i * a1 + j * a2+ k * a3;
                         rijn = rij + n;
 
                         if (i == 0 && j ==0 && k == 0)
@@ -74,7 +83,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                         ((pot.atom2_type == elem2.type) && (pot.atom2_label == elem2.label)) &&
                                         rij.norm() <= pot.cut_off2 && rij.norm() > 0.1)
                                 {
-                                    pot_deriv += -rij/rij.norm() * expterm;
+                                    pot_deriv += rij/rij.norm() * expterm;
 
 
                                 }
@@ -82,7 +91,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                          ((pot.atom1_type == elem2.type) && (pot.atom1_label == elem2.label)) &&
                                          rij.norm() <= pot.cut_off2 && rij.norm() > 0.1)
                                 {
-                                    pot_deriv += -rij/rij.norm() * expterm;
+                                    pot_deriv += rij/rij.norm() * expterm;
 
 
                                 }
@@ -97,14 +106,14 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                         ((pot.atom2_type == elem2.type) && (pot.atom2_label == elem2.label)) &&
                                         rijn.norm() <= pot.cut_off2)
                                 {
-                                    pot_deriv += (-rijn/rijn.norm()) * expterm;
+                                    pot_deriv += (rijn/rijn.norm()) * expterm;
 
                                 }
                                 else if (((pot.atom2_type == elem1.type) && (pot.atom2_label == elem1.label)) &&
                                          ((pot.atom1_type == elem2.type) && (pot.atom1_label == elem2.label)) &&
                                          rijn.norm() <= pot.cut_off2)
                                 {
-                                    pot_deriv += (-rijn/rijn.norm()) * expterm;
+                                    pot_deriv += (rijn/rijn.norm()) * expterm;
                                 }
                             }
                         }
@@ -113,7 +122,12 @@ UnitCell calc_forces(UnitCell unitcell_init)
                 }
             }
         }
-        // std::cout << pot_deriv[0] * a <<" " << pot_deriv[1] * b << " " << pot_deriv[2] * c << std::endl;
+        pot_deriv = lattice_vectors * pot_deriv;
+
+        elem1.fx = pot_deriv[0];
+        elem1.fy = pot_deriv[1];
+        elem1.fz = pot_deriv[2];
+        // std::cout << pot_deriv[0]   <<" " << pot_deriv[1]  << " " << pot_deriv[2]  << std::endl;
 
     }
 
@@ -122,9 +136,6 @@ UnitCell calc_forces(UnitCell unitcell_init)
     //Now calculate electrostatic contributions to force
     const double toeV = 14.39964390675221758120;
     int natom = unitcell_init.coordinates_frac.size();
-    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
-    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
-    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
 
     Eigen::Vector3d g1 = unitcell_init.reciprocal_vectors.row(0);
     Eigen::Vector3d g2 = unitcell_init.reciprocal_vectors.row(1);
@@ -132,13 +143,13 @@ UnitCell calc_forces(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    double kappa = 1./2.04154;
-    double rcut = 12.7729;
-    double kcut = 6.12922;
+    // double kappa = sqrt(0.159532);
+    // double rcut = 13.1605;
+    // double kcut = 4.199059;
 
     int nmax_x = ceil(rcut/a1.norm());
     int nmax_y = ceil(rcut/a2.norm());
@@ -151,7 +162,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
     n.setZero();
     rijn.setZero();
 
-        //Real part contribution Note calculated forces, not derivatves, hence negative sign in front of rijn.
+        //Real part contribution Note calculated derivatives.
     Eigen::Vector3d real_deriv;
     for ( auto& elem1 : atoms)
     {   
@@ -165,7 +176,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                 {
                     for (int k = -nmax_z; k <= nmax_z; ++k)
                     {
-                        n << i * a, j * b, k * c;
+                        n = i * a1 + j * a2 + k * a3;
                         rijn = rij + n;
                     double r_norm = rijn.norm();
                     double r_sqr = r_norm * r_norm;
@@ -177,7 +188,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             {
                                 if (rijn.norm() > 0.1)
                                 {
-                                    real_deriv += rijn * toeV * (0.5 * elem1.q * elem2.q) *
+                                    real_deriv += rijn * toeV * ( elem1.q * elem2.q) *
                                       ((-2. * kappa / sqrt(M_PI)) *
                                        (exp(-r_sqr * kappa * kappa) / r_norm) -
                                        (erfc(r_norm *kappa) / r_sqr)) / r_norm;
@@ -189,7 +200,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             }
                             else
                             {
-                                    real_deriv += rijn * toeV * (0.5 * elem1.q * elem2.q) *
+                                    real_deriv += rijn * toeV * ( elem1.q * elem2.q) *
                                       ((-2. * kappa / sqrt(M_PI)) *
                                        (exp(-r_sqr * kappa * kappa) / r_norm) -
                                        (erfc(r_norm *kappa) / r_sqr)) / r_norm;
@@ -205,12 +216,15 @@ UnitCell calc_forces(UnitCell unitcell_init)
                 }
             }
         }
-        std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
-
+        // std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
+        real_deriv = lattice_vectors * real_deriv;
+        elem1.fx += real_deriv[0];
+        elem1.fy += real_deriv[1];
+        elem1.fz += real_deriv[2];
     }
     rijn.setZero();
 
-    //Reciprocal contribution, again forces, not derivatives;
+    //Reciprocal contribution, again derivatives, not forces;
     Eigen::Vector3d reci_deriv;
     Eigen::Vector3d kvecs;
     kvecs.setZero();
@@ -239,7 +253,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                             }
                             else
                             {
-                                reci_deriv += kvecs*toeV * ((2. * M_PI)/ V) * elem1.q * elem2.q * exp(-kk/(4 * kappa * kappa))/kk * -sin(kvecs.dot(rijn));
+                                reci_deriv += kvecs*toeV * ((4. * M_PI)/ V) * elem1.q * elem2.q * exp(-kk/(4 * kappa * kappa))/kk * -sin(kvecs.dot(rijn));
                                 // reci_deriv += toeV *  kvecs * toeV *((2.*M_PI)/V)*elem1.q*elem2.q*exp(-0.25 * kk/kappa/kappa)/kk * -sin(kvecs.dot(rijn));
                                 // reci_deriv += -((2. * M_PI * elem1.q * elem2.q) / (V * kk)) * kvecs
                                             // * exp(-kk/4. * kappa * kappa) * -sin(kvecs.dot(rijn));
@@ -251,10 +265,17 @@ UnitCell calc_forces(UnitCell unitcell_init)
             }
 
         }
-        std::cout << reci_deriv[0] <<" " << reci_deriv[1]  << " " << reci_deriv[2]  << std::endl;
-
+        // std::cout << reci_deriv[0] <<" " << reci_deriv[1]  << " " << reci_deriv[2]  << std::endl;
+        reci_deriv = lattice_vectors * reci_deriv;
+        elem1.fx += reci_deriv[0];
+        elem1.fy += reci_deriv[1];
+        elem1.fz += reci_deriv[2];
     }
-
+    // for (const auto& elem : atoms)
+    // {
+    //     std::cout << elem.fx <<" " << elem.fy << " " << elem.fz << std::endl;
+    // }
+    // std::cout << lattice_vectors << std::endl;
 
     return unitcell_wforces;
 }
