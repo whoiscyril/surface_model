@@ -63,14 +63,14 @@ UnitCell calc_forces(UnitCell unitcell_init)
 
         for (auto& elem2 : atoms)
         {
-
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            // std::cout << rij.norm() << std::endl;
             for (int i = -maxx; i <= maxx; ++i)
             {
                 for (int j = -maxy; j <= maxy; ++j)
                 {
                     for (int k = -maxz; k <= maxz; ++k)
                     {
-                        rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
                         n = i * a1 + j * a2+ k * a3;
                         rijn = rij + n;
 
@@ -122,6 +122,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                 }
             }
         }
+        // pot_deriv *= 0.5;
         pot_deriv = lattice_vectors * pot_deriv;
 
         elem1.fx = pot_deriv[0];
@@ -271,11 +272,10 @@ UnitCell calc_forces(UnitCell unitcell_init)
         elem1.fy += reci_deriv[1];
         elem1.fz += reci_deriv[2];
     }
-    // for (const auto& elem : atoms)
-    // {
-    //     std::cout << elem.fx <<" " << elem.fy << " " << elem.fz << std::endl;
-    // }
-    // std::cout << lattice_vectors << std::endl;
+    for ( auto& elem : atoms)
+    {
+        std::cout << elem.fx <<" " << elem.fy << " " << elem.fz << std::endl;
+    }
 
     return unitcell_wforces;
 }

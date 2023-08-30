@@ -18,7 +18,7 @@ double bulk_energy(std::vector<Atom> atom_positions, std::vector<Specie> species
     short_range_energy = calc_short_range_buckingham_potential(unitcell);
     electrostatic_energy = calc_electrostatics_3D(unitcell);
     total_energy = short_range_energy + electrostatic_energy;
-    std::cout << short_range_energy << " " << electrostatic_energy <<" " << total_energy << std::endl;
+    // std::cout << short_range_energy << " " << electrostatic_energy <<" " << total_energy << std::endl;
     return total_energy;
 
 

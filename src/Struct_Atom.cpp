@@ -106,17 +106,16 @@ UnitCell::UnitCell(const std::string& filename)
     for (auto& elem : coordinates_frac)
     {
         Eigen::Vector3d frac;
+        Eigen::Vector3d cart;
         frac << elem.x, elem.y, elem.z; // Use commas to separate values
 
-        // Convert fractional to Cartesian for the current atom
-        Eigen::Vector3d cart = lattice_vectors * frac;
+        cart = frac[0] * lattice_vectors.row(0) + frac[1] * lattice_vectors.row(1) + frac[2] * lattice_vectors.row(2);
 
         // Create a new atom for the Cartesian coordinates
         Atom cartesian_atom = elem; // Copy the atom data
         cartesian_atom.x = cart[0];
         cartesian_atom.y = cart[1];
         cartesian_atom.z = cart[2];
-
         // Add the Cartesian atom to the coordinates_cart vector
         coordinates_cart.push_back(cartesian_atom);
     }
