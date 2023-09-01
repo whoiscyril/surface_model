@@ -3,12 +3,212 @@
 #include <iostream>
 #include <Struct_Atom.h>
 
+UnitCell calc_strain_deriv(UnitCell unitcell_init)
+{
+    UnitCell unitcell_wstrain;
+    Eigen::Matrix3d deriv;
+    deriv.setZero();
+
+    // //Now populate strain derivatives due to buckingham potentials;
+
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
+    Eigen::Vector3d lattice_constants = unitcell_init.lattice_constants;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
+    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
+    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+    double cutoff = 0;
+    std::vector<Buckingham> buck = unitcell_init.buckingham_potentials;
+
+    for (const auto& elem : buck)
+    {
+        if (elem.cut_off2 > cutoff)
+        {
+            cutoff = elem.cut_off2;
+        }
+        else
+        {
+            continue;
+        }
+    }
+    int maxx = ceil(cutoff/v1.norm());
+    int maxy = ceil(cutoff/v2.norm());
+    int maxz = ceil(cutoff/v3.norm());
+
+    Eigen::Vector3d rij;
+    Eigen::Vector3d n;
+    Eigen::Vector3d rijn;
+
+    for (auto& elem1 : atoms)
+    {
+        for (auto& elem2 : atoms)
+        {
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            // std::cout << rij.norm() << std::endl;
+            for (int i = -maxx; i <= maxx; ++i)
+            {
+                for (int j = -maxy; j <= maxy; ++j)
+                {
+                    for (int k = -maxz; k <= maxz; ++k)
+                    {
+                        n = i * a1 + j * a2+ k * a3;
+                        rijn = rij + n;
+
+                        if (i == 0 && j ==0 && k == 0)
+                        {
+                            for (const auto& pot : unitcell_init.buckingham_potentials)
+                            {
+                                double expterm = (-pot.A / pot.rho) * exp(-rij.norm()/pot.rho) + 6. * pot.C / pow(rij.norm(), 7.);
+                                // std::cout << expterm << std::endl;
+                                if (((pot.atom1_type == elem1.type) && (pot.atom1_label == elem1.label)) &&
+                                        ((pot.atom2_type == elem2.type) && (pot.atom2_label == elem2.label)) &&
+                                        rij.norm() <= pot.cut_off2 && rij.norm() > 0.1)
+                                {
+                                    deriv.col(0)(0) += rij[0] * rij[0] * expterm / rij.norm();
+                                    deriv.col(1)(0) += rij[0] * rij[1] * expterm / rij.norm();
+                                    deriv.col(1)(1) += rij[1] * rij[1] * expterm / rij.norm();
+                                    deriv.col(2)(0) += rij[0] * rij[2] * expterm / rij.norm();
+                                    deriv.col(2)(1) += rij[1] * rij[2] * expterm / rij.norm();
+                                    deriv.col(2)(2) += rij[2] * rij[2] * expterm / rij.norm();
+
+                                }
+                                else if (((pot.atom2_type == elem1.type) && (pot.atom2_label == elem1.label)) &&
+                                         ((pot.atom1_type == elem2.type) && (pot.atom1_label == elem2.label)) &&
+                                         rij.norm() <= pot.cut_off2 && rij.norm() > 0.1)
+                                {
+                                    deriv.col(0)(0) += rij[0] * rij[0] * expterm / rij.norm();
+                                    deriv.col(1)(0) += rij[0] * rij[1] * expterm / rij.norm();
+                                    deriv.col(1)(1) += rij[1] * rij[1] * expterm / rij.norm();
+                                    deriv.col(2)(0) += rij[0] * rij[2] * expterm / rij.norm();
+                                    deriv.col(2)(1) += rij[1] * rij[2] * expterm / rij.norm();
+                                    deriv.col(2)(2) += rij[2] * rij[2] * expterm / rij.norm();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (const auto pot : unitcell_init.buckingham_potentials)
+                            {
+                                double expterm = (-pot.A / pot.rho) * exp(-rijn.norm()/pot.rho) + 6. * pot.C / pow(rijn.norm(), 7.);
+                                if (((pot.atom1_type == elem1.type) && (pot.atom1_label == elem1.label)) &&
+                                        ((pot.atom2_type == elem2.type) && (pot.atom2_label == elem2.label)) &&
+                                        rijn.norm() <= pot.cut_off2)
+                                {
+                                    deriv.col(0)(0) += rijn[0] * rijn[0] * expterm / rijn.norm();
+                                    deriv.col(1)(0) += rijn[0] * rijn[1] * expterm / rijn.norm();
+                                    deriv.col(1)(1) += rijn[1] * rijn[1] * expterm / rijn.norm();
+                                    deriv.col(2)(0) += rijn[0] * rijn[2] * expterm / rijn.norm();
+                                    deriv.col(2)(1) += rijn[1] * rijn[2] * expterm / rijn.norm();
+                                    deriv.col(2)(2) += rijn[2] * rijn[2] * expterm / rijn.norm();
+                                }
+                                else if (((pot.atom2_type == elem1.type) && (pot.atom2_label == elem1.label)) &&
+                                         ((pot.atom1_type == elem2.type) && (pot.atom1_label == elem2.label)) &&
+                                         rijn.norm() <= pot.cut_off2)
+                                {
+                                    deriv.col(0)(0) += rijn[0] * rijn[0] * expterm / rijn.norm();
+                                    deriv.col(1)(0) += rijn[0] * rijn[1] * expterm / rijn.norm();
+                                    deriv.col(1)(1) += rijn[1] * rijn[1] * expterm / rijn.norm();
+                                    deriv.col(2)(0) += rijn[0] * rijn[2] * expterm / rijn.norm();
+                                    deriv.col(2)(1) += rijn[1] * rijn[2] * expterm / rijn.norm();
+                                    deriv.col(2)(2) += rijn[2] * rijn[2] * expterm / rijn.norm();
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+    deriv = deriv * 0.5;
+    // std::cout << 0.5 * deriv << std::endl;
+    const double toeV = 14.39964390675221758120;
+
+    int natom = unitcell_init.coordinates_frac.size();
+
+    Eigen::Vector3d g1 = unitcell_init.reciprocal_vectors.row(0);
+    Eigen::Vector3d g2 = unitcell_init.reciprocal_vectors.row(1);
+    Eigen::Vector3d g3 = unitcell_init.reciprocal_vectors.row(2);
+
+    double V = unitcell_init.volume;
+
+    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+
+    int nmax_x = ceil(rcut/a1.norm());
+    int nmax_y = ceil(rcut/a2.norm());
+    int nmax_z = ceil(rcut/a3.norm());
+    int kmax_x = ceil(kcut/g1.norm());
+    int kmax_y = ceil(kcut/g2.norm());
+    int kmax_z = ceil(kcut/g3.norm());
+
+    rij.setZero();
+    n.setZero();
+    rijn.setZero();
+
+    for ( auto& elem1 : atoms)
+    {
+        for ( auto& elem2 : atoms)
+        {
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            for (int i = -nmax_x; i<= nmax_x; ++i)
+            {
+                for (int j = -nmax_y; j <= nmax_y; ++j)
+                {
+                    for (int k = -nmax_z; k <= nmax_z; ++k)
+                    {
+                        n = i * a1 + j * a2 + k * a3;
+                        rijn = rij + n;
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
+                        if (rijn.norm() <= rcut)
+                        {
+                            double intact =toeV * ( elem1.q * elem2.q) *
+                                           ((-2. * kappa / sqrt(M_PI)) *
+                                            (exp(-r_sqr * kappa * kappa) / r_norm) -
+                                            (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                            if (i == 0 && j == 0 && k ==0)
+                            {
+                                if (rijn.norm() > 0.1)
+                                {
+                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
+                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
+                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
+                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
+                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
+                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                                }
+                            }
+                            else
+                            {
+                                deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
+                                deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
+                                deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
+                                deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
+                                deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
+                                deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
+
+    return unitcell_wstrain;
+}
+
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;
 
 UnitCell calc_forces(UnitCell unitcell_init)
 {
     UnitCell unitcell_wforces = unitcell_init;
-
 
     double total_energy = calc_short_range_buckingham_potential(unitcell_init) + calc_electrostatics_3D(unitcell_init);
     // std::cout << total_energy << std::endl;
@@ -22,7 +222,6 @@ UnitCell calc_forces(UnitCell unitcell_init)
     Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
     Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
     Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
-
 
     double a = lattice_constants[0];
     double b = lattice_constants[1];
@@ -44,11 +243,9 @@ UnitCell calc_forces(UnitCell unitcell_init)
         }
     }
 
-
     int maxx = ceil(cutoff/v1.norm());
     int maxy = ceil(cutoff/v2.norm());
     int maxz = ceil(cutoff/v3.norm());
-
 
     Eigen::Vector3d rij;
     Eigen::Vector3d n;
@@ -85,14 +282,12 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                 {
                                     pot_deriv += rij/rij.norm() * expterm;
 
-
                                 }
                                 else if (((pot.atom2_type == elem1.type) && (pot.atom2_label == elem1.label)) &&
                                          ((pot.atom1_type == elem2.type) && (pot.atom1_label == elem2.label)) &&
                                          rij.norm() <= pot.cut_off2 && rij.norm() > 0.1)
                                 {
                                     pot_deriv += rij/rij.norm() * expterm;
-
 
                                 }
                             }
@@ -117,7 +312,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                 }
                             }
                         }
-                    }    
+                    }
 
                 }
             }
@@ -131,8 +326,6 @@ UnitCell calc_forces(UnitCell unitcell_init)
         // std::cout << pot_deriv[0]   <<" " << pot_deriv[1]  << " " << pot_deriv[2]  << std::endl;
 
     }
-
-    //both of these contributions below were missing a factor of 2;
 
     //Now calculate electrostatic contributions to force
     const double toeV = 14.39964390675221758120;
@@ -163,10 +356,10 @@ UnitCell calc_forces(UnitCell unitcell_init)
     n.setZero();
     rijn.setZero();
 
-        //Real part contribution Note calculated derivatives.
+    //Real part contribution Note calculated derivatives.
     Eigen::Vector3d real_deriv;
     for ( auto& elem1 : atoms)
-    {   
+    {
         real_deriv.setZero();
         for ( auto& elem2 : atoms)
         {
@@ -179,8 +372,8 @@ UnitCell calc_forces(UnitCell unitcell_init)
                     {
                         n = i * a1 + j * a2 + k * a3;
                         rijn = rij + n;
-                    double r_norm = rijn.norm();
-                    double r_sqr = r_norm * r_norm;
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
                         // Eigen::Vector3d prefactor = rijn/pow(rijn.norm(), 3.);
                         // double erfcterm = erfc(k * rijn.norm()) + (2. * kappa / sqrt(M_PI) ) * rijn.norm() * exp(-kappa*kappa*rijn.norm() * rijn.norm());
                         if (rijn.norm() <= rcut)
@@ -190,26 +383,25 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                 if (rijn.norm() > 0.1)
                                 {
                                     real_deriv += rijn * toeV * ( elem1.q * elem2.q) *
-                                      ((-2. * kappa / sqrt(M_PI)) *
-                                       (exp(-r_sqr * kappa * kappa) / r_norm) -
-                                       (erfc(r_norm *kappa) / r_sqr)) / r_norm;
-                                            // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
+                                                  ((-2. * kappa / sqrt(M_PI)) *
+                                                   (exp(-r_sqr * kappa * kappa) / r_norm) -
+                                                   (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                                    // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
                                     // real_deriv +=  (-rijn / rijn.norm()) * (-0.5 * elem1.q * elem2.q / (rijn.norm() * rijn.norm()))
-                                                    // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm()));
+                                    // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm()));
                                     // real_deriv += toeV * elem1.q * elem2.q * prefactor * erfcterm;
-                                } 
+                                }
                             }
                             else
                             {
-                                    real_deriv += rijn * toeV * ( elem1.q * elem2.q) *
-                                      ((-2. * kappa / sqrt(M_PI)) *
-                                       (exp(-r_sqr * kappa * kappa) / r_norm) -
-                                       (erfc(r_norm *kappa) / r_sqr)) / r_norm;
-                                            // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
-                                    // real_deriv += (-rijn / rijn.norm()) * (-0.5 * elem1.q * elem2.q / (rijn.norm() * rijn.norm()))
-                                                    // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm())); 
-                                    // real_deriv += toeV * elem1.q * elem2.q * prefactor * erfcterm;
-
+                                real_deriv += rijn * toeV * ( elem1.q * elem2.q) *
+                                              ((-2. * kappa / sqrt(M_PI)) *
+                                               (exp(-r_sqr * kappa * kappa) / r_norm) -
+                                               (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                                // real_deriv += rijn* toeV*(0.5*elem1.q*elem2.q)*((-2. * kappa/sqrt(M_PI))*(exp(-r_sqr*kappa * kappa)/rnorm)-(erfc(rnorm * kappa )/r_sqr))/rnorm;
+                                // real_deriv += (-rijn / rijn.norm()) * (-0.5 * elem1.q * elem2.q / (rijn.norm() * rijn.norm()))
+                                // * ( (2. * kappa * rijn.norm() * exp(-kappa * kappa * rijn.norm() * rijn.norm())) / sqrt(M_PI) + erfc(kappa * rijn.norm()));
+                                // real_deriv += toeV * elem1.q * elem2.q * prefactor * erfcterm;
 
                             }
                         }
@@ -235,7 +427,7 @@ UnitCell calc_forces(UnitCell unitcell_init)
         for ( auto& elem2 : atoms)
         {
             rijn << (elem1.x - elem2.x), (elem1.y - elem2.y), (elem1.z - elem2.z);
-                                                        // std::cout << rijn[0] << " " << rijn[1] << " " << rijn[2] << std::endl;
+            // std::cout << rijn[0] << " " << rijn[1] << " " << rijn[2] << std::endl;
             for (int i = -kmax_x; i <= kmax_x; ++i)
             {
                 for (int j = -kmax_y; j <= kmax_y; ++j)
@@ -257,8 +449,8 @@ UnitCell calc_forces(UnitCell unitcell_init)
                                 reci_deriv += kvecs*toeV * ((4. * M_PI)/ V) * elem1.q * elem2.q * exp(-kk/(4 * kappa * kappa))/kk * -sin(kvecs.dot(rijn));
                                 // reci_deriv += toeV *  kvecs * toeV *((2.*M_PI)/V)*elem1.q*elem2.q*exp(-0.25 * kk/kappa/kappa)/kk * -sin(kvecs.dot(rijn));
                                 // reci_deriv += -((2. * M_PI * elem1.q * elem2.q) / (V * kk)) * kvecs
-                                            // * exp(-kk/4. * kappa * kappa) * -sin(kvecs.dot(rijn));
-                                            // std::cout << elem1.label<< " "<< elem2.label << " " << rijn.norm() << std::endl;
+                                // * exp(-kk/4. * kappa * kappa) * -sin(kvecs.dot(rijn));
+                                // std::cout << elem1.label<< " "<< elem2.label << " " << rijn.norm() << std::endl;
                             }
                         }
                     }
@@ -272,10 +464,10 @@ UnitCell calc_forces(UnitCell unitcell_init)
         elem1.fy += reci_deriv[1];
         elem1.fz += reci_deriv[2];
     }
-    for ( auto& elem : atoms)
-    {
-        std::cout << elem.fx <<" " << elem.fy << " " << elem.fz << std::endl;
-    }
+    // for ( auto& elem : atoms)
+    // {
+    //     std::cout << elem.fx <<" " << elem.fy << " " << elem.fz << std::endl;
+    // }
 
     return unitcell_wforces;
 }

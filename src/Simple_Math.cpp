@@ -6,7 +6,6 @@
 #include <vector>
 #include <iostream>
 
-
 std::tuple<double, double, double> rad2deg(const std::tuple<double, double, double>& angles)
 {
     double roll_r, pitch_r, yaw_r;
@@ -16,7 +15,6 @@ std::tuple<double, double, double> rad2deg(const std::tuple<double, double, doub
     double yaw_d = yaw_r * 180.0 / M_PI;
     return std::make_tuple(roll_d, pitch_d, yaw_d);
 }
-
 
 double get_distance(const Atom& atom1, const Atom& atom2)
 {
@@ -90,10 +88,6 @@ Eigen::Matrix3d frac2cart(const std::vector<Atom>& cell, Eigen::Matrix3d& lvecs)
                                   0.0, a2.norm() * std::sin(gamma), -a3.norm() * std::sin(beta) * std::cos(reci_alpha),
                                   0.0, 0.0, a3.norm() * std::sin(beta) * std::sin(reci_alpha);
 
-
-
-
-
     // std::cout << a1.norm() << " " << a2.norm() << " " << a3.norm()<< std::endl;
     // std::cout << alpha * 180. / M_PI<< " " << beta * 180. / M_PI<< " " << gamma * 180./M_PI<< std::endl;
 
@@ -117,7 +111,6 @@ Eigen::Matrix3d lattice_vectors(Eigen::Vector3d& lattice_constants, Eigen::Vecto
                     lattice_constants[2] * cos_beta, lattice_constants[2] * (cos_alpha - cos_beta * cos_gamma) / sin_gamma,
                     lattice_constants[2] * std::sqrt(1.0 - cos_alpha * cos_alpha - cos_beta * cos_beta - cos_gamma * cos_gamma +
                             2.0 * cos_alpha * cos_beta * cos_gamma) / sin_gamma;
-
 
     return lattice_vectors;
 }

@@ -7,8 +7,6 @@
 #include <stdexcept>
 #include <array>
 
-
-
 int echo_input(std::string filename)
 {
     std::string line;
@@ -70,7 +68,6 @@ std::vector<Atom> get_input_coordinates(std::string filename)
         }
     }
 
-
 // Add index to input_coordinates
     int ctn = 0;
     for (auto& atom : input_coordinates)
@@ -79,7 +76,6 @@ std::vector<Atom> get_input_coordinates(std::string filename)
         atom.index = ctn;
         // std :: cout << atom.index << " " << atom.label << " " << atom.type << " " << atom.x << " " << atom.y << " " << atom.z << std::endl;
     }
-
 
     in.close();
     return input_coordinates;
@@ -253,5 +249,3 @@ std::vector<double> get_lattice_constants(std::string filename)
     in.close();
     throw std::runtime_error("Cell structure not found in the file");
 }
-
-

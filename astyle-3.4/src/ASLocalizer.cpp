@@ -1162,7 +1162,6 @@ Ukrainian::Ukrainian()	// Український
     addPair("Artistic Style has terminated\n", L"Artistic Style припинив\n");
 }
 
-
 #endif	// ASTYLE_LIB
 
 }   // end of namespace astyle

@@ -4,7 +4,6 @@
 #include <Struct_Atom.h>
 #include <iostream>
 
-
 //Methods to distribute all input parameters into corresponding structs;
 
 //Populate lattice constants;
@@ -33,7 +32,6 @@ Eigen::Vector3d populate_lattice_const(UnitCell& unitcell, std::vector<double>& 
 // 	{
 //         unitcell.coordinates_frac.push_back(elem);
 // 	}
-
 
 // 	//Populate cartesian coordinates by first setting lattice vectors, and then transform it into cartesian
 

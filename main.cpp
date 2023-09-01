@@ -11,7 +11,8 @@ int main(int argc, char const *argv[])
     std::vector<double> lattice_constants;
     UnitCell unitcell(filename);
     // calc_electrostatics_3D(unitcell);
-    calc_forces(unitcell);
+    // calc_forces(unitcell);
+    calc_strain_deriv(unitcell);
     // double energy = calc_short_range_buckingham_potential(unitcell);
     // std::cout << energy << std::endl;
     // //Creating the bulk model
@@ -34,7 +35,6 @@ int main(int argc, char const *argv[])
 
     // // // std::cout << unitcell.lattice_angles << std::endl;
 
-
     // std::vector<Atom> atoms;
     // atoms = get_input_coordinates(filename);
     // populate_coordinates(unitcell, atoms);
@@ -49,7 +49,7 @@ int main(int argc, char const *argv[])
     // UnitCell unitcell(filename);
     // for (const auto& elem : unitcell.buckingham_potentials)
     // std::cout << elem.atom1_label <<" " << elem.atom1_type <<" " <<elem.atom2_label <<" " << elem.atom2_type<<" " <<
-    // elem.A << " " << elem.rho <<" " << elem.C << " " << 
+    // elem.A << " " << elem.rho <<" " << elem.C << " " <<
     //             elem.cut_off1 << " " << elem.cut_off2 << std::endl;
     // // std::cout << unitcell.lattice_angles << std::endl;
 

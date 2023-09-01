@@ -487,7 +487,6 @@ std::string ASFormatter::nextLine()
     isCharImmediatelyPostCloseBlock = false;
     isCharImmediatelyPostTemplate = false;
 
-
     while (!isLineReady)
     {
         if (shouldReparseCurrentChar)
@@ -2530,7 +2529,6 @@ void ASFormatter::setSqueezeEmptyLinesNumber(int num)
 {
     squeezeEmptyLineNum = num;
 }
-
 
 /**
  * set the pointer alignment.
@@ -5759,7 +5757,6 @@ void ASFormatter::processPreprocessor()
     else if (currentLine.compare(preproc, 6, "define") == 0)
         isInPreprocessorDefineDef = true;
 
-
 }
 
 /**
@@ -6336,7 +6333,6 @@ void ASFormatter::formatQuoteOpener()
         isInVerbatimQuote = true;
         checkInterpolation = true;
     }
-
 
     // a quote following a brace is an array
     if (previousCommandChar == '{'

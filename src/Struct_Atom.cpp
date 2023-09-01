@@ -45,7 +45,6 @@ UnitCell::UnitCell(const std::string& filename)
         }
     }
 
-
     in.clear();
     in.seekg(0);
     //Now populate fractional coordinates
@@ -76,7 +75,6 @@ UnitCell::UnitCell(const std::string& filename)
             }
         }
     }
-
 
     //Now calculate lattice vector so can convert from frac to cart
 //Obtuse angle not accounted for;
@@ -120,17 +118,14 @@ UnitCell::UnitCell(const std::string& filename)
         coordinates_cart.push_back(cartesian_atom);
     }
 
-
 //Calculate volume;
 
     volume = lattice_vectors.row(0).dot(lattice_vectors.row(1).cross(lattice_vectors.row(2)));
-
 
 //Populate reciprocal lattice vectors;
     reciprocal_vectors.row(0) = 2. * M_PI * lattice_vectors.row(1).cross(lattice_vectors.row(2)) / volume;
     reciprocal_vectors.row(1) = 2. * M_PI * lattice_vectors.row(2).cross(lattice_vectors.row(0)) / volume;
     reciprocal_vectors.row(2) = 2. * M_PI * lattice_vectors.row(0).cross(lattice_vectors.row(1)) / volume;
-
 
 //Populate short-range potential information
 
@@ -162,14 +157,13 @@ UnitCell::UnitCell(const std::string& filename)
             }
         }
 
-
     }
 
 }
 
 UnitCell::UnitCell() : lattice_constants(Eigen::Vector3d::Zero()), lattice_angles(Eigen::Vector3d::Zero()),
-                       lattice_vectors(Eigen::Matrix3d::Zero()), reciprocal_vectors(Eigen::Matrix3d::Zero()),
-                       volume(0.0)
+    lattice_vectors(Eigen::Matrix3d::Zero()), reciprocal_vectors(Eigen::Matrix3d::Zero()),
+    volume(0.0)
 {
     // Initialize other members to default values
     // For example, populate coordinates_frac and coordinates_cart

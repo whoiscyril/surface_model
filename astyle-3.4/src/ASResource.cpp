@@ -161,7 +161,6 @@ const std::string ASResource::AS_COLON = std::string(":");
 const std::string ASResource::AS_COMMA = std::string(",");
 const std::string ASResource::AS_SEMICOLON = std::string(";");
 
-
 /**
  * Sort comparison function.
  * Compares the length of the value of pointers in the vectors.
