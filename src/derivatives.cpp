@@ -138,17 +138,27 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    int nmax_x = ceil(rcut/a1.norm());
-    int nmax_y = ceil(rcut/a2.norm());
-    int nmax_z = ceil(rcut/a3.norm());
-    int kmax_x = ceil(kcut/g1.norm());
-    int kmax_y = ceil(kcut/g2.norm());
-    int kmax_z = ceil(kcut/g3.norm());
+    // int nmax_x = ceil(rcut/a1.norm());
+    // int nmax_y = ceil(rcut/a2.norm());
+    // int nmax_z = ceil(rcut/a3.norm());
+    // int kmax_x = ceil(kcut/g1.norm());
+    // int kmax_y = ceil(kcut/g2.norm());
+    // int kmax_z = ceil(kcut/g3.norm());
 
+    double kappa = 1./2.39958;
+    double rcut = 15.013;
+    double kcut = 5.21468;
+
+    int nmax_x = 3;
+    int nmax_y = 3;
+    int nmax_z = 2;
+    int kmax_x = 2;
+    int kmax_y = 4;
+    int kmax_z = 4;
     rij.setZero();
     n.setZero();
     rijn.setZero();
@@ -170,10 +180,7 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
                         double r_sqr = r_norm * r_norm;
                         if (rijn.norm() <= rcut)
                         {
-                            double intact = toeV * (elem1.q * elem2.q) *
-                                            ((-2. * kappa / sqrt(M_PI)) *
-                                            (exp(-r_sqr * kappa * kappa) / r_norm) -
-                                            (erfc(r_norm * kappa) / r_sqr)) / r_norm;
+                            double intact = toeV*(0.5*elem1.q*elem2.q)*((-2.*kappa/sqrt(M_PI))*(exp(-r_sqr*kappa*kappa)/r_norm)-(erfc(r_norm*kappa)/r_sqr))/r_norm;
                             if (i == 0 && j == 0 && k ==0)
                             {
                                 if (rijn.norm() > 0.1)
@@ -229,10 +236,10 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
                         kvecs = (g1 * i) + (g2 * j) + (g3 * k);
                         double kk = kvecs.norm() * kvecs.norm();
                         intact[0] = toeV * (2. * M_PI / V) * elem1.q * elem2.q;
-                        intact[1] = -2./kk/kk * exp(-kk/4./kappa/kappa) * cos(kvecs.dot(rij));
-                        intact[2] = -1./kk/2./kappa/kappa * exp(-kk/4./kappa/kappa) * cos(kvecs.dot(rij));
-                        intact[3] = -1./kk/2./kappa/kappa * exp(-kk/4./kappa/kappa) * sin(kvecs.dot(rij));
-                        intact[4] = -exp(-kk/4./kappa/kappa) * sin(kvecs.dot(rij)) / kk;
+                        intact[1] = -2. * exp(-kk/4./kappa/kappa)/kk/kk * cos(kvecs.dot(rij));
+                        intact[2] = -1./2. * exp(-kk/4./kappa/kappa)/(kk * kappa * kappa) * cos(kvecs.dot(rij));
+                        intact[3] = -exp(-kk/4./kappa/kappa)/kk * sin(kvecs.dot(rij));
+                        intact[4] = -exp(-kk/4./kappa/kappa)/kk * sin(kvecs.dot(rij));
                         if (kvecs.norm() <= kcut)
                         {
 
@@ -243,12 +250,12 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
                             }
                             else
                             {
-                                //wrt volume;
-                                deriv.col(0)(0) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
-                                deriv.col(1)(1) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
-                                deriv.col(2)(2) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                // wrt volume;
+                                deriv.col(0)(0) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(1)(1) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(2)(2) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
 
-                                //wrt rvec;
+                                // wrt rvec;
                                 deriv.col(0)(0) += intact[0] * intact[4] * kvecs[0] * rij[0];
                                 deriv.col(1)(0) += intact[0] * intact[4] * kvecs[0] * rij[1];
                                 deriv.col(1)(1) += intact[0] * intact[4] * kvecs[1] * rij[1];
@@ -259,12 +266,12 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
 
 
                                 //wrt kvec;
-                                deriv.col(0)(0) += -kvecs[0] * intact[0] * (kvecs[0] * intact[1] + kvecs[0] * intact[2] + rij[0] * intact[3]);
-                                deriv.col(1)(0) += -kvecs[0] * intact[0] * (kvecs[1] * intact[1] + kvecs[1] * intact[2] + rij[1] * intact[3]);
-                                deriv.col(1)(1) += -kvecs[1] * intact[0] * (kvecs[1] * intact[1] + kvecs[1] * intact[2] + rij[1] * intact[3]);
-                                deriv.col(2)(0) += -kvecs[0] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
-                                deriv.col(2)(1) += -kvecs[1] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
-                                deriv.col(2)(2) += -kvecs[2] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
+                                deriv.col(0)(0) += -kvecs[0] * intact[0] * (kvecs[0] * (intact[1] + intact[2]) + rij[0] * intact[3]);
+                                deriv.col(1)(0) += -kvecs[0] * intact[0] * (kvecs[1] * (intact[1] + intact[2]) + rij[1] * intact[3]);
+                                deriv.col(1)(1) += -kvecs[1] * intact[0] * (kvecs[1] * (intact[1] + intact[2]) + rij[1] * intact[3]);
+                                deriv.col(2)(0) += -kvecs[0] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
+                                deriv.col(2)(1) += -kvecs[1] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
+                                deriv.col(2)(2) += -kvecs[2] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
 
                             }
                         }
@@ -273,7 +280,7 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
             }
         }
     }
-        // std::cout << deriv << std::endl;
+        std::cout << deriv << std::endl;
 
     return unitcell_wstrain;
 }
