@@ -11,7 +11,7 @@
 *  conp         - constant pressure calculation                                *
 ********************************************************************************
 
-  Job Started  at 16:38.58  1st September  2023                               
+  Job Started  at 17:40.55 11th September  2023                               
 
   Number of CPUs =     1
 
@@ -57,8 +57,8 @@
    No.  Atomic       x           y          z         Charge      Occupancy
         Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
-      1 O     c    0.200000    0.500000    0.500000     0.00000    1.000000    
-      2 Mg    c    0.300000 *  0.000000 *  0.100000 *   0.00000    1.000000    
+      1 O     c    0.200000    0.500000    0.500000    -2.00000    1.000000    
+      2 Mg    c    0.300000 *  0.000000 *  0.100000 *   2.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -73,8 +73,8 @@
   Species    Type    Atomic    Atomic    Charge       Radii (Angs)     Library
                      Number     Mass       (e)     Cova   Ionic  VDW   Symbol
 --------------------------------------------------------------------------------
-    O        Core        8      16.00   0.000000   0.730  0.000  1.360          
-    Mg       Core       12      24.31   0.000000   1.100  0.000  1.640          
+    O        Core        8      16.00  -2.000000   0.730  0.000  1.360          
+    Mg       Core       12      24.31   2.000000   1.100  0.000  1.640          
 --------------------------------------------------------------------------------
 
 
@@ -88,19 +88,6 @@
 
   Time limit = Infinity
 
-  Maximum range for interatomic potentials =    100000.000000 Angstroms
-
-  General interatomic potentials :
-
---------------------------------------------------------------------------------
-Atom  Types   Potential      Parameter       Value         Units   Cutoffs(Ang)
-  1     2                                                            Min /  Max 
---------------------------------------------------------------------------------
-O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
-                            Buckingham rho  0.30000000    Ang       
-                            Buckingham C     0.0000000    eV*Ang^6  
---------------------------------------------------------------------------------
-
 ********************************************************************************
 *  Output for configuration   1                                                *
 ********************************************************************************
@@ -109,14 +96,14 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           0.03886053 eV    
-  Monopole - monopole (real) =           0.00000000 eV    
-  Monopole - monopole (recip)=           0.00000000 eV    
-  Monopole - monopole (total)=           0.00000000 eV    
+  Interatomic potentials     =           0.00000000 eV    
+  Monopole - monopole (real) =          -2.00870501 eV    
+  Monopole - monopole (recip)=         -22.56743815 eV    
+  Monopole - monopole (total)=         -24.57614316 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           0.03886053 eV    
+  Total lattice energy       =         -24.57614316 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =               3.7494 kJ/(mole unit cells)
+  Total lattice energy       =           -2371.2221 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
 
@@ -130,12 +117,12 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
   Final cell parameters and derivatives :
 
 --------------------------------------------------------------------------------
-       a            4.000000 Angstrom     dE/de1(xx)    -0.033219 eV/strain
-       b            5.000000 Angstrom     dE/de2(yy)    -0.237967 eV/strain
-       c            6.000000 Angstrom     dE/de3(zz)    -0.171750 eV/strain
+       a            4.000000 Angstrom     dE/de1(xx)    -4.017953 eV/strain
+       b            5.000000 Angstrom     dE/de2(yy)    14.111166 eV/strain
+       c            6.000000 Angstrom     dE/de3(zz)    14.482930 eV/strain
        alpha       90.000000 Degrees      dE/de4(yz)    -0.000000 eV/strain
-       beta        60.000000 Degrees      dE/de5(xz)    -0.055505 eV/strain
-       gamma       90.000000 Degrees      dE/de6(xy)     0.000000 eV/strain
+       beta        60.000000 Degrees      dE/de5(xz)     1.145245 eV/strain
+       gamma       90.000000 Degrees      dE/de6(xy)    -0.000000 eV/strain
 --------------------------------------------------------------------------------
 
   Primitive cell volume =           103.923048 Angs**3
@@ -152,9 +139,9 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
         Label          (eV)          (eV)          (eV)        (eV/Angs)
 --------------------------------------------------------------------------------
       1 O     c       0.000000      0.000000      0.000000      0.000000
-      2 Mg    c       0.112415      0.000000      0.459185      0.000000
+      2 Mg    c      -2.478219     -0.000000    -12.803338      0.000000
 --------------------------------------------------------------------------------
-  Maximum abs         0.112415      0.000000      0.459185      0.000000
+  Maximum abs         2.478219      0.000000     12.803338      0.000000
 --------------------------------------------------------------------------------
 
 
@@ -174,5 +161,5 @@ O    c Mg   c Buckingham    Buckingham A     1280.0000    eV        0.000  8.000
 --------------------------------------------------------------------------------
 
 
-  Job Finished at 16:38.58  1st September  2023                               
+  Job Finished at 17:40.55 11th September  2023                               
 

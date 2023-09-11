@@ -2,9 +2,8 @@ cell
 4 5 6 90 60 90
 
 frac
-O  core 0.2 0.5 0.5 0
-Mg core 0.3 0.0 0.1 0
+O  core 0.2 0.5 0.5 -2
+Mg core 0.3 0.0 0.1 2
 
-
-buckingham
-Mg core O core 1280.0 0.3 0.0 0.0 8.0
+#buckingham
+#Mg core O core 1280.0 0.3 0.0 0.0 8.0

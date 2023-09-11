@@ -125,7 +125,9 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
         }
     }
     deriv = deriv * 0.5;
-    // std::cout << 0.5 * deriv << std::endl;
+    // std::cout << deriv << std::endl;
+
+    //Real contribution
     const double toeV = 14.39964390675221758120;
 
     int natom = unitcell_init.coordinates_frac.size();
@@ -168,30 +170,30 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
                         double r_sqr = r_norm * r_norm;
                         if (rijn.norm() <= rcut)
                         {
-                            double intact =toeV * ( elem1.q * elem2.q) *
-                                           ((-2. * kappa / sqrt(M_PI)) *
+                            double intact = toeV * (elem1.q * elem2.q) *
+                                            ((-2. * kappa / sqrt(M_PI)) *
                                             (exp(-r_sqr * kappa * kappa) / r_norm) -
-                                            (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                                            (erfc(r_norm * kappa) / r_sqr)) / r_norm;
                             if (i == 0 && j == 0 && k ==0)
                             {
                                 if (rijn.norm() > 0.1)
                                 {
-                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
-                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact ;
+                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact ;
+                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact ;
+                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact ;
+                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact ;
+                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact ;
                                 }
                             }
                             else
                             {
-                                deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
-                                deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
-                                deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
-                                deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
-                                deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
-                                deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                                deriv.col(0)(0) += rijn[0] * rijn[0] * intact ;
+                                deriv.col(1)(0) += rijn[0] * rijn[1] * intact ;
+                                deriv.col(1)(1) += rijn[1] * rijn[1] * intact ;
+                                deriv.col(2)(0) += rijn[0] * rijn[2] * intact ;
+                                deriv.col(2)(1) += rijn[1] * rijn[2] * intact ;
+                                deriv.col(2)(2) += rijn[2] * rijn[2] * intact ;
                             }
                         }
                     }
@@ -199,7 +201,79 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
             }
         }
     }
+            // std::cout << deriv << std::endl;
+
     // std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
+
+
+    //Reciprocal Contribution - 3 terms; volume, r vector, k vector;
+    rij.setZero();
+    n.setZero();
+    rijn.setZero();
+    Eigen::Vector3d kvecs;
+    kvecs.setZero();
+    double intact[5];
+
+    for ( auto& elem1 : atoms)
+    {
+        for ( auto& elem2 : atoms)
+        {
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            for (int i = -kmax_x; i<= kmax_x; ++i)
+            {
+                for (int j = -kmax_y; j <= kmax_y; ++j)
+                {
+                    for (int k = -kmax_z; k <= kmax_z; ++k)
+                    {
+                        kvecs.setZero();
+                        kvecs = (g1 * i) + (g2 * j) + (g3 * k);
+                        double kk = kvecs.norm() * kvecs.norm();
+                        intact[0] = toeV * (2. * M_PI / V) * elem1.q * elem2.q;
+                        intact[1] = -2./kk/kk * exp(-kk/4./kappa/kappa) * cos(kvecs.dot(rij));
+                        intact[2] = -1./kk/2./kappa/kappa * exp(-kk/4./kappa/kappa) * cos(kvecs.dot(rij));
+                        intact[3] = -1./kk/2./kappa/kappa * exp(-kk/4./kappa/kappa) * sin(kvecs.dot(rij));
+                        intact[4] = -exp(-kk/4./kappa/kappa) * sin(kvecs.dot(rij)) / kk;
+                        if (kvecs.norm() <= kcut)
+                        {
+
+
+                            if (i == 0 && j == 0 && k ==0)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                //wrt volume;
+                                deriv.col(0)(0) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(1)(1) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(2)(2) += (-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+
+                                //wrt rvec;
+                                deriv.col(0)(0) += intact[0] * intact[4] * kvecs[0] * rij[0];
+                                deriv.col(1)(0) += intact[0] * intact[4] * kvecs[0] * rij[1];
+                                deriv.col(1)(1) += intact[0] * intact[4] * kvecs[1] * rij[1];
+                                deriv.col(2)(0) += intact[0] * intact[4] * kvecs[0] * rij[2];
+                                deriv.col(2)(1) += intact[0] * intact[4] * kvecs[1] * rij[2];
+                                deriv.col(2)(2) += intact[0] * intact[4] * kvecs[2] * rij[2];                                
+
+
+
+                                //wrt kvec;
+                                deriv.col(0)(0) += -kvecs[0] * intact[0] * (kvecs[0] * intact[1] + kvecs[0] * intact[2] + rij[0] * intact[3]);
+                                deriv.col(1)(0) += -kvecs[0] * intact[0] * (kvecs[1] * intact[1] + kvecs[1] * intact[2] + rij[1] * intact[3]);
+                                deriv.col(1)(1) += -kvecs[1] * intact[0] * (kvecs[1] * intact[1] + kvecs[1] * intact[2] + rij[1] * intact[3]);
+                                deriv.col(2)(0) += -kvecs[0] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
+                                deriv.col(2)(1) += -kvecs[1] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
+                                deriv.col(2)(2) += -kvecs[2] * intact[0] * (kvecs[2] * intact[1] + kvecs[2] * intact[2] + rij[2] * intact[3]);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+        // std::cout << deriv << std::endl;
 
     return unitcell_wstrain;
 }
