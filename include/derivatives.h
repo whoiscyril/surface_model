@@ -6,6 +6,7 @@
 #include <Struct_Atom.h>
 
 UnitCell calc_forces(UnitCell unitcell_init);
-UnitCell calc_strain_deriv(UnitCell unitcell_init);
+void calc_strain_deriv(UnitCell& unitcell_init);
+void calc_lattice_deriv(UnitCell& unitcell_init);
 
 #endif

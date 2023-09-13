@@ -42,7 +42,8 @@ struct UnitCell
     std::vector<Atom> coordinates_frac;
     Eigen::Matrix3d lattice_vectors;
     Eigen::Matrix3d reciprocal_vectors;
-
+    Eigen::Matrix3d strain_deriv;
+    Eigen::Matrix3d lattice_deriv;
     std::vector<Buckingham> buckingham_potentials;
     double volume;
 

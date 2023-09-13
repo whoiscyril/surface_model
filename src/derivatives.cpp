@@ -3,7 +3,36 @@
 #include <iostream>
 #include <Struct_Atom.h>
 
-UnitCell calc_strain_deriv(UnitCell unitcell_init)
+void calc_lattice_deriv(UnitCell& unitcell_init)
+{
+    Eigen::Matrix3d strain_deriv = unitcell_init.strain_deriv;
+    Eigen::Matrix3d lattice_deriv;
+    lattice_deriv.setZero();
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Matrix3d lattice_vectors_inverse = lattice_vectors.inverse();
+
+    for (int i=0; i < 3; ++i)
+    {
+
+
+        lattice_deriv.col(0)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(0)(i);
+        lattice_deriv.col(0)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(0)(i);
+        lattice_deriv.col(0)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(0)(i);
+
+        lattice_deriv.col(1)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(1)(i);
+        lattice_deriv.col(1)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(1)(i);
+        lattice_deriv.col(1)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(1)(i);
+
+        lattice_deriv.col(2)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(2)(i);
+        lattice_deriv.col(2)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(2)(i);
+        lattice_deriv.col(2)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(2)(i);
+
+    }
+    unitcell_init.lattice_deriv = lattice_deriv;
+
+}
+
+void calc_strain_deriv(UnitCell& unitcell_init)
 {
     UnitCell unitcell_wstrain;
     Eigen::Matrix3d deriv;
@@ -138,27 +167,27 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    // int nmax_x = ceil(rcut/a1.norm());
-    // int nmax_y = ceil(rcut/a2.norm());
-    // int nmax_z = ceil(rcut/a3.norm());
-    // int kmax_x = ceil(kcut/g1.norm());
-    // int kmax_y = ceil(kcut/g2.norm());
-    // int kmax_z = ceil(kcut/g3.norm());
+    int nmax_x = ceil(rcut/a1.norm());
+    int nmax_y = ceil(rcut/a2.norm());
+    int nmax_z = ceil(rcut/a3.norm());
+    int kmax_x = ceil(kcut/g1.norm());
+    int kmax_y = ceil(kcut/g2.norm());
+    int kmax_z = ceil(kcut/g3.norm());
 
-    double kappa = 1./2.39958;
-    double rcut = 15.013;
-    double kcut = 5.21468;
+    // double kappa = 1./2.39958;
+    // double rcut = 15.013;
+    // double kcut = 5.21468;
 
-    int nmax_x = 3;
-    int nmax_y = 3;
-    int nmax_z = 2;
-    int kmax_x = 2;
-    int kmax_y = 4;
-    int kmax_z = 4;
+    // int nmax_x = 3;
+    // int nmax_y = 3;
+    // int nmax_z = 2;
+    // int kmax_x = 2;
+    // int kmax_y = 4;
+    // int kmax_z = 4;
     rij.setZero();
     n.setZero();
     rijn.setZero();
@@ -280,9 +309,12 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
             }
         }
     }
-        std::cout << deriv << std::endl;
+    deriv(1,0) = deriv(0,1);
+    deriv(2,0) = deriv(0,2);
+    deriv(2,1) = deriv(1,2);
 
-    return unitcell_wstrain;
+        // std::cout << deriv << std::endl;
+    unitcell_init.strain_deriv = deriv;
 }
 
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;
