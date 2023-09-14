@@ -264,7 +264,7 @@ double calc_electrostatics_3D(UnitCell unitcell)
                         n.setZero();
                         n = i * a1 + j * a2 + k * a3;
                         rijn = rij - n;
-                        if (n.norm() < rcut)
+                        if (rijn.norm() < rcut)
                         {
                             // std::cout << i << " " << j << " " << k << " "<< "Trans "<< n[0] << " " << n[1] << " " << n[2];
                             if (i ==0 && j==0 && k ==0 )

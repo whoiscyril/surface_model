@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
     UnitCell unitcell(filename);
 
     double energy;
-    energy = calc_short_range_buckingham_potential(unitcell);
+    energy = calc_electrostatics_3D(unitcell);
     std::cout << energy << std::endl;
 
 
