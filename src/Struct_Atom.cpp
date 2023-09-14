@@ -158,6 +158,65 @@ UnitCell::UnitCell(const std::string& filename)
         }
 
     }
+    //Now parse spring constant for shell model
+
+    in.clear();
+    in.seekg(0);
+    line = " ";
+    std::string str= " ";
+    double k = 0.;
+    std::vector<std::pair<std::string, double>> k_constant;
+    while(std::getline(in,line))
+    {
+        if (line.compare(0, 6, "spring") == 0 && !line.empty())
+        {
+            while(std::getline(in,line))
+            {
+                std::istringstream iss(line);
+                if (iss >> str >> k)
+                {
+                    k_constant.push_back(std::make_pair(str, k));
+                }
+            }
+        }
+    }
+            //Add spring constant to core and shell pairs;
+
+    for (auto& elem1 : coordinates_frac)
+    {
+        for (const auto& elem2 : k_constant)
+        {
+            // std:: cout <<elem2.first <<" "<<elem2.second << std::endl;
+            if ((elem1.type == "shel" || elem1.type == "core") && elem1.label == elem2.first)
+            {
+                elem1.k = elem2.second;
+                // std::cout << "yes" << std::endl;
+            }
+        }
+    }
+
+
+    //Now pair up core and shell atoms;
+    for (int i = 0; i < coordinates_frac.size() - 1; i+=2)
+    {
+        if (coordinates_frac[i].label == coordinates_frac[i+1].label && (coordinates_frac[i].type == "core" && coordinates_frac[i+1].type == "shel"))
+        {
+            auto paired = std::make_pair(coordinates_frac[i], coordinates_frac[i+1]);
+            cs_pairs[i+1] = paired;
+        }
+    }
+
+    // for (const auto& elem : cs_pairs)
+    // {
+        // int key = elem.first;
+        // Atom coreatom = elem.second.first;
+        // Atom shelatom = elem.second.second;
+        // std::cout << key <<std::endl;
+        // std::cout << coreatom.label << " " <<coreatom.type << " " << coreatom.x << " " <<coreatom.y << " " << coreatom.z << " " << coreatom.q << " " <<coreatom.k<<std::endl;
+        // std::cout << shelatom.label << " " <<shelatom.type << " " << shelatom.x << " " <<shelatom.y << " " << shelatom.z << " " << shelatom.q<< " " <<shelatom.k << std::endl;
+
+    // }
+
 
 }
 
@@ -165,12 +224,5 @@ UnitCell::UnitCell() : lattice_constants(Eigen::Vector3d::Zero()), lattice_angle
     lattice_vectors(Eigen::Matrix3d::Zero()), reciprocal_vectors(Eigen::Matrix3d::Zero()),
     volume(0.0)
 {
-    // Initialize other members to default values
-    // For example, populate coordinates_frac and coordinates_cart
-    // Populate other members as needed
-    // ...
-    // You can use similar initialization logic as in the other constructor
-
-    // For example, populating coordinates_frac and coordinates_cart
 
 }

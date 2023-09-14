@@ -1,6 +1,7 @@
 #ifndef STRUCT_ATOM_H
 #define STRUCT_ATOM_H
 #include <string>
+#include <map>
 #include <tuple>
 #include <Eigen/Dense>
 
@@ -11,7 +12,7 @@ struct Atom
     int index;
     std::string label;
     std::string type;
-    double x, y, z, q, o;
+    double x, y, z, q, o, k;
     double rad;
     double dp_x, dp_y, dp_z;
     double fx, fy, fz;
@@ -20,7 +21,12 @@ struct Atom
     {
         return std::tie(label, x, y, z) < std::tie(other.label, other.x, other.y, other.z);
     }
+
 };
+    // std::ostream& operator<<(std::ostream& os, const Atom& atom) {
+    //     os << atom.label << " " << atom.type << " " << atom.x << " " << atom.y << " " << atom.z << " " << atom.q<<std::endl; ;
+    //     return os;
+    // }
 struct Buckingham
 {
     std::string atom1_label;
@@ -45,6 +51,7 @@ struct UnitCell
     Eigen::Matrix3d strain_deriv;
     Eigen::Matrix3d lattice_deriv;
     std::vector<Buckingham> buckingham_potentials;
+    std::map<int, std::pair<Atom, Atom>> cs_pairs;
     double volume;
 
 

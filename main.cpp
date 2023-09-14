@@ -1,4 +1,5 @@
 #include "bulk.h"
+#include "Energy.h"
 #include "Input_Parser.h"
 #include "Struct_Atom.h"
 #include "distributor.h"
@@ -10,11 +11,17 @@ int main(int argc, char const *argv[])
     std::string filename = "input.in";
     std::vector<double> lattice_constants;
     UnitCell unitcell(filename);
+
+    double energy;
+    energy = calc_short_range_buckingham_potential(unitcell);
+    std::cout << energy << std::endl;
+
+
     // calc_electrostatics_3D(unitcell);
     // calc_forces(unitcell);
-    calc_strain_deriv(unitcell);
-    calc_lattice_deriv(unitcell);
-    std::cout << unitcell.lattice_deriv << std::endl;
+    // calc_strain_deriv(unitcell);
+    // calc_lattice_deriv(unitcell);
+
 
     // double energy = calc_short_range_buckingham_potential(unitcell);
     // std::cout << energy << std::endl;

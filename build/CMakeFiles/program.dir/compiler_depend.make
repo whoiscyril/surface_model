@@ -181,6 +181,10 @@ CMakeFiles/program.dir/main.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -456,10 +460,10 @@ CMakeFiles/program.dir/main.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Eigenvalues/RealQZ.h \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+  /Users/uccazxu/Desktop/surface/surface_model/include/Energy.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/Input_Parser.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/distributor.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/derivatives.h \
-  /Users/uccazxu/Desktop/surface/surface_model/include/Energy.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/iostream
 
 CMakeFiles/program.dir/src/Energy.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/src/Energy.cpp \
@@ -645,6 +649,10 @@ CMakeFiles/program.dir/src/Energy.cpp.o: /Users/uccazxu/Desktop/surface/surface_
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/Struct_Atom.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -1097,6 +1105,10 @@ CMakeFiles/program.dir/src/Input_Parser.cpp.o: /Users/uccazxu/Desktop/surface/su
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/Struct_Atom.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -1562,6 +1574,10 @@ CMakeFiles/program.dir/src/Simple_Math.cpp.o: /Users/uccazxu/Desktop/surface/sur
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/math.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/math.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/Struct_Atom.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -2016,6 +2032,10 @@ CMakeFiles/program.dir/src/Struct_Atom.cpp.o: /Users/uccazxu/Desktop/surface/sur
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -2477,6 +2497,10 @@ CMakeFiles/program.dir/src/bulk.cpp.o: /Users/uccazxu/Desktop/surface/surface_mo
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -2943,6 +2967,10 @@ CMakeFiles/program.dir/src/derivatives.cpp.o: /Users/uccazxu/Desktop/surface/sur
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -3394,6 +3422,10 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/wctype.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_types/_wctrans_t.h \
   /Users/uccazxu/Desktop/surface/surface_model/include/Struct_Atom.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Dense \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core \
   /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h \
@@ -3750,13 +3782,17 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Householder/Householder.h:
 
+/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Householder:
+
+/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/QR:
+
+/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Cholesky/LDLT.h:
+
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Cholesky/InternalHeaderCheck.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_ucontext.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Cholesky/LLT.h:
-
-/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Householder:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Jacobi:
 
@@ -3881,8 +3917,6 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/products/SelfadjointRank2Update.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/NestByValue.h:
-
-/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Cholesky/LDLT.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_in_addr_t.h:
 
@@ -4104,6 +4138,12 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/complex:
 
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/optional:
+
+/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/functors/NullaryFunctors.h:
+
+/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/popcntintrin.h:
+
 /Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/smmintrin.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Jacobi/Jacobi.h:
@@ -4116,13 +4156,7 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__memory/base.h:
 
-/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/QR:
-
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/ConfigureVectorization.h:
-
-/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/emmintrin.h:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/math.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/math.h:
 
@@ -4138,17 +4172,33 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/Core:
 
-/Users/uccazxu/Desktop/surface/surface_model/include/bulk.h:
+/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/DenseStorage.h:
 
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/ctime:
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__node_handle:
 
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/cctype:
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/__tree:
+
+/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/emmintrin.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/math.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/vector:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_va_list.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Eigenvalues/Tridiagonalization.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/string_view:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/string:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/map:
+
+/Users/uccazxu/Desktop/surface/surface_model/include/bulk.h:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/ctime:
+
+/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/cctype:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_pthread/_pthread_rwlock_t.h:
 
@@ -4290,10 +4340,6 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_endian.h:
 
-/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/functors/NullaryFunctors.h:
-
-/Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/popcntintrin.h:
-
 /Library/Developer/CommandLineTools/usr/lib/clang/12.0.5/include/stdarg.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_timeval.h:
@@ -4343,8 +4389,6 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/i386/signal.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/appleapiopts.h:
-
-/Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/DenseStorage.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/LU/arch/InverseSize4.h:
 
@@ -4507,10 +4551,6 @@ CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/sur
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_u_int64_t.h:
 
 /Users/uccazxu/Desktop/surface/surface_model/eigen/Eigen/src/Core/util/DisableStupidWarnings.h:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/c++/v1/vector:
-
-/Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/sys/_types/_va_list.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk/usr/include/_ctermid.h:
 
