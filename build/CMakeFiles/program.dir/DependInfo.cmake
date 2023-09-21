@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/uccazxu/Desktop/surface/surface_model/src/Struct_Atom.cpp" "CMakeFiles/program.dir/src/Struct_Atom.cpp.o" "gcc" "CMakeFiles/program.dir/src/Struct_Atom.cpp.o.d"
   "/Users/uccazxu/Desktop/surface/surface_model/src/bulk.cpp" "CMakeFiles/program.dir/src/bulk.cpp.o" "gcc" "CMakeFiles/program.dir/src/bulk.cpp.o.d"
   "/Users/uccazxu/Desktop/surface/surface_model/src/derivatives.cpp" "CMakeFiles/program.dir/src/derivatives.cpp.o" "gcc" "CMakeFiles/program.dir/src/derivatives.cpp.o.d"
+  "/Users/uccazxu/Desktop/surface/surface_model/src/derv_1.cpp" "CMakeFiles/program.dir/src/derv_1.cpp.o" "gcc" "CMakeFiles/program.dir/src/derv_1.cpp.o.d"
   "/Users/uccazxu/Desktop/surface/surface_model/src/distributor.cpp" "CMakeFiles/program.dir/src/distributor.cpp.o" "gcc" "CMakeFiles/program.dir/src/distributor.cpp.o.d"
   )
 

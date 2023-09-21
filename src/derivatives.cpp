@@ -2,6 +2,123 @@
 #include <Energy.h>
 #include <iostream>
 #include <Struct_Atom.h>
+#include <derv_1.h>
+
+void internal_derv2(UnitCell& unitcell_init)
+{
+
+    int natom = unitcell_init.coordinates_frac.size();
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
+    double cutoff;   
+    //Max buck cut off
+    std::vector<Buckingham> buck = unitcell_init.buckingham_potentials;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    Eigen::Vector3d n;
+    Eigen::Vector3d total_buck_derv1;
+    Eigen::MatrixXd derv2(3*natom, 3*natom);
+    derv2.setZero();
+    n.setZero();
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
+    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
+    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+
+    for (const auto& elem : buck)
+    {
+        if (elem.cut_off2 > cutoff)
+        {
+            cutoff = elem.cut_off2;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    //Max images in 3 directions;
+
+    double xmax = ceil(cutoff/v1.norm());
+    double ymax = ceil(cutoff/v2.norm());
+    double zmax = ceil(cutoff/v3.norm());
+
+    Eigen::Vector3d rij, rijn;
+//Second derivative
+    for (int i = 0; i <atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        for (int j = 0; j<atoms.size(); ++j)
+        {   
+            Atom elem2 = atoms[j];
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            for (int ii = -xmax; ii <= xmax; ++ii)
+            {
+                for (int jj = -ymax; jj <= ymax; ++jj)
+                {
+                    for (int kk = -zmax; kk <= zmax ; ++kk)
+                    {
+                        n = ii * a1 + jj * a2 + kk * a3;
+                        rijn = rij + n;
+                        if (ii == 0 && jj == 0 && kk == 0)
+                        {
+                            for (const auto pot : buck)
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            for (const auto pot : buck)
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+//First derivative
+    for (int i = 0; i <atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        total_buck_derv1.setZero();
+        for (int j = 0; j<atoms.size(); ++j)
+        {   
+            Atom elem2 = atoms[j];
+            for (int ii = -xmax; ii <= xmax; ++ii)
+            {
+                for (int jj = -ymax; jj <= ymax; ++jj)
+                {
+                    for (int kk = -zmax; kk <= zmax ; ++kk)
+                    {
+                        n = ii * a1 + jj * a2 + kk * a3;
+
+                        if (ii == 0 && jj == 0 && kk == 0)
+                        {
+                            for (const auto pot : buck)
+                            {
+                                total_buck_derv1 += buck_derv1(elem1, elem2, n, pot);
+                            }
+                        }
+                        else
+                        {
+                            for (const auto pot : buck)
+                            {
+                                total_buck_derv1 += buck_derv1(elem1, elem2, n, pot);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        total_buck_derv1 = lattice_vectors * total_buck_derv1;
+    }
+}
 
 void calc_lattice_deriv(UnitCell& unitcell_init)
 {

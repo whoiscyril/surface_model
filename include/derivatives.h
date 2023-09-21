@@ -8,5 +8,6 @@
 UnitCell calc_forces(UnitCell unitcell_init);
 void calc_strain_deriv(UnitCell& unitcell_init);
 void calc_lattice_deriv(UnitCell& unitcell_init);
+void internal_derv2(UnitCell& unitcell);
 
 #endif

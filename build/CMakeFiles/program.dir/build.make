@@ -153,10 +153,24 @@ CMakeFiles/program.dir/src/derivatives.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/program.dir/src/derivatives.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/uccazxu/Desktop/surface/surface_model/src/derivatives.cpp -o CMakeFiles/program.dir/src/derivatives.cpp.s
 
+CMakeFiles/program.dir/src/derv_1.cpp.o: CMakeFiles/program.dir/flags.make
+CMakeFiles/program.dir/src/derv_1.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/src/derv_1.cpp
+CMakeFiles/program.dir/src/derv_1.cpp.o: CMakeFiles/program.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/program.dir/src/derv_1.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/program.dir/src/derv_1.cpp.o -MF CMakeFiles/program.dir/src/derv_1.cpp.o.d -o CMakeFiles/program.dir/src/derv_1.cpp.o -c /Users/uccazxu/Desktop/surface/surface_model/src/derv_1.cpp
+
+CMakeFiles/program.dir/src/derv_1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/program.dir/src/derv_1.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/uccazxu/Desktop/surface/surface_model/src/derv_1.cpp > CMakeFiles/program.dir/src/derv_1.cpp.i
+
+CMakeFiles/program.dir/src/derv_1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/program.dir/src/derv_1.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/uccazxu/Desktop/surface/surface_model/src/derv_1.cpp -o CMakeFiles/program.dir/src/derv_1.cpp.s
+
 CMakeFiles/program.dir/src/distributor.cpp.o: CMakeFiles/program.dir/flags.make
 CMakeFiles/program.dir/src/distributor.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/src/distributor.cpp
 CMakeFiles/program.dir/src/distributor.cpp.o: CMakeFiles/program.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/program.dir/src/distributor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/program.dir/src/distributor.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/program.dir/src/distributor.cpp.o -MF CMakeFiles/program.dir/src/distributor.cpp.o.d -o CMakeFiles/program.dir/src/distributor.cpp.o -c /Users/uccazxu/Desktop/surface/surface_model/src/distributor.cpp
 
 CMakeFiles/program.dir/src/distributor.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/program.dir/src/distributor.cpp.s: cmake_force
 CMakeFiles/program.dir/main.cpp.o: CMakeFiles/program.dir/flags.make
 CMakeFiles/program.dir/main.cpp.o: /Users/uccazxu/Desktop/surface/surface_model/main.cpp
 CMakeFiles/program.dir/main.cpp.o: CMakeFiles/program.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/program.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/program.dir/main.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/program.dir/main.cpp.o -MF CMakeFiles/program.dir/main.cpp.o.d -o CMakeFiles/program.dir/main.cpp.o -c /Users/uccazxu/Desktop/surface/surface_model/main.cpp
 
 CMakeFiles/program.dir/main.cpp.i: cmake_force
@@ -189,6 +203,7 @@ program_OBJECTS = \
 "CMakeFiles/program.dir/src/Struct_Atom.cpp.o" \
 "CMakeFiles/program.dir/src/bulk.cpp.o" \
 "CMakeFiles/program.dir/src/derivatives.cpp.o" \
+"CMakeFiles/program.dir/src/derv_1.cpp.o" \
 "CMakeFiles/program.dir/src/distributor.cpp.o" \
 "CMakeFiles/program.dir/main.cpp.o"
 
@@ -201,11 +216,12 @@ program_EXTERNAL_OBJECTS =
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/src/Struct_Atom.cpp.o
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/src/bulk.cpp.o
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/src/derivatives.cpp.o
+/Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/src/derv_1.cpp.o
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/src/distributor.cpp.o
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/main.cpp.o
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/build.make
 /Users/uccazxu/Desktop/surface/surface_model/program: CMakeFiles/program.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable /Users/uccazxu/Desktop/surface/surface_model/program"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/uccazxu/Desktop/surface/surface_model/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable /Users/uccazxu/Desktop/surface/surface_model/program"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/program.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

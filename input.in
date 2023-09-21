@@ -2,8 +2,8 @@ cell
 4 5 6 90 60 90
 
 frac
-O  core 0.5 0.5 0.5 -2.0
-Mg core 0.0 0.0 0.0 2.0
+O  core 0.5 0.5 0.5 0
+Mg core 0.28 0.28 0.28 0
 
 buckingham
 Mg core    O    core   946.627 0.31813  0.00000 0.0 10.0

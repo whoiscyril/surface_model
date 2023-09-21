@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/program.dir/src/bulk.cpp.o.d"
   "CMakeFiles/program.dir/src/derivatives.cpp.o"
   "CMakeFiles/program.dir/src/derivatives.cpp.o.d"
+  "CMakeFiles/program.dir/src/derv_1.cpp.o"
+  "CMakeFiles/program.dir/src/derv_1.cpp.o.d"
   "CMakeFiles/program.dir/src/distributor.cpp.o"
   "CMakeFiles/program.dir/src/distributor.cpp.o.d"
 )

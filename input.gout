@@ -12,7 +12,7 @@
 *  nosymmetry   - turn off symmetry after initial structure generation         *
 ********************************************************************************
 
-  Job Started  at 16:17.51 18th September  2023                               
+  Job Started  at 17:20.26 21st September  2023                               
 
   Number of CPUs =     1
 
@@ -25,10 +25,10 @@
 
   Formula = OMg                                                         
 
-  Number of irreducible atoms/shells =       3
+  Number of irreducible atoms/shells =       2
 
 
-  Total number atoms/shells =       3
+  Total number atoms/shells =       2
 
   Dimensionality = 3               :  Bulk   
 
@@ -58,9 +58,8 @@
    No.  Atomic       x           y          z         Charge      Occupancy
         Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
-      1 O     c    0.500000    0.500000    0.500000    -2.00000    1.000000    
-      2 Mg    c    0.000000 *  0.000000 *  0.000000 *   2.00000    1.000000    
-      3 O     s    0.500000 *  0.500000 *  0.500000 *   0.00000    1.000000    
+      1 O     c    0.500000    0.500000    0.500000     0.00000    1.000000    
+      2 Mg    c    0.280000 *  0.280000 *  0.280000 *   0.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -75,9 +74,8 @@
   Species    Type    Atomic    Atomic    Charge       Radii (Angs)     Library
                      Number     Mass       (e)     Cova   Ionic  VDW   Symbol
 --------------------------------------------------------------------------------
-    O        Core        8      16.00  -2.000000   0.730  0.000  1.360          
-    Mg       Core       12      24.31   2.000000   1.100  0.000  1.640          
-    O        Shell       8       0.00   0.000000   0.730  0.000  0.000          
+    O        Core        8      16.00   0.000000   0.730  0.000  1.360          
+    Mg       Core       12      24.31   0.000000   1.100  0.000  1.640          
 --------------------------------------------------------------------------------
 
 
@@ -91,12 +89,6 @@
 
   Time limit = Infinity
 
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! WARNING : potential   1 is acting on the core of an ion with a shell
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
   Maximum range for interatomic potentials =    100000.000000 Angstroms
 
   General interatomic potentials :
@@ -109,9 +101,6 @@ O    c Mg   c Buckingham    Buckingham A     946.62700    eV        0.000 10.000
                             Buckingham rho  0.31813000    Ang       
                             Buckingham C     0.0000000    eV*Ang^6  
 --------------------------------------------------------------------------------
-O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
-                            Spring k 4       0.0000000    eV*Ang^-4 
---------------------------------------------------------------------------------
 
 ********************************************************************************
 *  Output for configuration   1                                                *
@@ -121,14 +110,14 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           0.04122065 eV    
-  Monopole - monopole (real) =          -1.59936485 eV    
-  Monopole - monopole (recip)=         -22.76164282 eV    
-  Monopole - monopole (total)=         -24.36100766 eV    
+  Interatomic potentials     =           1.00553086 eV    
+  Monopole - monopole (real) =           0.00000000 eV    
+  Monopole - monopole (recip)=           0.00000000 eV    
+  Monopole - monopole (total)=           0.00000000 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =         -24.31978701 eV    
+  Total lattice energy       =           1.00553086 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           -2346.4877 kJ/(mole unit cells)
+  Total lattice energy       =              97.0184 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
 
@@ -142,12 +131,12 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
   Final cell parameters and derivatives :
 
 --------------------------------------------------------------------------------
-       a            4.000000 Angstrom     dE/de1(xx)    -6.080736 eV/strain
-       b            5.000000 Angstrom     dE/de2(yy)    13.273719 eV/strain
-       c            6.000000 Angstrom     dE/de3(zz)    16.693759 eV/strain
-       alpha       90.000000 Degrees      dE/de4(yz)    -0.000000 eV/strain
-       beta        60.000000 Degrees      dE/de5(xz)    -1.034288 eV/strain
-       gamma       90.000000 Degrees      dE/de6(xy)     0.000000 eV/strain
+       a            4.000000 Angstrom     dE/de1(xx)    -3.686255 eV/strain
+       b            5.000000 Angstrom     dE/de2(yy)    -1.701657 eV/strain
+       c            6.000000 Angstrom     dE/de3(zz)    -1.833043 eV/strain
+       alpha       90.000000 Degrees      dE/de4(yz)    -1.744082 eV/strain
+       beta        60.000000 Degrees      dE/de5(xz)    -1.986031 eV/strain
+       gamma       90.000000 Degrees      dE/de6(xy)    -1.904795 eV/strain
 --------------------------------------------------------------------------------
 
   Primitive cell volume =           103.923048 Angs**3
@@ -164,17 +153,16 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
         Label          (eV)          (eV)          (eV)        (eV/Angs)
 --------------------------------------------------------------------------------
       1 O     c       0.000000      0.000000      0.000000      0.000000
-      2 Mg    c       0.000000     -0.000000     -0.000000      0.000000
-      3 O     s       0.000000      0.000000      0.000000      0.000000
+      2 Mg    c       6.939662      7.644957     13.469731      0.000000
 --------------------------------------------------------------------------------
-  Maximum abs         0.000000      0.000000      0.000000      0.000000
+  Maximum abs         6.939662      7.644957     13.469731      0.000000
 --------------------------------------------------------------------------------
 
 
-  Time to end of gradients =       0.0037 seconds
+  Time to end of gradients =       0.0040 seconds
 
 
-  Peak dynamic memory used =       1.79 MB 
+  Peak dynamic memory used =       1.78 MB 
 
 
   Timing analysis for GULP :
@@ -183,12 +171,9 @@ O    c O    s Spring (c-s)  Spring k 2       74.920000    eV*Ang^-2 0.000  0.800
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0037
+  Total CPU time                                                  0.0040
 --------------------------------------------------------------------------------
 
 
-
-  **** GULP has completed with 1 warning - beware! ****
-
-  Job Finished at 16:17.51 18th September  2023                               
+  Job Finished at 17:20.26 21st September  2023                               
 
