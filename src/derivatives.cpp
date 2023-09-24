@@ -7,7 +7,7 @@
 void internal_derv2(UnitCell& unitcell_init)
 {
 
-    int natom = unitcell_init.coordinates_frac.size();
+    int natom = unitcell_init.coordinates_cart.size();
     std::vector<Atom> atoms = unitcell_init.coordinates_cart;
     double cutoff;   
     //Max buck cut off
@@ -45,43 +45,92 @@ void internal_derv2(UnitCell& unitcell_init)
     double zmax = ceil(cutoff/v3.norm());
 
     Eigen::Vector3d rij, rijn;
+
+
+    //First put coordinates into row and column vectors
+    std::vector<double> row_coordinates;
+    std::vector<double> col_coordinates;
+
+        for (const auto & elem : atoms)
+        {
+            row_coordinates.push_back(elem.x);
+            row_coordinates.push_back(elem.y);
+            row_coordinates.push_back(elem.z);
+        }
+
+    //Now compute distance and put it in a matrix
+        Eigen::MatrixXd dist_mat(3*natom, 3*natom);
+        dist_mat.setZero();
+
+        for (int i = 0; i < 3*natom; ++i)
+        {
+            for (int j = 0; j < 3*natom ; ++j)
+            {
+                dist_mat(j, i) = row_coordinates[i] - row_coordinates[j];
+            }
+        }
+        // std::cout << dist_mat << std::endl;
 //Second derivative
-    for (int i = 0; i <atoms.size(); ++i)
+
+    double intact[5];
+    Eigen::Vector3d mcoord, ncoord;
+    mcoord.setZero();
+    ncoord.setZero();
+    for (int i = 0; i < atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
-        for (int j = 0; j<atoms.size(); ++j)
-        {   
-            Atom elem2 = atoms[j];
-            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
-            for (int ii = -xmax; ii <= xmax; ++ii)
-            {
-                for (int jj = -ymax; jj <= ymax; ++jj)
-                {
-                    for (int kk = -zmax; kk <= zmax ; ++kk)
-                    {
-                        n = ii * a1 + jj * a2 + kk * a3;
-                        rijn = rij + n;
-                        if (ii == 0 && jj == 0 && kk == 0)
-                        {
-                            for (const auto pot : buck)
-                            {
+        mcoord << elem1.x, elem1.y, elem1.z;
 
+        for (int j = 0; j < atoms.size(); ++j)
+        {
+            Atom elem2 = atoms[j];
+            ncoord << elem2.x, elem2.y, elem2.z;
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+
+            for (int iii = -xmax; iii <= xmax; ++iii)
+            {
+                for (int jjj = -ymax; jjj <= ymax; ++jjj)
+                {
+                    for (int kkk = -zmax; kkk <= zmax; ++kkk)
+                    {
+                        n = iii * a1 + jjj * a2 + kkk * a3;
+                        if (iii == 0 && jjj == 0 && kkk == 0)
+                        {
+                            for (const auto& pot : buck)
+                            {
+                                intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+                                intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
                             }
                         }
                         else
                         {
-                            for (const auto pot : buck)
+                            for (const auto& pot : buck)
                             {
+                                intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+                                intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
                             }
                         }
                     }
                 }
             }
+
+
+            for (int ii = 0; ii < 3; ++ii)
+            {
+                for (int jj = 0; jj < 3; ++jj)
+                {
+                    intact[0] = (-1./rij.norm()) + (mcoord[ii] - ncoord[jj]) * (mcoord[ii] - ncoord[jj])/(rij.norm(), 3.);
+                    intact[2] = (mcoord[ii] - ncoord[jj]) / rij.norm();
+                    intact[3] = -intact[2];
+                    derv2(3*j + jj, 3*i+ii) = intact[0] * intact[1] + intact[2]*intact[3]*intact[4];
+                    // std::cout << intact[0] << " " << intact[1] << " "<< intact[2] << " " << intact[3] <<" "<< intact[4] << std::endl;
+                    std::cout << rij << std::endl;
+                }
+            }
+
         }
     }
-
-
-
+// std::cout << derv2<< std::endl;
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
     {
