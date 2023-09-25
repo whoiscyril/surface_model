@@ -2,8 +2,248 @@
 #include <Energy.h>
 #include <iostream>
 #include <Struct_Atom.h>
+#include <derv_1.h>
 
-UnitCell calc_strain_deriv(UnitCell unitcell_init)
+void internal_derv2(UnitCell& unitcell_init)
+{
+
+    int natom = unitcell_init.coordinates_cart.size();
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
+    double cutoff;
+    //Max buck cut off
+    std::vector<Buckingham> buck = unitcell_init.buckingham_potentials;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    Eigen::Vector3d n;
+    Eigen::Vector3d total_buck_derv1;
+    Eigen::MatrixXd derv2(3, natom, 3, natom);
+    derv2.setZero();
+    n.setZero();
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
+    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
+    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+
+    for (const auto& elem : buck)
+    {
+        if (elem.cut_off2 > cutoff)
+        {
+            cutoff = elem.cut_off2;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    //Max images in 3 directions;
+
+    double xmax = ceil(cutoff/v1.norm());
+    double ymax = ceil(cutoff/v2.norm());
+    double zmax = ceil(cutoff/v3.norm());
+
+    Eigen::Vector3d rij, rijn;
+
+    //First put coordinates into row and column vectors
+    std::vector<double> row_coordinates;
+    std::vector<double> col_coordinates;
+
+    for (const auto & elem : atoms)
+    {
+        row_coordinates.push_back(elem.x);
+        row_coordinates.push_back(elem.y);
+        row_coordinates.push_back(elem.z);
+    }
+
+    //Now compute distance and put it in a matrix
+    Eigen::MatrixXd dist_mat(3*natom, 3*natom);
+    dist_mat.setZero();
+
+    for (int i = 0; i < 3*natom; ++i)
+    {
+        for (int j = 0; j < 3*natom ; ++j)
+        {
+            dist_mat(j, i) = row_coordinates[i] - row_coordinates[j];
+        }
+    }
+    // std::cout << dist_mat << std::endl;
+//Second derivative
+    // double intact[5];
+    // Eigen::Vector3d mcoord, ncoord;
+    // mcoord.setZero();
+    // ncoord.setZero();
+    // for (int i = 0; i < atoms.size(); ++i)
+    // {
+    //     Atom elem1 = atoms[i];
+    //     mcoord << elem1.x, elem1.y, elem1.z;
+
+    //     for (int j = 0; j < atoms.size(); ++j)
+    //     {
+    //         Atom elem2 = atoms[j];
+    //         ncoord << elem2.x, elem2.y, elem2.z;
+    //         rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+
+    //         for (int iii = -xmax; iii <= xmax; ++iii)
+    //         {
+    //             for (int jjj = -ymax; jjj <= ymax; ++jjj)
+    //             {
+    //                 for (int kkk = -zmax; kkk <= zmax; ++kkk)
+    //                 {
+    //                     n = iii * a1 + jjj * a2 + kkk * a3;
+    //                     if (iii == 0 && jjj == 0 && kkk == 0)
+    //                     {
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+    //                             intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+    //                             intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         for (int ii = 0; ii < 3; ++ii)
+    //         {
+    //             for (int jj = 0; jj < 3; ++jj)
+    //             {
+    //                 intact[0] = (-1./rij.norm()) + (mcoord[ii] - ncoord[jj]) * (mcoord[ii] - ncoord[jj])/(rij.norm(), 3.);
+    //                 intact[2] = (mcoord[ii] - ncoord[jj]) / rij.norm();
+    //                 intact[3] = -intact[2];
+    //                 derv2(3*j + jj, 3*i+ii) = intact[0] * intact[1] + intact[2]*intact[3]*intact[4];
+    //                 // std::cout << intact[0] << " " << intact[1] << " "<< intact[2] << " " << intact[3] <<" "<< intact[4] << std::endl;
+    //                 std::cout << rij << std::endl;
+    //             }
+    //         }
+
+    //     }
+    // }
+
+//Second derivatives;
+    double intact[5];
+    for (int i = 0; i < atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        Eigen::Vector3d mcoord;
+        mcoord << elem1.x, elem1.y, elem1.z;
+        Eigen::Matrix3d temp;
+        temp.setZero();
+        for (int j = 0; j < atoms.size(); ++j)
+        {
+            Atom elem2 = atoms[j];
+            Eigen::Vector3d ncoord;
+            ncoord << elem2.x, elem2.y, elem2.z;
+            rij = mcoord - ncoord;
+            double r_norm = rij.norm();
+            double r_norm_sq = r_norm * r_norm;
+
+            intact[1] = buck_derv1_scalar(elem1, elem2, unitcell_init) / r_norm;
+            intact[3] = buck_derv2_scalar(elem1, elem2, unitcell_init);
+            
+            for(int i_a = 0; i_a < 3; ++i)
+            {
+                for (int j_b = 0; j_b < 3; ++j)
+                {
+                    if(i_a != j_b)
+                    {
+                        temp(i_a,j_b) = (-1. * (mcoord[i_a] - ncoord[i_a]) * (mcoord[j_b] - ncoord[j_b]) / r_norm_sq) * (intact[3] - intact[1]);
+                    }
+                    else
+                    {
+                        temp(i_a,j_b) = -1. * intact[1] + (-1. * (mcoord[i_a] - ncoord[i_a]) * (mcoord[j_b] - ncoord[j_b]) / r_norm_sq) * (intact[3] - intact[1]);
+                    }
+                }
+            } 
+
+                    for (int i_a = 0; i_a < 3; ++i)
+        {
+            for (int j_b = 0; j_b < 3; ++j)
+            {
+                derv2(i_a, i, j_b, j) = temp(i_a, j_b);
+            }
+        }
+        }
+
+    }
+
+// std::cout << derv2<< std::endl;
+
+//First derivative
+    for (int i = 0; i <atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        total_buck_derv1.setZero();
+        for (int j = 0; j<atoms.size(); ++j)
+        {
+            Atom elem2 = atoms[j];
+            for (int ii = -xmax; ii <= xmax; ++ii)
+            {
+                for (int jj = -ymax; jj <= ymax; ++jj)
+                {
+                    for (int kk = -zmax; kk <= zmax ; ++kk)
+                    {
+                        n = ii * a1 + jj * a2 + kk * a3;
+
+                        if (ii == 0 && jj == 0 && kk == 0)
+                        {
+                            for (const auto pot : buck)
+                            {
+                                total_buck_derv1 += buck_derv1(elem1, elem2, n, pot);
+                            }
+                        }
+                        else
+                        {
+                            for (const auto pot : buck)
+                            {
+                                total_buck_derv1 += buck_derv1(elem1, elem2, n, pot);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        total_buck_derv1 = lattice_vectors * total_buck_derv1;
+    }
+}
+
+void calc_lattice_deriv(UnitCell& unitcell_init)
+{
+    Eigen::Matrix3d strain_deriv = unitcell_init.strain_deriv;
+    Eigen::Matrix3d lattice_deriv;
+    lattice_deriv.setZero();
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Matrix3d lattice_vectors_inverse = lattice_vectors.inverse();
+
+    for (int i=0; i < 3; ++i)
+    {
+
+        lattice_deriv.col(0)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(0)(i);
+        lattice_deriv.col(0)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(0)(i);
+        lattice_deriv.col(0)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(0)(i);
+
+        lattice_deriv.col(1)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(1)(i);
+        lattice_deriv.col(1)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(1)(i);
+        lattice_deriv.col(1)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(1)(i);
+
+        lattice_deriv.col(2)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(2)(i);
+        lattice_deriv.col(2)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(2)(i);
+        lattice_deriv.col(2)(2) += strain_deriv.col(2)(i) * lattice_vectors_inverse.col(2)(i);
+
+    }
+    unitcell_init.lattice_deriv = lattice_deriv;
+
+}
+
+void calc_strain_deriv(UnitCell& unitcell_init)
 {
     UnitCell unitcell_wstrain;
     Eigen::Matrix3d deriv;
@@ -125,7 +365,9 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
         }
     }
     deriv = deriv * 0.5;
-    // std::cout << 0.5 * deriv << std::endl;
+    // std::cout << deriv << std::endl;
+
+    //Real contribution
     const double toeV = 14.39964390675221758120;
 
     int natom = unitcell_init.coordinates_frac.size();
@@ -147,6 +389,16 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
     int kmax_y = ceil(kcut/g2.norm());
     int kmax_z = ceil(kcut/g3.norm());
 
+    // double kappa = 1./2.39958;
+    // double rcut = 15.013;
+    // double kcut = 5.21468;
+
+    // int nmax_x = 3;
+    // int nmax_y = 3;
+    // int nmax_z = 2;
+    // int kmax_x = 2;
+    // int kmax_y = 4;
+    // int kmax_z = 4;
     rij.setZero();
     n.setZero();
     rijn.setZero();
@@ -168,30 +420,27 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
                         double r_sqr = r_norm * r_norm;
                         if (rijn.norm() <= rcut)
                         {
-                            double intact =toeV * ( elem1.q * elem2.q) *
-                                                   ((-2. * kappa / sqrt(M_PI)) *
-                                                    (exp(-r_sqr * kappa * kappa) / r_norm) -
-                                                    (erfc(r_norm *kappa) / r_sqr)) / r_norm;
+                            double intact = toeV*(0.5*elem1.q*elem2.q)*((-2.*kappa/sqrt(M_PI))*(exp(-r_sqr*kappa*kappa)/r_norm)-(erfc(r_norm*kappa)/r_sqr))/r_norm;
                             if (i == 0 && j == 0 && k ==0)
                             {
                                 if (rijn.norm() > 0.1)
                                 {
-                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
-                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact ;
+                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact ;
+                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact ;
+                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact ;
+                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact ;
+                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact ;
                                 }
                             }
                             else
                             {
-                                                                    deriv.col(0)(0) += rijn[0] * rijn[0] * intact / rijn.norm();
-                                    deriv.col(1)(0) += rijn[0] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(1)(1) += rijn[1] * rijn[1] * intact / rijn.norm();
-                                    deriv.col(2)(0) += rijn[0] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(1) += rijn[1] * rijn[2] * intact / rijn.norm();
-                                    deriv.col(2)(2) += rijn[2] * rijn[2] * intact / rijn.norm();
+                                deriv.col(0)(0) += rijn[0] * rijn[0] * intact ;
+                                deriv.col(1)(0) += rijn[0] * rijn[1] * intact ;
+                                deriv.col(1)(1) += rijn[1] * rijn[1] * intact ;
+                                deriv.col(2)(0) += rijn[0] * rijn[2] * intact ;
+                                deriv.col(2)(1) += rijn[1] * rijn[2] * intact ;
+                                deriv.col(2)(2) += rijn[2] * rijn[2] * intact ;
                             }
                         }
                     }
@@ -199,9 +448,80 @@ UnitCell calc_strain_deriv(UnitCell unitcell_init)
             }
         }
     }
+    // std::cout << deriv << std::endl;
+
     // std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
 
-    return unitcell_wstrain;
+    //Reciprocal Contribution - 3 terms; volume, r vector, k vector;
+    rij.setZero();
+    n.setZero();
+    rijn.setZero();
+    Eigen::Vector3d kvecs;
+    kvecs.setZero();
+    double intact[5];
+
+    for ( auto& elem1 : atoms)
+    {
+        for ( auto& elem2 : atoms)
+        {
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            for (int i = -kmax_x; i<= kmax_x; ++i)
+            {
+                for (int j = -kmax_y; j <= kmax_y; ++j)
+                {
+                    for (int k = -kmax_z; k <= kmax_z; ++k)
+                    {
+                        kvecs.setZero();
+                        kvecs = (g1 * i) + (g2 * j) + (g3 * k);
+                        double kk = kvecs.norm() * kvecs.norm();
+                        intact[0] = toeV * (2. * M_PI / V) * elem1.q * elem2.q;
+                        intact[1] = -2. * exp(-kk/4./kappa/kappa)/kk/kk * cos(kvecs.dot(rij));
+                        intact[2] = -1./2. * exp(-kk/4./kappa/kappa)/(kk * kappa * kappa) * cos(kvecs.dot(rij));
+                        intact[3] = -exp(-kk/4./kappa/kappa)/kk * sin(kvecs.dot(rij));
+                        intact[4] = -exp(-kk/4./kappa/kappa)/kk * sin(kvecs.dot(rij));
+                        if (kvecs.norm() <= kcut)
+                        {
+
+                            if (i == 0 && j == 0 && k ==0)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                // wrt volume;
+                                deriv.col(0)(0) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(1)(1) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+                                deriv.col(2)(2) += toeV*(-2. * M_PI * elem1.q * elem2.q / V / kk) * exp(-kk / (4. * kappa * kappa)) * cos(kvecs.dot(rij));
+
+                                // wrt rvec;
+                                deriv.col(0)(0) += intact[0] * intact[4] * kvecs[0] * rij[0];
+                                deriv.col(1)(0) += intact[0] * intact[4] * kvecs[0] * rij[1];
+                                deriv.col(1)(1) += intact[0] * intact[4] * kvecs[1] * rij[1];
+                                deriv.col(2)(0) += intact[0] * intact[4] * kvecs[0] * rij[2];
+                                deriv.col(2)(1) += intact[0] * intact[4] * kvecs[1] * rij[2];
+                                deriv.col(2)(2) += intact[0] * intact[4] * kvecs[2] * rij[2];
+
+                                //wrt kvec;
+                                deriv.col(0)(0) += -kvecs[0] * intact[0] * (kvecs[0] * (intact[1] + intact[2]) + rij[0] * intact[3]);
+                                deriv.col(1)(0) += -kvecs[0] * intact[0] * (kvecs[1] * (intact[1] + intact[2]) + rij[1] * intact[3]);
+                                deriv.col(1)(1) += -kvecs[1] * intact[0] * (kvecs[1] * (intact[1] + intact[2]) + rij[1] * intact[3]);
+                                deriv.col(2)(0) += -kvecs[0] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
+                                deriv.col(2)(1) += -kvecs[1] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
+                                deriv.col(2)(2) += -kvecs[2] * intact[0] * (kvecs[2] * (intact[1] + intact[2]) + rij[2] * intact[3]);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    deriv(1,0) = deriv(0,1);
+    deriv(2,0) = deriv(0,2);
+    deriv(2,1) = deriv(1,2);
+
+    // std::cout << deriv << std::endl;
+    unitcell_init.strain_deriv = deriv;
 }
 
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;

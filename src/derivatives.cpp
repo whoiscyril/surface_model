@@ -9,7 +9,7 @@ void internal_derv2(UnitCell& unitcell_init)
 
     int natom = unitcell_init.coordinates_cart.size();
     std::vector<Atom> atoms = unitcell_init.coordinates_cart;
-    double cutoff;   
+    double cutoff;
     //Max buck cut off
     std::vector<Buckingham> buck = unitcell_init.buckingham_potentials;
     Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
@@ -46,98 +46,149 @@ void internal_derv2(UnitCell& unitcell_init)
 
     Eigen::Vector3d rij, rijn;
 
-
     //First put coordinates into row and column vectors
     std::vector<double> row_coordinates;
     std::vector<double> col_coordinates;
 
-        for (const auto & elem : atoms)
-        {
-            row_coordinates.push_back(elem.x);
-            row_coordinates.push_back(elem.y);
-            row_coordinates.push_back(elem.z);
-        }
+    for (const auto & elem : atoms)
+    {
+        row_coordinates.push_back(elem.x);
+        row_coordinates.push_back(elem.y);
+        row_coordinates.push_back(elem.z);
+    }
 
     //Now compute distance and put it in a matrix
-        Eigen::MatrixXd dist_mat(3*natom, 3*natom);
-        dist_mat.setZero();
+    Eigen::MatrixXd dist_mat(3*natom, 3*natom);
+    dist_mat.setZero();
 
-        for (int i = 0; i < 3*natom; ++i)
+    for (int i = 0; i < 3*natom; ++i)
+    {
+        for (int j = 0; j < 3*natom ; ++j)
         {
-            for (int j = 0; j < 3*natom ; ++j)
-            {
-                dist_mat(j, i) = row_coordinates[i] - row_coordinates[j];
-            }
+            dist_mat(j, i) = row_coordinates[i] - row_coordinates[j];
         }
-        // std::cout << dist_mat << std::endl;
+    }
+    // std::cout << dist_mat << std::endl;
 //Second derivative
+    // double intact[5];
+    // Eigen::Vector3d mcoord, ncoord;
+    // mcoord.setZero();
+    // ncoord.setZero();
+    // for (int i = 0; i < atoms.size(); ++i)
+    // {
+    //     Atom elem1 = atoms[i];
+    //     mcoord << elem1.x, elem1.y, elem1.z;
 
+    //     for (int j = 0; j < atoms.size(); ++j)
+    //     {
+    //         Atom elem2 = atoms[j];
+    //         ncoord << elem2.x, elem2.y, elem2.z;
+    //         rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+
+    //         for (int iii = -xmax; iii <= xmax; ++iii)
+    //         {
+    //             for (int jjj = -ymax; jjj <= ymax; ++jjj)
+    //             {
+    //                 for (int kkk = -zmax; kkk <= zmax; ++kkk)
+    //                 {
+    //                     n = iii * a1 + jjj * a2 + kkk * a3;
+    //                     if (iii == 0 && jjj == 0 && kkk == 0)
+    //                     {
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+    //                             intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
+    //                             intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         for (int ii = 0; ii < 3; ++ii)
+    //         {
+    //             for (int jj = 0; jj < 3; ++jj)
+    //             {
+    //                 intact[0] = (-1./rij.norm()) + (mcoord[ii] - ncoord[jj]) * (mcoord[ii] - ncoord[jj])/(rij.norm(), 3.);
+    //                 intact[2] = (mcoord[ii] - ncoord[jj]) / rij.norm();
+    //                 intact[3] = -intact[2];
+    //                 derv2(3*j + jj, 3*i+ii) = intact[0] * intact[1] + intact[2]*intact[3]*intact[4];
+    //                 // std::cout << intact[0] << " " << intact[1] << " "<< intact[2] << " " << intact[3] <<" "<< intact[4] << std::endl;
+    //                 std::cout << rij << std::endl;
+    //             }
+    //         }
+
+    //     }
+    // }
+
+//Second derivatives;
     double intact[5];
-    Eigen::Vector3d mcoord, ncoord;
-    mcoord.setZero();
-    ncoord.setZero();
     for (int i = 0; i < atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
+        Eigen::Vector3d mcoord;
         mcoord << elem1.x, elem1.y, elem1.z;
-
+        Eigen::Matrix3d temp;
+        temp.setZero();
         for (int j = 0; j < atoms.size(); ++j)
         {
             Atom elem2 = atoms[j];
+            Eigen::Vector3d ncoord;
             ncoord << elem2.x, elem2.y, elem2.z;
-            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            rij = mcoord - ncoord;
+            double r_norm = rij.norm();
+            double r_norm_sq = r_norm * r_norm;
 
-            for (int iii = -xmax; iii <= xmax; ++iii)
+            if (i != j)
             {
-                for (int jjj = -ymax; jjj <= ymax; ++jjj)
+            intact[1] = buck_derv1_scalar(elem1, elem2, unitcell_init) / r_norm;
+            intact[3] = buck_derv2_scalar(elem1, elem2, unitcell_init);
+
+            for(int i_a = 0; i_a < 3; ++i_a)
+            {
+                for (int j_b = 0; j_b < 3; ++j_b)
                 {
-                    for (int kkk = -zmax; kkk <= zmax; ++kkk)
+                    if(i_a != j_b)
                     {
-                        n = iii * a1 + jjj * a2 + kkk * a3;
-                        if (iii == 0 && jjj == 0 && kkk == 0)
-                        {
-                            for (const auto& pot : buck)
-                            {
-                                intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
-                                intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
-                            }
-                        }
-                        else
-                        {
-                            for (const auto& pot : buck)
-                            {
-                                intact[1] += buck_derv1_scalar(elem1, elem2, n, pot);
-                                intact[4] += buck_derv2_scalar(elem1, elem2, n, pot);
-                            }
-                        }
+                        temp(i_a,j_b) = (-1. * (mcoord[i_a] - ncoord[i_a]) * (mcoord[j_b] - ncoord[j_b]) / r_norm_sq) * (intact[3] - intact[1]);
+                    }
+                    else
+                    {
+                        temp(i_a,j_b) = -1. * intact[1] + (-1. * (mcoord[i_a] - ncoord[i_a]) * (mcoord[j_b] - ncoord[j_b]) / r_norm_sq) * (intact[3] - intact[1]);
                     }
                 }
             }
 
-
-            for (int ii = 0; ii < 3; ++ii)
+            for (int i_a = 0; i_a < 3; ++i_a)
             {
-                for (int jj = 0; jj < 3; ++jj)
+                for (int j_b = 0; j_b < 3; ++j_b)
                 {
-                    intact[0] = (-1./rij.norm()) + (mcoord[ii] - ncoord[jj]) * (mcoord[ii] - ncoord[jj])/(rij.norm(), 3.);
-                    intact[2] = (mcoord[ii] - ncoord[jj]) / rij.norm();
-                    intact[3] = -intact[2];
-                    derv2(3*j + jj, 3*i+ii) = intact[0] * intact[1] + intact[2]*intact[3]*intact[4];
-                    // std::cout << intact[0] << " " << intact[1] << " "<< intact[2] << " " << intact[3] <<" "<< intact[4] << std::endl;
-                    std::cout << rij << std::endl;
+
+                        derv2(i_a, j_b) = temp(i_a, j_b);
+                    
                 }
             }
-
         }
+        }
+
     }
-// std::cout << derv2<< std::endl;
+
+std::cout << derv2<< std::endl;
+
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
         total_buck_derv1.setZero();
         for (int j = 0; j<atoms.size(); ++j)
-        {   
+        {
             Atom elem2 = atoms[j];
             for (int ii = -xmax; ii <= xmax; ++ii)
             {
@@ -179,7 +230,6 @@ void calc_lattice_deriv(UnitCell& unitcell_init)
 
     for (int i=0; i < 3; ++i)
     {
-
 
         lattice_deriv.col(0)(0) += strain_deriv.col(0)(i) * lattice_vectors_inverse.col(0)(i);
         lattice_deriv.col(0)(1) += strain_deriv.col(1)(i) * lattice_vectors_inverse.col(0)(i);
@@ -403,10 +453,9 @@ void calc_strain_deriv(UnitCell& unitcell_init)
             }
         }
     }
-            // std::cout << deriv << std::endl;
+    // std::cout << deriv << std::endl;
 
     // std::cout <<  real_deriv[0]  <<" " <<  real_deriv[1] << " " <<  real_deriv[2] << std::endl;
-
 
     //Reciprocal Contribution - 3 terms; volume, r vector, k vector;
     rij.setZero();
@@ -438,7 +487,6 @@ void calc_strain_deriv(UnitCell& unitcell_init)
                         if (kvecs.norm() <= kcut)
                         {
 
-
                             if (i == 0 && j == 0 && k ==0)
                             {
                                 continue;
@@ -456,9 +504,7 @@ void calc_strain_deriv(UnitCell& unitcell_init)
                                 deriv.col(1)(1) += intact[0] * intact[4] * kvecs[1] * rij[1];
                                 deriv.col(2)(0) += intact[0] * intact[4] * kvecs[0] * rij[2];
                                 deriv.col(2)(1) += intact[0] * intact[4] * kvecs[1] * rij[2];
-                                deriv.col(2)(2) += intact[0] * intact[4] * kvecs[2] * rij[2];                                
-
-
+                                deriv.col(2)(2) += intact[0] * intact[4] * kvecs[2] * rij[2];
 
                                 //wrt kvec;
                                 deriv.col(0)(0) += -kvecs[0] * intact[0] * (kvecs[0] * (intact[1] + intact[2]) + rij[0] * intact[3]);
@@ -479,7 +525,7 @@ void calc_strain_deriv(UnitCell& unitcell_init)
     deriv(2,0) = deriv(0,2);
     deriv(2,1) = deriv(1,2);
 
-        // std::cout << deriv << std::endl;
+    // std::cout << deriv << std::endl;
     unitcell_init.strain_deriv = deriv;
 }
 
