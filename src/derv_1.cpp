@@ -257,3 +257,34 @@ double buck_derv2_scalar (Atom atom1, Atom atom2, UnitCell unitcell_init)
 
     return derv2;
 }
+
+double derv1_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Buckingham pot)
+{
+	double result;
+	Eigen::Vector3d rij, rijn;
+	rij.setZero();
+	rijn.setZero();
+
+	rij << atom1.x - atom2.x, atom1.y - atom2.y, atom1.z - atom2.z;
+	rijn = rij - n;
+
+	result = -pot.A/pot.rho * exp(-rijn.norm() / pot.rho) + (6.* pot.C / pow(rijn.norm(), 7.));
+
+	return result;
+
+}
+double derv2_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Buckingham pot)
+{
+	double result;
+	Eigen::Vector3d rij, rijn;
+	rij.setZero();
+	rijn.setZero();
+	
+	rij << atom1.x - atom2.x, atom1.y - atom2.y, atom1.z - atom2.z;
+	rijn = rij - n;
+
+	result = (pot.A/pot.rho / pot.rho) * exp(-rijn.norm() / pot.rho) - (42.* pot.C / pow(rijn.norm(), 8.));
+
+	return result;
+
+}
