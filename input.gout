@@ -7,12 +7,11 @@
 ********************************************************************************
 * Version = 6.1.2 * Last modified =   3rd November 2022                        *
 ********************************************************************************
-*  gradient     - perform gradient run                                         *
+*  optimise     - perform optimisation run                                     *
 *  conp         - constant pressure calculation                                *
-*  nosymmetry   - turn off symmetry after initial structure generation         *
 ********************************************************************************
 
-  Job Started  at 17:20.26 21st September  2023                               
+  Job Started  at 13:37.37 16th October    2023                               
 
   Number of CPUs =     1
 
@@ -36,17 +35,17 @@
 
   Cartesian lattice vectors (Angstroms) :
 
-        4.000000    0.000000    0.000000
+        5.000000    0.000000    0.000000
         0.000000    5.000000    0.000000
-        3.000000    0.000000    5.196152
+        0.000000    0.000000    5.000000
 
   Cell parameters (Angstroms/Degrees):
 
-  a =       4.0000    alpha =  90.0000
-  b =       5.0000    beta  =  60.0000
-  c =       6.0000    gamma =  90.0000
+  a =       5.0000    alpha =  90.0000
+  b =       5.0000    beta  =  90.0000
+  c =       5.0000    gamma =  90.0000
 
-  Initial cell volume =         103.923048 Angs**3
+  Initial cell volume =         125.000000 Angs**3
 
   Temperature of configuration =   0.00     K 
 
@@ -59,7 +58,7 @@
         Label      (Frac)      (Frac)     (Frac)        (e)         (Frac)  
 --------------------------------------------------------------------------------
       1 O     c    0.500000    0.500000    0.500000     0.00000    1.000000    
-      2 Mg    c    0.280000 *  0.280000 *  0.280000 *   0.00000    1.000000    
+      2 Mg    c    0.000000 *  0.000000 *  0.000000 *   0.00000    1.000000    
 --------------------------------------------------------------------------------
 
 
@@ -110,40 +109,146 @@ O    c Mg   c Buckingham    Buckingham A     946.62700    eV        0.000 10.000
   Components of energy : 
 
 --------------------------------------------------------------------------------
-  Interatomic potentials     =           1.00553086 eV    
+  Interatomic potentials     =           0.00928989 eV    
   Monopole - monopole (real) =           0.00000000 eV    
   Monopole - monopole (recip)=           0.00000000 eV    
   Monopole - monopole (total)=           0.00000000 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =           1.00553086 eV    
+  Total lattice energy       =           0.00928989 eV    
 --------------------------------------------------------------------------------
-  Total lattice energy       =              97.0184 kJ/(mole unit cells)
+  Total lattice energy       =               0.8963 kJ/(mole unit cells)
 --------------------------------------------------------------------------------
 
+
+  Number of variables =        9
+
+  Maximum number of calculations  =          1000
+  Maximum Hessian update interval =            10
+  Maximum step size               =   1.000000000
+  Maximum parameter tolerance     =   0.000010000
+  Maximum function  tolerance     =   0.000010000
+  Maximum gradient  tolerance     =   0.001000000
+  Maximum gradient  component     =   0.010000000
+
+  Symmetry not applied to optimisation
+
+  Cell parameters to be optimised using strains
+
+  Newton-Raphson optimiser to be used
+
+  BFGS hessian update to be used
+
+  Lower half triangular hessian to be used
+
+  Start of bulk optimisation :
+
+
+
+  Strain-strain second derivative matrix : (eV)
+
+     0.12100     0.20528     0.20528     0.00000     0.00000    -0.00000
+     0.20528     0.12100     0.20528     0.00000     0.00000    -0.00000
+     0.20528     0.20528     0.12100     0.00000     0.00000     0.00000
+     0.00000     0.00000     0.00000     0.16313     0.00000     0.00000
+     0.00000     0.00000     0.00000     0.00000     0.16313     0.00000
+    -0.00000    -0.00000     0.00000     0.00000     0.00000     0.16313
+
+
+  Internal-internal second derivative matrix : (eV/Angstrom**2)
+
+     0.02610     0.00000     0.00000    -0.02610    -0.00000     0.00000
+     0.00000     0.02610     0.00000    -0.00000    -0.02610     0.00000
+     0.00000     0.00000     0.02610     0.00000     0.00000    -0.02610
+    -0.02610    -0.00000     0.00000     0.02610     0.00000     0.00000
+    -0.00000    -0.02610     0.00000     0.00000     0.02610     0.00000
+     0.00000     0.00000    -0.02610     0.00000     0.00000     0.02610
+
+
+  Cycle:      0 Energy:         0.009290  Gnorm:      0.008112  CPU:    0.004
+
+  Second Derivative Matrix  :
+
+     0.0261   0.0000   0.0000  -0.0261  -0.0000   0.0000
+     0.0000   0.0261   0.0000  -0.0000  -0.0261   0.0000
+     0.0000   0.0000   0.0261   0.0000   0.0000  -0.0261
+    -0.0261  -0.0000   0.0000   0.0261   0.0000   0.0000
+    -0.0000  -0.0261   0.0000   0.0000   0.0261   0.0000
+     0.0000   0.0000  -0.0261   0.0000   0.0000   0.0261
+
+
+
+  Symmetrised Second Derivative Matrix  :
+
+     0.6525
+     0.0000   0.6525
+     0.0000   0.0000   0.6525
+    -0.0000   0.0000   0.0000   0.1210
+     0.0000  -0.0000   0.0000   0.2053   0.1210
+     0.0000  -0.0000   0.0000   0.2053   0.2053   0.1210
+     0.0000   0.0000  -0.0000   0.0000   0.0000   0.0000   0.1631
+     0.0000   0.0000   0.0000   0.0000   0.0000   0.0000   0.0000   0.1631
+     0.0000   0.0000   0.0000  -0.0000  -0.0000   0.0000   0.0000   0.0000   0.1631
+
+
+  ** Hessian calculated **
+  Cycle:      1 Energy:         0.001669  Gnorm:      0.001641  CPU:    0.004
+  Cycle:      2 Energy:         0.000296  Gnorm:      0.000324  CPU:    0.004
+  Cycle:      3 Energy:         0.000054  Gnorm:      0.000065  CPU:    0.004
+  Cycle:      4 Energy:         0.000010  Gnorm:      0.000013  CPU:    0.004
+
+
+  **** Optimisation achieved ****
+
+
+  Final energy =       0.00000182 eV      
+  Final Gnorm  =       0.00000258
+
+  Components of energy : 
+
+--------------------------------------------------------------------------------
+  Interatomic potentials     =           0.00000182 eV    
+  Monopole - monopole (real) =           0.00000000 eV    
+  Monopole - monopole (recip)=           0.00000000 eV    
+  Monopole - monopole (total)=           0.00000000 eV    
+--------------------------------------------------------------------------------
+  Total lattice energy       =           0.00000182 eV    
+--------------------------------------------------------------------------------
+  Total lattice energy       =               0.0002 kJ/(mole unit cells)
+--------------------------------------------------------------------------------
+
+  Final fractional coordinates of atoms :
+
+--------------------------------------------------------------------------------
+   No.  Atomic        x           y          z          Radius
+        Label       (Frac)      (Frac)     (Frac)       (Angs) 
+--------------------------------------------------------------------------------
+     1  O     c     0.500000    0.500000    0.500000    0.000000
+     2  Mg    c     0.000000    0.000000    0.000000    0.000000
+--------------------------------------------------------------------------------
 
   Final Cartesian lattice vectors (Angstroms) :
 
-        4.000000    0.000000    0.000000
-        0.000000    5.000000    0.000000
-        3.000000    0.000000    5.196152
+        8.136884    0.000000   -0.000000
+        0.000000    8.136884   -0.000000
+       -0.000000   -0.000000    8.136884
 
 
   Final cell parameters and derivatives :
 
 --------------------------------------------------------------------------------
-       a            4.000000 Angstrom     dE/de1(xx)    -3.686255 eV/strain
-       b            5.000000 Angstrom     dE/de2(yy)    -1.701657 eV/strain
-       c            6.000000 Angstrom     dE/de3(zz)    -1.833043 eV/strain
-       alpha       90.000000 Degrees      dE/de4(yz)    -1.744082 eV/strain
-       beta        60.000000 Degrees      dE/de5(xz)    -1.986031 eV/strain
-       gamma       90.000000 Degrees      dE/de6(xy)    -1.904795 eV/strain
+       a            8.136884 Angstrom     dE/de1(xx)    -0.000013 eV/strain
+       b            8.136884 Angstrom     dE/de2(yy)    -0.000013 eV/strain
+       c            8.136884 Angstrom     dE/de3(zz)    -0.000013 eV/strain
+       alpha       90.000000 Degrees      dE/de4(yz)     0.000000 eV/strain
+       beta        90.000000 Degrees      dE/de5(xz)     0.000000 eV/strain
+       gamma       90.000000 Degrees      dE/de6(xy)     0.000000 eV/strain
 --------------------------------------------------------------------------------
 
-  Primitive cell volume =           103.923048 Angs**3
+  Primitive cell volume =           538.734064 Angs**3
 
-  Density of cell =      0.644105 g/cm**3
+  Density of cell =      0.124249 g/cm**3
 
-  Non-primitive cell volume =           103.923048 Angs**3
+  Non-primitive cell volume =           538.734064 Angs**3
 
 
   Final internal derivatives :
@@ -153,13 +258,13 @@ O    c Mg   c Buckingham    Buckingham A     946.62700    eV        0.000 10.000
         Label          (eV)          (eV)          (eV)        (eV/Angs)
 --------------------------------------------------------------------------------
       1 O     c       0.000000      0.000000      0.000000      0.000000
-      2 Mg    c       6.939662      7.644957     13.469731      0.000000
+      2 Mg    c       0.000000      0.000000      0.000000      0.000000
 --------------------------------------------------------------------------------
-  Maximum abs         6.939662      7.644957     13.469731      0.000000
+  Maximum abs         0.000000      0.000000      0.000000      0.000000
 --------------------------------------------------------------------------------
 
 
-  Time to end of gradients =       0.0040 seconds
+  Time to end of optimisation =       0.0044 seconds
 
 
   Peak dynamic memory used =       1.78 MB 
@@ -170,10 +275,11 @@ O    c Mg   c Buckingham    Buckingham A     946.62700    eV        0.000 10.000
 --------------------------------------------------------------------------------
   Task / Subroutine                                          Time (Seconds)
 --------------------------------------------------------------------------------
+  Calculation of real space energy and derivatives                0.0001
 --------------------------------------------------------------------------------
-  Total CPU time                                                  0.0040
+  Total CPU time                                                  0.0044
 --------------------------------------------------------------------------------
 
 
-  Job Finished at 17:20.26 21st September  2023                               
+  Job Finished at 13:37.37 16th October    2023                               
 

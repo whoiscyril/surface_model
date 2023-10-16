@@ -74,7 +74,7 @@ void internal_derv2(UnitCell& unitcell_init)
     double temp_derv_1;
     double temp_derv_2;
     double result[atoms.size()][3][atoms.size()][3];
-    Eigen::MatrixXd temp(3*natom, 3*natom);
+    Eigen::MatrixXd temp(3, 3);
     temp.setZero();
     derv2.setZero();
     for (int i = 0; i <atoms.size(); ++i)
@@ -145,55 +145,80 @@ void internal_derv2(UnitCell& unitcell_init)
                             }
                         }
 
-                        //Now calculate second derivatives
-                        if (i != j)
+                        if (j != i)
                         {
                             for (int ia = 0; ia < 3; ++ia)
                             {
                                 for (int jb = 0; jb < 3; ++jb)
                                 {
-                                    double delta;
                                     if (ia == jb)
                                     {
-                                        delta = 1.;
+                                        // temp(ia,jb) = -1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
                                     }
                                     else
                                     {
-                                        delta = 0.;
+                                        temp(ia,jb) = -(((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
+                                                                                std::cout << temp << std::endl;
                                     }
-                                    temp(ia,jb) += -delta * temp_derv_1 / r_norm - ((rijn[ia] * rijn[jb]) / r_sqr * (temp_derv_2 - temp_derv_1 / r_norm));
                                 }
                             }
                         }
                         else
                         {
-                            for (int ia = 0; ia < 3; ++ia)
+                            for (int k = 0; k < atoms.size(); ++k)
                             {
-                                for (int jb = 0; jb < 3; ++jb)
+                                Atom elem3 = atoms[k];
+                                Eigen::Vector3d rik; 
+                                Eigen::Vector3d rikn; 
+                                rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                for (int kx = -xmax; kx <= xmax; ++kx)
                                 {
-                                    double delta;
-                                    
-                                    if (ia == jb)
+                                    for (int ky = -ymax; ky <= ymax; ++ky)
                                     {
-                                        delta =1.;
+                                        for (int kz = -zmax; kz <= zmax; ++kz)
+                                        {
+                                            Eigen::Vector3d nk;
+                                            nk = kx * a1 + ky * a2 + kz * a3;
+                                            rikn = rik - nk;
+                                            double rk_norm = rikn.norm();
+                                            double rk_sqr = rk_norm * rk_norm;
+                                            if (kx == 0 && ky == 0 && kz == 0)
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                            if (k != i)
+                                            {
+                                                for (int ia = 0; ia < 3; ++ia)
+                                                {
+                                                    for (int jb = 0; jb < 3; ++jb)
+                                                    {
+                                                        if (ia == jb)
+                                                        {
+                                                            temp(ia,jb) += -1. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
+                                                        }
+                                                        else
+                                                        {
+                                                            temp(ia,jb) += 0. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        }
                                     }
-                                    else
-                                    {
-                                        delta =0.;
-                                    }
-                                    temp(ia, jb) += (delta * temp_derv_1 / r_norm) + ((rijn[ia] * rijn[jb])/ r_sqr * (temp_derv_2 - temp_derv_1 / r_norm));
                                 }
+
                             }
                         }
-
-                        
-
                     }
                 }
             }
         }
     }
-
+    // std::cout << temp << std::endl;
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
     {
