@@ -70,154 +70,261 @@ void internal_derv2(UnitCell& unitcell_init)
     }
     // std::cout << dist_mat << std::endl;
 
-//Second derivatives;
-    double temp_derv_1;
-    double temp_derv_2;
-    double result[atoms.size()][3][atoms.size()][3];
-    Eigen::MatrixXd temp(3, 3);
+//Rewrite second derivatives;
+    Eigen::Matrix3d temp;
     temp.setZero();
-    derv2.setZero();
     for (int i = 0; i <atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
-        Eigen::Vector3d el1_coord;
-        el1_coord << elem1.x, elem1.y, elem1.z;
         for (int j = 0; j < atoms.size(); ++j)
         {
-            Atom elem2 = atoms[j];
-            Eigen::Vector3d el2_coord;
-            el2_coord << elem2.x, elem2.y, elem2.z;
+            Atom elem2 =atoms[j];
+            Eigen::Vector3d rij;
             rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            double r_norm = rij.norm();
+            double r_sqr = r_norm * r_norm;
+            double temp_derv_1 = 0.;
+            double temp_derv_2 = 0.;
+
             for (int ii = -xmax; ii <= xmax; ++ii)
             {
-                for (int jj = -ymax; jj <= xmax; ++jj)
+                for (int jj = -ymax; jj <= ymax; ++jj)
                 {
                     for (int kk = -zmax; kk <= zmax; ++kk)
                     {
                         n = ii * a1 + jj * a2 + kk * a3;
-                        rijn = rij - n;
-                        double r_norm = rijn.norm();
-                        double r_sqr = r_norm * r_norm;
-                        //Central image
+                        rijn = rij + n;
+                        r_norm = rijn.norm();
+                        r_sqr = r_norm * r_norm;
                         if (ii == 0 && jj == 0 && kk == 0)
                         {
-                            //Calculate psi'
-                            for (const auto& pot : buck)
+                            for (const auto pot : buck)
                             {
-                                if ((pot.atom1_type == elem1.type && pot.atom1_label == elem1.label) &&
-                                        (pot.atom2_type == elem2.type && pot.atom2_label == elem2.label) &&
-                                        rijn.norm() < pot.cut_off2)
-                                {
-                                    temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
-                                    temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
-                                }
-                                else if ((pot.atom2_type == elem1.type && pot.atom2_label == elem1.label) &&
-                                         (pot.atom2_type == elem2.type && pot.atom1_label == elem2.label) &&
-                                         rijn.norm() < pot.cut_off2)
-                                {
-                                    temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
-                                    temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
-                                }
-
+                                temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
+                                temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
                             }
-                        }
-
-                        //other images;
-                        else
-                        {
-                            for (const auto& pot : buck)
+                            std::cout << temp_derv_1 << std::endl;
+                            if (j != i)
                             {
-                                if ((pot.atom1_type == elem1.type && pot.atom1_label == elem1.label) &&
-                                        (pot.atom2_type == elem2.type && pot.atom2_label == elem2.label) &&
-                                        rijn.norm() < pot.cut_off2)
+                                for (int ia = 0; ia < 3; ++ia)
                                 {
-                                    temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
-                                    temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
-                                }
-                                else if ((pot.atom2_type == elem1.type && pot.atom2_label == elem1.label) &&
-                                         (pot.atom2_type == elem2.type && pot.atom1_label == elem2.label) &&
-                                         rijn.norm() < pot.cut_off2)
-                                {
-                                    temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
-                                    temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
-                                }
-
-                            }
-                        }
-
-                        if (j != i)
-                        {
-                            for (int ia = 0; ia < 3; ++ia)
-                            {
-                                for (int jb = 0; jb < 3; ++jb)
-                                {
-                                    if (ia == jb)
+                                    for (int jb = 0; jb < 3; ++jb)
                                     {
-                                        // temp(ia,jb) = -1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
-                                    }
-                                    else
-                                    {
-                                        temp(ia,jb) = -(((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
-                                                                                std::cout << temp << std::endl;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            for (int k = 0; k < atoms.size(); ++k)
-                            {
-                                Atom elem3 = atoms[k];
-                                Eigen::Vector3d rik; 
-                                Eigen::Vector3d rikn; 
-                                rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
-                                for (int kx = -xmax; kx <= xmax; ++kx)
-                                {
-                                    for (int ky = -ymax; ky <= ymax; ++ky)
-                                    {
-                                        for (int kz = -zmax; kz <= zmax; ++kz)
+                                        if (ia == jb)
                                         {
-                                            Eigen::Vector3d nk;
-                                            nk = kx * a1 + ky * a2 + kz * a3;
-                                            rikn = rik - nk;
-                                            double rk_norm = rikn.norm();
-                                            double rk_sqr = rk_norm * rk_norm;
-                                            if (kx == 0 && ky == 0 && kz == 0)
-                                            {
-
-                                            }
-                                            else
-                                            {
-                                            if (k != i)
-                                            {
-                                                for (int ia = 0; ia < 3; ++ia)
-                                                {
-                                                    for (int jb = 0; jb < 3; ++jb)
-                                                    {
-                                                        if (ia == jb)
-                                                        {
-                                                            temp(ia,jb) += -1. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
-                                                        }
-                                                        else
-                                                        {
-                                                            temp(ia,jb) += 0. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                           temp(ia,jb) += (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
                                         }
-
+                                        else
+                                        {
+                                           temp(ia,jb) += (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
                                         }
                                     }
                                 }
-
                             }
+                        }
+                        else
+                        {
+                            for (const auto pot : buck)
+                            {
+                                temp_derv_1 =   derv1_scalar(elem1, elem2, n, pot);
+                                temp_derv_2 =   derv2_scalar(elem1, elem2, n, pot);
+                            }
+                            if (j != i)
+                            {
+                                for (int ia = 0; ia < 3; ++ia)
+                                {
+                                    for (int jb = 0; jb < 3; ++jb)
+                                    {
+                                        if (ia == jb)
+                                        {
+                                           temp(ia,jb) += (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                        }
+                                        else
+                                        {
+                                           temp(ia,jb) += (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                        }
+                                    }
+                                }
+                            }                           
                         }
                     }
                 }
             }
+
+            // temp_derv_1 = buck_derv1_scalar(elem1, elem2, unitcell_init);
+            // temp_derv_2 = buck_derv2_scalar(elem1, elem2, unitcell_init);
+            // // std::cout << temp_derv_1 << std::endl;
+
+            // if(j != i)
+            // {
+            //     for (int ii = 0; ii < 3; ++ii)
+            //     {
+            //         for (int jj = 0; jj < 3; ++jj)
+            //         {
+            //             if (ii == jj)
+            //             {
+            //                 temp(ii,jj) = -1. * (temp_derv_1 / r_norm) - (((rij[ii] * rij[jj]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
+            //             }
+            //             else
+            //             {
+            //                 temp(ii,jj) = 0. * (temp_derv_1 / r_norm) - (((rij[ii] * rij[jj]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
+            //             }
+            //             // std::cout << rij[ii] << " " << rij[jj] << std::endl;
+            //         }
+            //     }
+            // }
         }
     }
+            std::cout<< temp << std::endl;
+
+//Second derivatives;
+    // double temp_derv_1;
+    // double temp_derv_2;
+    // double result[atoms.size()][3][atoms.size()][3];
+    // Eigen::MatrixXd temp(3, 3);
+    // temp.setZero();
+    // derv2.setZero();
+    // for (int i = 0; i <atoms.size(); ++i)
+    // {
+    //     Atom elem1 = atoms[i];
+    //     Eigen::Vector3d el1_coord;
+    //     el1_coord << elem1.x, elem1.y, elem1.z;
+    //     for (int j = 0; j < atoms.size(); ++j)
+    //     {
+    //         Atom elem2 = atoms[j];
+    //         Eigen::Vector3d el2_coord;
+    //         el2_coord << elem2.x, elem2.y, elem2.z;
+    //         rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+    //         for (int ii = -xmax; ii <= xmax; ++ii)
+    //         {
+    //             for (int jj = -ymax; jj <= xmax; ++jj)
+    //             {
+    //                 for (int kk = -zmax; kk <= zmax; ++kk)
+    //                 {
+    //                     n = ii * a1 + jj * a2 + kk * a3;
+    //                     rijn = rij - n;
+    //                     double r_norm = rijn.norm();
+    //                     double r_sqr = r_norm * r_norm;
+    //                     //Central image
+    //                     if (ii == 0 && jj == 0 && kk == 0)
+    //                     {
+    //                         //Calculate psi'
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             if ((pot.atom1_type == elem1.type && pot.atom1_label == elem1.label) &&
+    //                                     (pot.atom2_type == elem2.type && pot.atom2_label == elem2.label) &&
+    //                                     rijn.norm() < pot.cut_off2)
+    //                             {
+    //                                 temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
+    //                                 temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
+    //                             }
+    //                             else if ((pot.atom2_type == elem1.type && pot.atom2_label == elem1.label) &&
+    //                                      (pot.atom2_type == elem2.type && pot.atom1_label == elem2.label) &&
+    //                                      rijn.norm() < pot.cut_off2)
+    //                             {
+    //                                 temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
+    //                                 temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
+    //                             }
+
+    //                         }
+    //                     }
+
+    //                     //other images;
+    //                     else
+    //                     {
+    //                         for (const auto& pot : buck)
+    //                         {
+    //                             if ((pot.atom1_type == elem1.type && pot.atom1_label == elem1.label) &&
+    //                                     (pot.atom2_type == elem2.type && pot.atom2_label == elem2.label) &&
+    //                                     rijn.norm() < pot.cut_off2)
+    //                             {
+    //                                 temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
+    //                                 temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
+    //                             }
+    //                             else if ((pot.atom2_type == elem1.type && pot.atom2_label == elem1.label) &&
+    //                                      (pot.atom2_type == elem2.type && pot.atom1_label == elem2.label) &&
+    //                                      rijn.norm() < pot.cut_off2)
+    //                             {
+    //                                 temp_derv_1 += derv1_scalar(elem1, elem2, n, pot);
+    //                                 temp_derv_2 += derv2_scalar(elem1, elem2, n, pot);
+    //                             }
+
+    //                         }
+    //                     }
+
+    //                     if (j != i)
+    //                     {
+    //                         for (int ia = 0; ia < 3; ++ia)
+    //                         {
+    //                             for (int jb = 0; jb < 3; ++jb)
+    //                             {
+    //                                 if (ia == jb)
+    //                                 {
+    //                                     // temp(ia,jb) = -1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
+    //                                 }
+    //                                 else
+    //                                 {
+    //                                     temp(ia,jb) = -(((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
+    //                                                                             std::cout << temp << std::endl;
+    //                                 }
+    //                             }
+    //                         }
+    //                     }
+    //                     // else
+    //                     // {
+    //                     //     for (int k = 0; k < atoms.size(); ++k)
+    //                     //     {
+    //                     //         Atom elem3 = atoms[k];
+    //                     //         Eigen::Vector3d rik; 
+    //                     //         Eigen::Vector3d rikn; 
+    //                     //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+    //                     //         for (int kx = -xmax; kx <= xmax; ++kx)
+    //                     //         {
+    //                     //             for (int ky = -ymax; ky <= ymax; ++ky)
+    //                     //             {
+    //                     //                 for (int kz = -zmax; kz <= zmax; ++kz)
+    //                     //                 {
+    //                     //                     Eigen::Vector3d nk;
+    //                     //                     nk = kx * a1 + ky * a2 + kz * a3;
+    //                     //                     rikn = rik - nk;
+    //                     //                     double rk_norm = rikn.norm();
+    //                     //                     double rk_sqr = rk_norm * rk_norm;
+    //                     //                     if (kx == 0 && ky == 0 && kz == 0)
+    //                     //                     {
+
+    //                     //                     }
+    //                     //                     else
+    //                     //                     {
+    //                     //                     if (k != i)
+    //                     //                     {
+    //                     //                         for (int ia = 0; ia < 3; ++ia)
+    //                     //                         {
+    //                     //                             for (int jb = 0; jb < 3; ++jb)
+    //                     //                             {
+    //                     //                                 if (ia == jb)
+    //                     //                                 {
+    //                     //                                     temp(ia,jb) += -1. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
+    //                     //                                 }
+    //                     //                                 else
+    //                     //                                 {
+    //                     //                                     temp(ia,jb) += 0. * (temp_derv_1 / rk_norm) - (((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm));
+    //                     //                                 }
+    //                     //                             }
+    //                     //                         }
+    //                     //                     }
+    //                     //                 }
+
+    //                     //                 }
+    //                     //             }
+    //                     //         }
+
+    //                     //     }
+    //                     // }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     // std::cout << temp << std::endl;
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
