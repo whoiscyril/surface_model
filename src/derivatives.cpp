@@ -71,11 +71,14 @@ void internal_derv2(UnitCell& unitcell_init)
     // std::cout << dist_mat << std::endl;
 
 //Rewrite second derivatives;
-    Eigen::Matrix3d temp;
+    Eigen::Matrix3d temp, temp_diag;
     temp.setZero();
+    temp_diag.setZero();
     for (int i = 0; i <atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
+        temp.setZero();
+        temp_diag.setZero();
         for (int j = 0; j < atoms.size(); ++j)
         {
             Atom elem2 =atoms[j];
@@ -98,54 +101,130 @@ void internal_derv2(UnitCell& unitcell_init)
                         r_sqr = r_norm * r_norm;
                         if (ii == 0 && jj == 0 && kk == 0)
                         {
-                            for (const auto pot : buck)
+
+                            if (i != j)
                             {
-                                temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
-                                temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
-                            }
-                            std::cout << temp_derv_1 << std::endl;
-                            if (j != i)
-                            {
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
+                                    temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
+                                }
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
                                     {
                                         if (ia == jb)
                                         {
-                                           temp(ia,jb) += (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                            temp(ia,jb) += (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) ;
                                         }
                                         else
                                         {
-                                           temp(ia,jb) += (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                            temp(ia,jb) += (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) ;
                                         }
                                     }
                                 }
                             }
+                            else if (i == j)
+                            {
+
+                                for (int k = 0; k < atoms.size(); ++k)
+                                {
+                                    Atom elem3 = atoms[k];
+                                    Eigen::Vector3d rik, rikn;
+                                    rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                    rikn = rik + n;
+                                    double rk_norm = rikn.norm();
+                                    double rk_sqr = rk_norm * rk_norm;
+                                    for (const auto pot : buck)
+                                    {
+                                        temp_derv_1 = derv1_scalar(elem1,elem3,n,pot);
+                                        temp_derv_2 = derv2_scalar(elem1,elem3,n,pot);
+                                    }
+                                    if (i != k)
+                                    {
+                                        for (int ia = 0; ia < 3; ++ia)
+                                        {
+                                            for (int jb = 0; jb < 3; ++jb)
+                                            {
+                                                if (ia == jb)
+                                                {
+                                                    temp_diag(ia,jb) += (1. * temp_derv_1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm);
+
+                                                }
+                                                else
+                                                {
+                                                    temp_diag(ia,jb) += (0. * temp_derv_1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+
                         }
                         else
                         {
-                            for (const auto pot : buck)
+
+                            if (i != j)
                             {
-                                temp_derv_1 =   derv1_scalar(elem1, elem2, n, pot);
-                                temp_derv_2 =   derv2_scalar(elem1, elem2, n, pot);
-                            }
-                            if (j != i)
-                            {
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 =   derv1_scalar(elem1, elem2, n, pot);
+                                    temp_derv_2 =   derv2_scalar(elem1, elem2, n, pot);
+                                }
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
                                     {
                                         if (ia == jb)
                                         {
-                                           temp(ia,jb) += (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                            temp(ia,jb) +=  (-1. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) ;
                                         }
                                         else
                                         {
-                                           temp(ia,jb) += (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) * 0.5;
+                                            temp(ia,jb) +=  (-0. * (temp_derv_1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm))) ;
                                         }
                                     }
                                 }
-                            }                           
+                            }
+                            else if ( i == j )
+                            {
+
+                                for (int k = 0; k < atoms.size(); ++k)
+                                {
+                                    Atom elem3 = atoms[k];
+                                    Eigen::Vector3d rik, rikn;
+                                    rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                    rikn = rik + n;
+                                    double rk_norm = rikn.norm();
+                                    double rk_sqr = rk_norm * rk_norm;
+                                    for (const auto pot : buck)
+                                    {
+                                        temp_derv_1 =   derv1_scalar(elem1, elem3, n, pot);
+                                        temp_derv_2 =   derv2_scalar(elem1, elem3, n, pot);
+                                    }
+                                    if (i != k)
+                                    {
+                                        for (int ia = 0 ; ia < 3; ++ia)
+                                        {
+                                            for (int jb = 0; jb < 3; ++jb)
+                                            {
+                                                if (ia == jb)
+                                                {
+                                                    temp_diag(ia,jb) += (1. * temp_derv_1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm);
+                                                }
+                                                else
+                                                {
+                                                    temp_diag(ia,jb) += (0. * temp_derv_1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (temp_derv_2 - temp_derv_1 / rk_norm);
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -174,8 +253,8 @@ void internal_derv2(UnitCell& unitcell_init)
             //     }
             // }
         }
+        // std::cout << temp_diag << std::endl;
     }
-            std::cout<< temp << std::endl;
 
 //Second derivatives;
     // double temp_derv_1;
@@ -275,8 +354,8 @@ void internal_derv2(UnitCell& unitcell_init)
     //                     //     for (int k = 0; k < atoms.size(); ++k)
     //                     //     {
     //                     //         Atom elem3 = atoms[k];
-    //                     //         Eigen::Vector3d rik; 
-    //                     //         Eigen::Vector3d rikn; 
+    //                     //         Eigen::Vector3d rik;
+    //                     //         Eigen::Vector3d rikn;
     //                     //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
     //                     //         for (int kx = -xmax; kx <= xmax; ++kx)
     //                     //         {
@@ -325,7 +404,7 @@ void internal_derv2(UnitCell& unitcell_init)
     //         }
     //     }
     // }
-    // std::cout << temp << std::endl;
+    std::cout << temp_diag << std::endl;
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
     {
