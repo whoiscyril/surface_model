@@ -104,11 +104,11 @@ void internal_derv2(UnitCell& unitcell_init)
 
                             if (i != j)
                             {
-                            for (const auto pot : buck)
-                            {
-                                temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
-                                temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
-                            }
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
+                                    temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
+                                }
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
@@ -135,11 +135,11 @@ void internal_derv2(UnitCell& unitcell_init)
                                     rikn = rik + n;
                                     double rk_norm = rikn.norm();
                                     double rk_sqr = rk_norm * rk_norm;
-                                                                for (const auto pot : buck)
-                            {
-                                temp_derv_1 = derv1_scalar(elem1,elem3,n,pot);
-                                temp_derv_2 = derv2_scalar(elem1,elem3,n,pot);
-                            }
+                                    for (const auto pot : buck)
+                                    {
+                                        temp_derv_1 = derv1_scalar(elem1,elem3,n,pot);
+                                        temp_derv_2 = derv2_scalar(elem1,elem3,n,pot);
+                                    }
                                     if (i != k)
                                     {
                                         for (int ia = 0; ia < 3; ++ia)
@@ -169,11 +169,11 @@ void internal_derv2(UnitCell& unitcell_init)
 
                             if (i != j)
                             {
-                            for (const auto pot : buck)
-                            {
-                                temp_derv_1 =   derv1_scalar(elem1, elem2, n, pot);
-                                temp_derv_2 =   derv2_scalar(elem1, elem2, n, pot);
-                            }
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 =   derv1_scalar(elem1, elem2, n, pot);
+                                    temp_derv_2 =   derv2_scalar(elem1, elem2, n, pot);
+                                }
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
@@ -200,11 +200,11 @@ void internal_derv2(UnitCell& unitcell_init)
                                     rikn = rik + n;
                                     double rk_norm = rikn.norm();
                                     double rk_sqr = rk_norm * rk_norm;
-                            for (const auto pot : buck)
-                            {
-                                temp_derv_1 =   derv1_scalar(elem1, elem3, n, pot);
-                                temp_derv_2 =   derv2_scalar(elem1, elem3, n, pot);
-                            }
+                                    for (const auto pot : buck)
+                                    {
+                                        temp_derv_1 =   derv1_scalar(elem1, elem3, n, pot);
+                                        temp_derv_2 =   derv2_scalar(elem1, elem3, n, pot);
+                                    }
                                     if (i != k)
                                     {
                                         for (int ia = 0 ; ia < 3; ++ia)
@@ -229,7 +229,6 @@ void internal_derv2(UnitCell& unitcell_init)
                     }
                 }
             }
-
             // temp_derv_1 = buck_derv1_scalar(elem1, elem2, unitcell_init);
             // temp_derv_2 = buck_derv2_scalar(elem1, elem2, unitcell_init);
             // // std::cout << temp_derv_1 << std::endl;
@@ -252,9 +251,35 @@ void internal_derv2(UnitCell& unitcell_init)
             //         }
             //     }
             // }
+
         }
-        // std::cout << temp_diag << std::endl;
+                    std::cout << temp_diag << std::endl;
+
+                // Calculate the starting row and column for the current diagonal block
+                int start_row = i * 3;
+                int start_col = i * 3;
+
+
+                for (int iii = 0; iii < 3; ++iii)
+                {
+                    for (int jjj = 0; jjj < 3; ++jjj)
+                    {
+                            int derv2_row = start_row + iii;
+                            int derv2_col = start_col + jjj；
+                        // Calculate the row and column indices within the current diagonal block
+                        if (derv2_row == derv2_col)
+                        {
+                            derv2(derv2_row, derv2_col) = temp_diag(iii, jjj);
+                        }
+                        else
+                        {
+                            derv2(derv2_row, derv2_col) = temp(iii, jjj);
+                        }
+                    }
+                }
+            
     }
+    std::cout << derv2 << std::endl;
 
 //Second derivatives;
     // double temp_derv_1;
@@ -404,7 +429,7 @@ void internal_derv2(UnitCell& unitcell_init)
     //         }
     //     }
     // }
-    std::cout << temp_diag << std::endl;
+    // std::cout << temp_diag << std::endl;
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
     {
