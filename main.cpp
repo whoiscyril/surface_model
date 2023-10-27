@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
     UnitCell unitcell(filename);
 
     double energy;
-    internal_derv2(unitcell);
+    internal_derv2_buck(unitcell);
     // energy = calc_electrostatics_3D(unitcell) + calc_short_range_buckingham_potential(unitcell);
     // std::cout << energy << std::endl;
 

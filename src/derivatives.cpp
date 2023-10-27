@@ -4,7 +4,7 @@
 #include <Struct_Atom.h>
 #include <derv_1.h>
 
-void internal_derv2(UnitCell& unitcell_init)
+void internal_derv2_buck(UnitCell& unitcell_init)
 {
 
     int natom = unitcell_init.coordinates_cart.size();
@@ -25,6 +25,16 @@ void internal_derv2(UnitCell& unitcell_init)
     Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
     Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
     Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+    const double toeV = 14.39964390675221758120;
+    Eigen::Vector3d g1 = unitcell_init.reciprocal_vectors.row(0);
+    Eigen::Vector3d g2 = unitcell_init.reciprocal_vectors.row(1);
+    Eigen::Vector3d g3 = unitcell_init.reciprocal_vectors.row(2);
+
+    double V = unitcell_init.volume;
+
+    double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
     for (const auto& elem : buck)
     {
@@ -100,6 +110,8 @@ void internal_derv2(UnitCell& unitcell_init)
                         r_sqr = r_norm * r_norm;
                         if (ii == 0 && jj == 0 && kk == 0)
                         {
+                            //Reciprocal part skip
+                            //Real part contribution added
 
                             if (i != j)
                             {
@@ -108,6 +120,9 @@ void internal_derv2(UnitCell& unitcell_init)
                                     temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
                                     temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
                                 }
+                                //Electrostatics real space;
+                                // temp_ewald_1 = coloumb_derv1_scalar();
+                                // temp_ewald_2 = coloumb_derv2_scalar();
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
@@ -228,28 +243,7 @@ void internal_derv2(UnitCell& unitcell_init)
                     }
                 }
             }
-            // temp_derv_1 = buck_derv1_scalar(elem1, elem2, unitcell_init);
-            // temp_derv_2 = buck_derv2_scalar(elem1, elem2, unitcell_init);
-            // // std::cout << temp_derv_1 << std::endl;
 
-            // if(j != i)
-            // {
-            //     for (int ii = 0; ii < 3; ++ii)
-            //     {
-            //         for (int jj = 0; jj < 3; ++jj)
-            //         {
-            //             if (ii == jj)
-            //             {
-            //                 temp(ii,jj) = -1. * (temp_derv_1 / r_norm) - (((rij[ii] * rij[jj]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
-            //             }
-            //             else
-            //             {
-            //                 temp(ii,jj) = 0. * (temp_derv_1 / r_norm) - (((rij[ii] * rij[jj]) / r_sqr) * (temp_derv_2 - temp_derv_1 / r_norm));
-            //             }
-            //             // std::cout << rij[ii] << " " << rij[jj] << std::endl;
-            //         }
-            //     }
-            // }
         int start_row = i * 3;
         int start_col = j * 3;
 
@@ -319,6 +313,11 @@ void internal_derv2(UnitCell& unitcell_init)
         }
         total_buck_derv1 = lattice_vectors * total_buck_derv1;
     }
+}
+void internal_derv_columb(UnitCell& unitcell_init)
+{
+    int natoms = unitcell_init.coordinates_cart.size();
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
 }
 
 void calc_lattice_deriv(UnitCell& unitcell_init)
