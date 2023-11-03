@@ -319,7 +319,7 @@ double derv2_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Buckingham pot)
 
 }
 
-double coloumb_derv1_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Eigen::Vector3d kvecs, double kappa, double V)
+double coloumb_derv1_scalar_real(Atom atom1, Atom atom2, Eigen::Vector3d n, Eigen::Vector3d kvecs, double kappa, double V)
 {
     double result;
 
@@ -336,14 +336,32 @@ double coloumb_derv1_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Eigen::Ve
     double k_sqr = k_norm * k_norm;
 
     intact[0] = 0.5 * atom1.q * atom2.q * (-1./r_sqr * erfc(kappa * r_norm) + -2. * kappa/sqrt(M_PI)/r_norm * exp(-kappa*kappa*r_sqr));
-    intact[1] = 2. * M_PI/V * atom1.q * atom2.q * (exp(- k_sqr / (4. * kappa * kappa)) * (1./k_sqr) * -sin(kvecs.dot(rijn)));
+    // intact[1] = 2. * M_PI/V * atom1.q * atom2.q * (exp(- k_sqr / (4. * kappa * kappa)) * (1./k_sqr) * -sin(kvecs.dot(rijn)));
+    result = intact[0] + intact[1];
 
     return result;
 }
 
-double coloumb_derv2_scalar(Atom atom1, Atom atom2, Eigen::Vector3d n, Eigen::Vector3d kvecs, double kappa, double V)
+double coloumb_derv2_scalar_real(Atom atom1, Atom atom2, Eigen::Vector3d n, Eigen::Vector3d kvecs, double kappa, double V)
 {
     double result;
+
+    Eigen::Vector3d rij, rijn;
+    rij.setZero();
+    rijn.setZero();
+    double intact[2];
+
+    rij << atom1.x - atom2.x, atom1.y - atom2.y, atom1.z - atom2.z;
+    rijn = rij + n;
+    double r_norm = rijn.norm();
+    double r_sqr = r_norm * r_norm;
+    double k_norm = kvecs.norm();
+    double k_sqr = k_norm * k_norm;
+    double r_cbd = r_norm * r_norm * r_norm;
+
+    intact[0] = 0.5 * atom1.q * atom2.q * (1./r_cbd * erfc(kappa*r_norm) + 4.*kappa*exp(-kappa*kappa*r_sqr)/sqrt(M_PI)/r_sqr + 4.*exp(-kappa*kappa*r_sqr)*kappa*kappa*kappa/sqrt(M_PI));
+    // intact[1] = (2.*M_PI/V) * atom1.q * atom2.q * (exp(-k_sqr/4./kappa/kappa)) * -cos(kvecs.dot(rij)) ;
+    result = intact[0] + intact[1];
 
     return result;
 }

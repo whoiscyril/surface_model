@@ -1,5 +1,5 @@
 #opti conp debug derv2 
-single phonon conp debug derv2
+single phonon conp debug derv2 dist
 title
 end
 
@@ -7,14 +7,12 @@ cell
 4 5 6 90 75 60
 
 frac
-O  core 0.37 0.28 0.79 0
-Mg core 0.5 0.42 0.10 0
-O  core 0.62 0.33 0.45 0
-
+O  core 0.37 0.28 0.79 -2
+Mg core 0.5 0.42 0.10 2
 
 #cart 
 #O core 2.5 2.5 2.5 0
 #Mg core 0 0 0 0
-buckingham
-Mg core    O    core   946.627 0.31813  0.00000 0.0 10.0
+#buckingham
+#Mg core    O    core   946.627 0.31813  0.00000 0.0 10.0
 

@@ -10,5 +10,6 @@ void calc_strain_deriv(UnitCell& unitcell_init);
 void calc_lattice_deriv(UnitCell& unitcell_init);
 void internal_derv2_buck(UnitCell& unitcell);
 void internal_derv_columb(UnitCell& unitcell_init);
+Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init);
 
 #endif

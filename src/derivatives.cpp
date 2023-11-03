@@ -110,8 +110,7 @@ void internal_derv2_buck(UnitCell& unitcell_init)
                         r_sqr = r_norm * r_norm;
                         if (ii == 0 && jj == 0 && kk == 0)
                         {
-                            //Reciprocal part skip
-                            //Real part contribution added
+
 
                             if (i != j)
                             {
@@ -244,38 +243,35 @@ void internal_derv2_buck(UnitCell& unitcell_init)
                 }
             }
 
-        int start_row = i * 3;
-        int start_col = j * 3;
+            int start_row = i * 3;
+            int start_col = j * 3;
 
-        for (int iii = 0; iii < 3; ++iii)
-        {
-            for (int jjj = 0; jjj < 3; ++jjj)
+            for (int iii = 0; iii < 3; ++iii)
             {
-                int derv2_row = start_row + iii;
-                int derv2_col = start_col + jjj;
-                                // Calculate the row and column indices within the current diagonal block
-                if (i == j)
+                for (int jjj = 0; jjj < 3; ++jjj)
                 {
-                    derv2(derv2_row, derv2_col) = temp_diag(iii, jjj);
-                }
-                else
-                {
-                    derv2(derv2_row, derv2_col) = temp(iii, jjj);
+                    int derv2_row = start_row + iii;
+                    int derv2_col = start_col + jjj;
+                    // Calculate the row and column indices within the current diagonal block
+                    if (i == j)
+                    {
+                        derv2(derv2_row, derv2_col) = temp_diag(iii, jjj);
+                    }
+                    else
+                    {
+                        derv2(derv2_row, derv2_col) = temp(iii, jjj);
+                    }
                 }
             }
+            // std::cout << i << " " << j << " " << temp << std::endl;
+
+            temp.setZero();
+            temp_diag.setZero();
+
         }
-        // std::cout << i << " " << j << " " << temp << std::endl; 
-
-        temp.setZero();
-        temp_diag.setZero();
-
-        }
-
-
 
     }
     std::cout << derv2 << std::endl;
-
 
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
@@ -627,6 +623,152 @@ void calc_strain_deriv(UnitCell& unitcell_init)
 
     // std::cout << deriv << std::endl;
     unitcell_init.strain_deriv = deriv;
+}
+
+//Function that calculates the second derivative of energy with respect to atomic positions
+
+Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
+{
+    // std::cout << "hi" << std::endl;
+
+    const double toeV = 14.39964390675221758120;
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+
+    Eigen::Vector3d rij, n, rijn, kvecs;
+    rij.setZero();
+    n.setZero();
+    rijn.setZero();
+    kvecs.setZero();
+
+    int natom = unitcell_init.coordinates_cart.size();
+    Eigen::MatrixXd result(3*natom, 3*natom);
+    Eigen::Vector3d g1 = unitcell_init.reciprocal_vectors.row(0);
+    Eigen::Vector3d g2 = unitcell_init.reciprocal_vectors.row(1);
+    Eigen::Vector3d g3 = unitcell_init.reciprocal_vectors.row(2);
+
+    double V = unitcell_init.volume;
+
+    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+
+    int nmax_x = ceil(rcut/v1.norm());
+    int nmax_y = ceil(rcut/v2.norm());
+    int nmax_z = ceil(rcut/v3.norm());
+    int kmax_x = ceil(kcut/g1.norm());
+    int kmax_y = ceil(kcut/g2.norm());
+    int kmax_z = ceil(kcut/g3.norm());
+
+    Eigen::Matrix3d temp_diag;
+    Eigen::Matrix3d temp;
+    double temp_derv_1 = 0;
+    double temp_derv_2 = 0;
+
+    temp.setZero();
+    temp_diag.setZero();
+        // Start the loops for atoms
+    for (int i = 0; i <atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        for (int j = 0; j < atoms.size(); ++j)
+        {
+            Atom elem2 = atoms[j];
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+            for (int ii = -nmax_x; ii <= nmax_x; ++ii)
+            {
+                for (int jj = -nmax_y; jj <= nmax_y; ++jj)
+                {
+                    for (int kk = -nmax_z; kk <= nmax_z; ++kk)
+                    {
+                        n = ii * v1 + jj * v2 + kk * v3;
+                        rijn = rij + n;
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
+                        double r_cbd = r_norm * r_norm * r_norm;
+                        //Real part contribution
+                        std::cout << temp << std::endl;
+                        if (rijn.norm() < rcut)
+                        {
+                            if (ii == 0 && jj == 0 && kk == 0)
+                            {
+                                if (i != j)
+                                {
+                                    double val = 0.;
+                                    val = 0.5 * elem1.q * elem2.q * ((1./r_cbd) * erfc(kappa * r_norm) + 4. * kappa * exp(-kappa*kappa*r_norm) + 4.*kappa*kappa*kappa*exp(-kappa*kappa*r_sqr)/sqrt(M_PI));
+                                    for (int ia = 0; ia < 3; ia ++)
+                                    {
+                                        for (int jb = 0; jb < 3; jb++)
+                                        {
+                                            temp(ia,jb) += toeV * val * (rijn[ia] * rijn[jb]/r_sqr);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                double val = 0.;
+                                val = 0.5 * elem1.q * elem2.q * ((1./r_cbd) * erfc(kappa * r_norm) + 4. * kappa * exp(-kappa*kappa*r_norm) + 4.*kappa*kappa*kappa*exp(-kappa*kappa*r_sqr)/sqrt(M_PI));
+                                for (int ia = 0; ia < 3; ia ++)
+                                {
+                                    for (int jb = 0; jb < 3; jb++)
+                                    {
+                                        temp(ia,jb) += toeV * val * (rijn[ia] * rijn[jb]/r_sqr);
+                                    }
+                                }
+                            
+                        }
+
+                        }
+                    }
+                }
+            }
+
+            //Reciprocal part contribution
+            for (int ii = -kmax_x; ii <= kmax_x; ++ii)
+            {
+                for (int jj = -kmax_y; jj <= kmax_y; ++jj)
+                {
+                    for (int kk = -kmax_z; kk <= kmax_z; ++kk)
+                    {
+                        kvecs = ii * g1 + jj * g2 + kk * g3;
+                        double k_norm = kvecs.norm();
+                        double k_sqr = k_norm * k_norm;
+                        if (k_norm <= kcut)
+                        {
+                            if (ii == 0 && jj == 0 && kk == 0)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+
+                                double val = 0;
+                                val = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
+                                for (int ia = 0; ia < 3; ++ia)
+                                {
+                                    for (int jb = 0; jb < 3; ++jb)
+                                    {
+                                        temp(ia, jb) += toeV * val * (kvecs[ia] * kvecs[jb]/k_sqr);
+                                    }
+                                }
+                            }
+
+                            
+                        }
+                    }
+                }
+            // std::cout << temp << std::endl;
+            }
+        temp.setZero();
+        }
+    }
+    return result;
 }
 
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;
