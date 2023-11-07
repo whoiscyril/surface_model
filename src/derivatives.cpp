@@ -653,9 +653,13 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    // long double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
+
+    double kappa = sqrt(0.141053);
+    double rcut = 13.996121;
+    double kcut = 3.948383;
 
     int nmax_x = ceil(rcut/v1.norm());
     int nmax_y = ceil(rcut/v2.norm());
@@ -689,36 +693,54 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                         rijn = rij + n;
                         double r_norm = rijn.norm();
                         double r_sqr = r_norm * r_norm;
-                        double r_cbd = r_norm * r_norm * r_norm;
+                        double r_cbd = r_sqr * r_norm;
                         //Real part contribution
-                        std::cout << temp << std::endl;
-                        if (rijn.norm() < rcut)
+                        // std::cout << temp << std::endl;
+                        if (rijn.norm() <= rcut)
                         {
                             if (ii == 0 && jj == 0 && kk == 0)
                             {
                                 if (i != j)
                                 {
-                                    double val = 0.;
-                                    val = 0.5 * elem1.q * elem2.q * ((1./r_cbd) * erfc(kappa * r_norm) + 4. * kappa * exp(-kappa*kappa*r_norm) + 4.*kappa*kappa*kappa*exp(-kappa*kappa*r_sqr)/sqrt(M_PI));
-                                    for (int ia = 0; ia < 3; ia ++)
+                                    double val2 = 0.;
+                                    double val1 = 0.;
+                                    val1 = -exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / r_norm - erfc(kappa*r_norm) * elem1.q * elem2.q / 2. / r_sqr;
+                                    val2 = 2. * exp(-kappa*kappa*r_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/r_sqr + erfc(kappa*r_norm) * elem1.q * elem2.q/r_cbd;
+                                    for (int ia = 0; ia < 3; ++ia)
                                     {
-                                        for (int jb = 0; jb < 3; jb++)
+                                        for (int jb = 0; jb < 3; ++jb)
                                         {
-                                            temp(ia,jb) += toeV * val * (rijn[ia] * rijn[jb]/r_sqr);
+                                        if (ia == jb)
+                                        {
+                                            temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
                                         }
+                                        else
+                                        {
+                                            temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+                                        }                                        
+                                    }
                                     }
                                 }
                             }
                             else
                             {
 
-                                double val = 0.;
-                                val = 0.5 * elem1.q * elem2.q * ((1./r_cbd) * erfc(kappa * r_norm) + 4. * kappa * exp(-kappa*kappa*r_norm) + 4.*kappa*kappa*kappa*exp(-kappa*kappa*r_sqr)/sqrt(M_PI));
-                                for (int ia = 0; ia < 3; ia ++)
+                                double val2 = 0.;
+                                double val1 = 0.;
+                                    val1 = -exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / r_norm - erfc(kappa*r_norm) * elem1.q * elem2.q / 2. / r_sqr;
+                                    val2 = 2. * exp(-kappa*kappa*r_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/r_sqr + erfc(kappa*r_norm) * elem1.q * elem2.q/r_cbd;
+                                for (int ia = 0; ia < 3; ++ia)
                                 {
-                                    for (int jb = 0; jb < 3; jb++)
+                                    for (int jb = 0; jb < 3; ++jb)
                                     {
-                                        temp(ia,jb) += toeV * val * (rijn[ia] * rijn[jb]/r_sqr);
+                                        if (ia == jb)
+                                        {
+                                            temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+                                        }
+                                        else
+                                        {
+                                            temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+                                        }
                                     }
                                 }
                             
@@ -736,6 +758,8 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                 {
                     for (int kk = -kmax_z; kk <= kmax_z; ++kk)
                     {
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
                         kvecs = ii * g1 + jj * g2 + kk * g3;
                         double k_norm = kvecs.norm();
                         double k_sqr = k_norm * k_norm;
@@ -748,13 +772,25 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                             else
                             {
 
-                                double val = 0;
-                                val = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
+                                double val2 = 0.;
+                                double val1 = 0.;
+
                                 for (int ia = 0; ia < 3; ++ia)
                                 {
                                     for (int jb = 0; jb < 3; ++jb)
                                     {
-                                        temp(ia, jb) += toeV * val * (kvecs[ia] * kvecs[jb]/k_sqr);
+                                    // val2 =(2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
+                                    // val1 = kvecs[ia] * ((2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -sin(kvecs.dot(rij)))) / k_sqr;
+                                    // val2 = kvecs[ia] * kvecs[jb] * (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij))) / k_sqr;
+                                        // if (ia == jb)
+                                        // {
+                                        //     temp(ia, jb) +=  -1. * val1 / r_norm - ((rijn[ia] * rijn[jb])/r_sqr)*(val2 - val1/r_norm);
+                                        // }
+                                        // else
+                                        // {
+                                        //     temp(ia, jb) += 0. * val1 / r_norm - ((rijn[ia] * rijn[jb])/r_sqr)*(val2 - val1/r_norm);
+                                        // }
+                                    // temp(ia, jb) += val2 * kvecs[ia] * kvecs[jb] / k_sqr;
                                     }
                                 }
                             }
@@ -763,12 +799,14 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                         }
                     }
                 }
-            // std::cout << temp << std::endl;
             }
-        temp.setZero();
+
         }
+        std::cout << toeV*temp << std::endl;
+
     }
-    return result;
+        temp.setZero();
+        return result;
 }
 
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;
