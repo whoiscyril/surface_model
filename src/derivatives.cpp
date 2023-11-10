@@ -111,7 +111,6 @@ void internal_derv2_buck(UnitCell& unitcell_init)
                         if (ii == 0 && jj == 0 && kk == 0)
                         {
 
-
                             if (i != j)
                             {
                                 for (const auto pot : buck)
@@ -657,9 +656,9 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
     // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
     // double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    double kappa = sqrt(0.141053);
-    double rcut = 13.996121;
-    double kcut = 3.948383;
+    double kappa = sqrt(0.150914);
+    double rcut = 13.531110;
+    double kcut = 4.084073;
 
     int nmax_x = ceil(rcut/v1.norm());
     int nmax_y = ceil(rcut/v2.norm());
@@ -669,15 +668,15 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
     int kmax_z = ceil(kcut/g3.norm());
 
     Eigen::Matrix3d temp_diag;
-    Eigen::Matrix3d temp;
+    Eigen::Matrix3d temp, tempr;
     double temp_derv_1 = 0;
     double temp_derv_2 = 0;
-
     temp.setZero();
     temp_diag.setZero();
-        // Start the loops for atoms
+    // Start the loops for atoms
     for (int i = 0; i <atoms.size(); ++i)
     {
+        // std::cout << i << std::endl;
         Atom elem1 = atoms[i];
         for (int j = 0; j < atoms.size(); ++j)
         {
@@ -690,6 +689,7 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                     for (int kk = -nmax_z; kk <= nmax_z; ++kk)
                     {
                         n = ii * v1 + jj * v2 + kk * v3;
+                        // std::cout << n << std::endl;
                         rijn = rij + n;
                         double r_norm = rijn.norm();
                         double r_sqr = r_norm * r_norm;
@@ -710,103 +710,204 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                     {
                                         for (int jb = 0; jb < 3; ++jb)
                                         {
-                                        if (ia == jb)
-                                        {
-                                            temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+                                            if (ia == jb)
+                                            {
+                                                temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))));
+                                            }
+                                            else
+                                            {
+                                                temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                            }
                                         }
-                                        else
-                                        {
-                                            temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
-                                        }                                        
-                                    }
                                     }
                                 }
+                                // else if (i == j)
+                                // {
+                                //     for (int k = 0; k < atoms.size(); ++k)
+                                //     {
+                                //         Atom elem3 = atoms[k];
+                                //         Eigen::Vector3d rik, rikn;
+                                //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                //         rikn = rik + n;
+                                //         double rk_norm = rikn.norm();
+                                //         double rk_sqr = rk_norm * rk_norm;
+                                //         double rk_cbd = rk_norm * rk_sqr;
+                                //         double val1 = 0.;
+                                //         double val2 = 0.;
+                                //         val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem2.q / 2. / rk_sqr;
+                                //         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem2.q/rk_cbd;
+                                //         if (i != k)
+                                //         {
+                                //             for (int ia = 0; ia < 3; ++ia)
+                                //             {
+                                //                 for (int jb = 0; jb < 3; ++jb)
+                                //                 {
+                                //                     if (ia == jb)
+                                //                     {
+                                //                         temp_diag(ia,jb) += 1. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
+                                //                     }
+                                //                     else
+                                //                     {
+                                //                         temp_diag(ia,jb) += 0. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
+                                //                     }
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // }
                             }
                             else
                             {
-
-                                double val2 = 0.;
-                                double val1 = 0.;
+                                if (i != j)
+                                {
+                                    double val2 = 0.;
+                                    double val1 = 0.;
                                     val1 = -exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / r_norm - erfc(kappa*r_norm) * elem1.q * elem2.q / 2. / r_sqr;
                                     val2 = 2. * exp(-kappa*kappa*r_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/r_sqr + erfc(kappa*r_norm) * elem1.q * elem2.q/r_cbd;
-                                for (int ia = 0; ia < 3; ++ia)
-                                {
-                                    for (int jb = 0; jb < 3; ++jb)
+                                    for (int ia = 0; ia < 3; ++ia)
                                     {
-                                        if (ia == jb)
+                                        for (int jb = 0; jb < 3; ++jb)
                                         {
-                                            temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
-                                        }
-                                        else
-                                        {
-                                            temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+                                            if (ia == jb)
+                                            {
+                                                temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                            }
+                                            else
+                                            {
+                                                temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                            }
                                         }
                                     }
                                 }
-                            
-                        }
+                                // else if (i == j)
+                                // {
+                                //     for (int k = 0; k < atoms.size(); ++k)
+                                //     {
+                                //         Atom elem3 = atoms[k];
+                                //         Eigen::Vector3d rik, rikn;
+                                //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                //         rikn = rik + n;
+                                //         double rk_norm = rikn.norm();
+                                //         double rk_sqr = rk_norm * rk_norm;
+                                //         double rk_cbd = rk_norm * rk_sqr;
+                                //         double val1 = 0.;
+                                //         double val2 = 0.;
+                                //         val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem2.q / 2. / rk_sqr;
+                                //         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem2.q/rk_cbd;
+                                //         if (i != k)
+                                //         {
+                                //             for (int ia = 0; ia < 3; ++ia)
+                                //             {
+                                //                 for (int jb = 0; jb < 3; ++jb)
+                                //                 {
+                                //                     if (ia == jb)
+                                //                     {
+                                //                         temp_diag(ia,jb) += 1. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
+                                //                     }
+                                //                     else
+                                //                     {
+                                //                         temp_diag(ia,jb) += 0. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
+                                //                     }
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // }
+
+                            }
 
                         }
                     }
                 }
             }
+            int start_row = i * 3;
+            int start_col = j * 3;
 
-            //Reciprocal part contribution
-            for (int ii = -kmax_x; ii <= kmax_x; ++ii)
+            for (int iii = 0; iii < 3; ++iii)
             {
-                for (int jj = -kmax_y; jj <= kmax_y; ++jj)
+                for (int jjj = 0; jjj < 3; ++jjj)
                 {
-                    for (int kk = -kmax_z; kk <= kmax_z; ++kk)
+                    int derv2_row = start_row + iii;
+                    int derv2_col = start_col + jjj;
+                    // Calculate the row and column indices within the current diagonal block
+                    if (i == j)
                     {
-                        double r_norm = rijn.norm();
-                        double r_sqr = r_norm * r_norm;
-                        kvecs = ii * g1 + jj * g2 + kk * g3;
-                        double k_norm = kvecs.norm();
-                        double k_sqr = k_norm * k_norm;
-                        if (k_norm <= kcut)
-                        {
-                            if (ii == 0 && jj == 0 && kk == 0)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-
-                                double val2 = 0.;
-                                double val1 = 0.;
-
-                                for (int ia = 0; ia < 3; ++ia)
-                                {
-                                    for (int jb = 0; jb < 3; ++jb)
-                                    {
-                                    // val2 =(2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
-                                    // val1 = kvecs[ia] * ((2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -sin(kvecs.dot(rij)))) / k_sqr;
-                                    // val2 = kvecs[ia] * kvecs[jb] * (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij))) / k_sqr;
-                                        // if (ia == jb)
-                                        // {
-                                        //     temp(ia, jb) +=  -1. * val1 / r_norm - ((rijn[ia] * rijn[jb])/r_sqr)*(val2 - val1/r_norm);
-                                        // }
-                                        // else
-                                        // {
-                                        //     temp(ia, jb) += 0. * val1 / r_norm - ((rijn[ia] * rijn[jb])/r_sqr)*(val2 - val1/r_norm);
-                                        // }
-                                    // temp(ia, jb) += val2 * kvecs[ia] * kvecs[jb] / k_sqr;
-                                    }
-                                }
-                            }
-
-                            
-                        }
+                        // result(derv2_row, derv2_col) = toeV*temp_diag(iii, jjj);
+                    }
+                    else
+                    {
+                        result(derv2_row, derv2_col) = toeV*temp(iii, jjj);
                     }
                 }
             }
+            temp.setZero();
+            temp_diag.setZero();
+            // std::cout << temp << std::endl;
+            //Reciprocal part contribution
+            // for (int ii = -kmax_x; ii <= kmax_x; ++ii)
+            // {
+            //     for (int jj = -kmax_y; jj <= kmax_y; ++jj)
+            //     {
+            //         for (int kk = -kmax_z; kk <= kmax_z; ++kk)
+            //         {
+            //             double r_norm = rijn.norm();
+            //             double r_sqr = r_norm * r_norm;
+            //             kvecs = ii * g1 + jj * g2 + kk * g3;
+            //             double k_norm = kvecs.norm();
+            //             double k_sqr = k_norm * k_norm;
+            //             if (k_norm <= kcut)
+            //             {
+            //                 if (ii == 0 && jj == 0 && kk == 0)
+            //                 {
+            //                     continue;
+            //                 }
+            //                 else
+            //                 {
+            //                     if (i != j)
+            //                     {
+            //                         // std::cout << i << " " << j<< std::endl;
+            //                         double val2 = 0.;
+            //                         double val1 = 0.;
 
+            //                         for (int ia = 0; ia < 3; ++ia)
+            //                         {
+            //                             for (int jb = 0; jb < 3; ++jb)
+            //                             {
+            //                                 // val2 =(2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
+            //                                 // temp(ia, jb) += val2 * kvecs[ia] * kvecs[jb] / k_sqr;
+            //                                 // val1 = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -sin(kvecs.dot(rij))) * kvecs[ia] / k_sqr;
+            //                                 // val2 = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij))) * kvecs[ia] * kvecs[jb] / k_sqr;
+            //                                 // if (ia == jb)
+            //                                 // {
+            //                                 //     temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+
+            //                                 // }
+            //                                 // else
+            //                                 // {
+            //                                 //     temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
+            //                                 // }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+
+            //             }
+            //         }
+            //     }
+            // }
+            // if(i != j)
+            // {
+            //     std::cout << i << " " << j << std::endl;
+            //     std::cout << toeV*temp << std::endl;
+            // }
         }
-        std::cout << toeV*temp << std::endl;
+    // temp.setZero();
 
     }
-        temp.setZero();
-        return result;
+
+    // temp_diag.setZero();
+    std::cout << result << std::endl;
+    return result;
 }
 
 //Function that takes in energy and coordinates to compute the forces on each ions - rigid ion model only;

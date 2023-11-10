@@ -369,6 +369,30 @@ src/distributor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/distributor.cpp.s
 .PHONY : src/distributor.cpp.s
 
+src/fdm_algo.o: src/fdm_algo.cpp.o
+.PHONY : src/fdm_algo.o
+
+# target to build an object file
+src/fdm_algo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/fdm_algo.cpp.o
+.PHONY : src/fdm_algo.cpp.o
+
+src/fdm_algo.i: src/fdm_algo.cpp.i
+.PHONY : src/fdm_algo.i
+
+# target to preprocess a source file
+src/fdm_algo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/fdm_algo.cpp.i
+.PHONY : src/fdm_algo.cpp.i
+
+src/fdm_algo.s: src/fdm_algo.cpp.s
+.PHONY : src/fdm_algo.s
+
+# target to generate assembly for a file
+src/fdm_algo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/program.dir/build.make CMakeFiles/program.dir/src/fdm_algo.cpp.s
+.PHONY : src/fdm_algo.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -408,6 +432,9 @@ help:
 	@echo "... src/distributor.o"
 	@echo "... src/distributor.i"
 	@echo "... src/distributor.s"
+	@echo "... src/fdm_algo.o"
+	@echo "... src/fdm_algo.i"
+	@echo "... src/fdm_algo.s"
 .PHONY : help
 
 

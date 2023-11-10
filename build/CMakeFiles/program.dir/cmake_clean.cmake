@@ -21,6 +21,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/program.dir/src/derv_2.cpp.o.d"
   "CMakeFiles/program.dir/src/distributor.cpp.o"
   "CMakeFiles/program.dir/src/distributor.cpp.o.d"
+  "CMakeFiles/program.dir/src/fdm_algo.cpp.o"
+  "CMakeFiles/program.dir/src/fdm_algo.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.
