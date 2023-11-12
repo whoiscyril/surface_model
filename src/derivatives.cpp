@@ -721,40 +721,41 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         }
                                     }
                                 }
-                                // else if (i == j)
-                                // {
-                                //     for (int k = 0; k < atoms.size(); ++k)
-                                //     {
-                                //         Atom elem3 = atoms[k];
-                                //         Eigen::Vector3d rik, rikn;
-                                //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
-                                //         rikn = rik + n;
-                                //         double rk_norm = rikn.norm();
-                                //         double rk_sqr = rk_norm * rk_norm;
-                                //         double rk_cbd = rk_norm * rk_sqr;
-                                //         double val1 = 0.;
-                                //         double val2 = 0.;
-                                //         val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem2.q / 2. / rk_sqr;
-                                //         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem2.q/rk_cbd;
-                                //         if (i != k)
-                                //         {
-                                //             for (int ia = 0; ia < 3; ++ia)
-                                //             {
-                                //                 for (int jb = 0; jb < 3; ++jb)
-                                //                 {
-                                //                     if (ia == jb)
-                                //                     {
-                                //                         temp_diag(ia,jb) += 1. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
-                                //                     }
-                                //                     else
-                                //                     {
-                                //                         temp_diag(ia,jb) += 0. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
-                                //                     }
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // }
+                                else if (i == j)
+                                {
+                                    for (int k = 0; k < atoms.size(); ++k)
+                                    {
+                                        Atom elem3 = atoms[k];
+                                        Eigen::Vector3d rik, rikn;
+                                        rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                        rikn = rik + n;
+                                        double rk_norm = rikn.norm();
+                                        double rk_sqr = rk_norm * rk_norm;
+                                        double rk_cbd = rk_norm * rk_sqr;
+                                        double val1 = 0.;
+                                        double val2 = 0.;
+                                        val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem3.q / 2. / rk_sqr;
+                                        val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem3.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem3.q/rk_cbd;
+                                        if (i != k)
+                                        {
+                                        for (int ia = 0; ia < 3; ++ia)
+                                        {
+                                            for (int jb = 0; jb < 3; ++jb)
+                                            {
+                                                if (ia == jb)
+                                                {
+                                                    temp_diag(ia,jb) += 2.*((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                }
+                                                else
+                                                {
+                                                    temp_diag(ia,jb) += 2.*((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    }
+                                }
+
                             }
                             else
                             {
@@ -779,40 +780,41 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         }
                                     }
                                 }
-                                // else if (i == j)
-                                // {
-                                //     for (int k = 0; k < atoms.size(); ++k)
-                                //     {
-                                //         Atom elem3 = atoms[k];
-                                //         Eigen::Vector3d rik, rikn;
-                                //         rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
-                                //         rikn = rik + n;
-                                //         double rk_norm = rikn.norm();
-                                //         double rk_sqr = rk_norm * rk_norm;
-                                //         double rk_cbd = rk_norm * rk_sqr;
-                                //         double val1 = 0.;
-                                //         double val2 = 0.;
-                                //         val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem2.q / 2. / rk_sqr;
-                                //         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem2.q/rk_cbd;
-                                //         if (i != k)
-                                //         {
-                                //             for (int ia = 0; ia < 3; ++ia)
-                                //             {
-                                //                 for (int jb = 0; jb < 3; ++jb)
-                                //                 {
-                                //                     if (ia == jb)
-                                //                     {
-                                //                         temp_diag(ia,jb) += 1. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
-                                //                     }
-                                //                     else
-                                //                     {
-                                //                         temp_diag(ia,jb) += 0. * val1/rk_norm + ( rikn[ia] * rikn[jb] / rk_sqr ) * (val2 - val1/rk_norm);
-                                //                     }
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // }
+                                else if (i == j)
+                                {
+                                    for (int k = 0; k < atoms.size(); ++k)
+                                    {
+                                        Atom elem3 = atoms[k];
+                                        Eigen::Vector3d rik, rikn;
+                                        rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                        rikn = rik + n;
+                                        double rk_norm = rikn.norm();
+                                        double rk_sqr = rk_norm * rk_norm;
+                                        double rk_cbd = rk_norm * rk_sqr;
+                                        double val1 = 0.;
+                                        double val2 = 0.;
+                                        val1 = -exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI) / rk_norm - erfc(kappa*rk_norm) * elem1.q * elem3.q / 2. / rk_sqr;
+                                        val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem3.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem3.q/rk_cbd;
+                                        if (i != k)
+                                        {
+                                        for (int ia = 0; ia < 3; ++ia)
+                                        {
+                                            for (int jb = 0; jb < 3; ++jb)
+                                            {
+                                                if (ia == jb)
+                                                {
+                                                    temp_diag(ia,jb) += 2. * ((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                }
+                                                else
+                                                {
+                                                    temp_diag(ia,jb) += 2. * ((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    }
+                                }
+
 
                             }
 
@@ -832,11 +834,11 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                     // Calculate the row and column indices within the current diagonal block
                     if (i == j)
                     {
-                        // result(derv2_row, derv2_col) = toeV*temp_diag(iii, jjj);
+                        result(derv2_row, derv2_col) = toeV*temp_diag(iii, jjj);
                     }
                     else
                     {
-                        result(derv2_row, derv2_col) = toeV*temp(iii, jjj);
+                        // result(derv2_row, derv2_col) = toeV*temp(iii, jjj);
                     }
                 }
             }
