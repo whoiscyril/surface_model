@@ -656,9 +656,9 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
     // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
     // double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
-    double kappa = sqrt(0.150914);
-    double rcut = 13.531110;
-    double kcut = 4.084073;
+    double kappa = sqrt(0.152500);
+    double rcut = 13.460566;
+    double kcut = 4.105477;
 
     int nmax_x = ceil(rcut/v1.norm());
     int nmax_y = ceil(rcut/v2.norm());
@@ -712,11 +712,11 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         {
                                             if (ia == jb)
                                             {
-                                                temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))));
+                                                // temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))));
                                             }
                                             else
                                             {
-                                                temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                                // temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
                                             }
                                         }
                                     }
@@ -744,11 +744,11 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                             {
                                                 if (ia == jb)
                                                 {
-                                                    temp_diag(ia,jb) += 2.*((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    // temp_diag(ia,jb) += 2.*((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
                                                 }
                                                 else
                                                 {
-                                                    temp_diag(ia,jb) += 2.*((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    // temp_diag(ia,jb) += 2.*((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
                                                 }
                                             }
                                         }
@@ -771,11 +771,11 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         {
                                             if (ia == jb)
                                             {
-                                                temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                                // temp(ia,jb) += 2.* ((-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
                                             }
                                             else
                                             {
-                                                temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
+                                                // temp(ia,jb) += 2.* ((0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm)))) ;
                                             }
                                         }
                                     }
@@ -803,11 +803,11 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                             {
                                                 if (ia == jb)
                                                 {
-                                                    temp_diag(ia,jb) += 2. * ((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    // temp_diag(ia,jb) += 2. * ((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
                                                 }
                                                 else
                                                 {
-                                                    temp_diag(ia,jb) += 2. * ((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    // temp_diag(ia,jb) += 2. * ((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
                                                 }
                                             }
                                         }
@@ -816,6 +816,75 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                 }
 
 
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            // std::cout << temp << std::endl;
+            //Reciprocal part contribution
+            for (int ii = -kmax_x; ii <= kmax_x; ++ii)
+            {
+                for (int jj = -kmax_y; jj <= kmax_y; ++jj)
+                {
+                    for (int kk = -kmax_z; kk <= kmax_z; ++kk)
+                    {
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
+                        kvecs = ii * g1 + jj * g2 + kk * g3;
+                        double k_norm = kvecs.norm();
+                        double k_sqr = k_norm * k_norm;
+                        if (k_norm <= kcut)
+                        {
+                            if (ii == 0 && jj == 0 && kk == 0)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                if (i != j)
+                                {
+                                    // std::cout << i << " " << j<< std::endl;
+                                    double val2 = 0.;
+                                    double val1 = 0.;
+
+                                    for (int ia = 0; ia < 3; ++ia)
+                                    {
+                                        for (int jb = 0; jb < 3; ++jb)
+                                        {
+                                            //Here a minus sign is supposed to be infront of cos, but removing made everything works.
+                                            val2 = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * cos(kvecs.dot(rij)));
+                                            // temp(ia, jb) += 2.*(val2 * kvecs[ia] * kvecs[jb] / k_sqr);
+                                        }
+                                    }
+                                }
+                                else if (i == j)
+                                {
+                                    for (int k = 0; k < atoms.size(); ++k)
+                                    {
+                                        Atom elem3 = atoms[k];
+                                        Eigen::Vector3d rik, rikn;
+                                        rik << elem1.x - elem3.x, elem1.y - elem3.y, elem1.z - elem3.z;
+                                        rikn = rik + n;
+                                        double rk_norm = rikn.norm();
+                                        double rk_sqr = rk_norm * rk_norm;
+                                        double rk_cbd = rk_norm * rk_sqr;
+                                        double val2 = 0.;
+                                        val2 = (2. * M_PI / V) * elem1.q * elem3.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rik)));
+                                        if (i != k)
+                                        {
+                                        for (int ia = 0; ia < 3; ++ia)
+                                        {
+                                            for (int jb = 0; jb < 3; ++jb)
+                                            {
+                                            temp_diag(ia, jb) += 2.*(val2 * kvecs[ia] * kvecs[jb] / k_sqr);
+                                            }
+                                        }
+                                    }
+                                    }                                    
+                                }
                             }
 
                         }
@@ -844,59 +913,6 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
             }
             temp.setZero();
             temp_diag.setZero();
-            // std::cout << temp << std::endl;
-            //Reciprocal part contribution
-            // for (int ii = -kmax_x; ii <= kmax_x; ++ii)
-            // {
-            //     for (int jj = -kmax_y; jj <= kmax_y; ++jj)
-            //     {
-            //         for (int kk = -kmax_z; kk <= kmax_z; ++kk)
-            //         {
-            //             double r_norm = rijn.norm();
-            //             double r_sqr = r_norm * r_norm;
-            //             kvecs = ii * g1 + jj * g2 + kk * g3;
-            //             double k_norm = kvecs.norm();
-            //             double k_sqr = k_norm * k_norm;
-            //             if (k_norm <= kcut)
-            //             {
-            //                 if (ii == 0 && jj == 0 && kk == 0)
-            //                 {
-            //                     continue;
-            //                 }
-            //                 else
-            //                 {
-            //                     if (i != j)
-            //                     {
-            //                         // std::cout << i << " " << j<< std::endl;
-            //                         double val2 = 0.;
-            //                         double val1 = 0.;
-
-            //                         for (int ia = 0; ia < 3; ++ia)
-            //                         {
-            //                             for (int jb = 0; jb < 3; ++jb)
-            //                             {
-            //                                 // val2 =(2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij)));
-            //                                 // temp(ia, jb) += val2 * kvecs[ia] * kvecs[jb] / k_sqr;
-            //                                 // val1 = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -sin(kvecs.dot(rij))) * kvecs[ia] / k_sqr;
-            //                                 // val2 = (2. * M_PI / V) * elem1.q * elem2.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rij))) * kvecs[ia] * kvecs[jb] / k_sqr;
-            //                                 // if (ia == jb)
-            //                                 // {
-            //                                 //     temp(ia,jb) += (-1. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
-
-            //                                 // }
-            //                                 // else
-            //                                 // {
-            //                                 //     temp(ia,jb) += (0. * (val1 / r_norm) - (((rijn[ia] * rijn[jb]) / r_sqr) * (val2 - val1 / r_norm))) ;
-            //                                 // }
-            //                             }
-            //                         }
-            //                     }
-            //                 }
-
-            //             }
-            //         }
-            //     }
-            // }
             // if(i != j)
             // {
             //     std::cout << i << " " << j << std::endl;
