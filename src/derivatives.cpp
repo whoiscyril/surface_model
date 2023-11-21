@@ -838,7 +838,7 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                     }
                     else
                     {
-                        // result(derv2_row, derv2_col) = toeV*temp(iii, jjj);
+                        result(derv2_row, derv2_col) = toeV*temp(iii, jjj);
                     }
                 }
             }
@@ -908,7 +908,7 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
     }
 
     // temp_diag.setZero();
-    std::cout << result << std::endl;
+    // std::cout << result << std::endl;
     return result;
 }
 
@@ -1178,4 +1178,87 @@ UnitCell calc_forces(UnitCell unitcell_init)
     // }
 
     return unitcell_wforces;
+}
+
+Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
+{
+    Eigen::MatrixXd result(6,6);
+
+int natom = unitcell_init.coordinates_cart.size();
+    std::vector<Atom> atoms = unitcell_init.coordinates_cart;
+    double cutoff;
+    //Max buck cut off
+    std::vector<Buckingham> buck = unitcell_init.buckingham_potentials;
+    Eigen::Matrix3d lattice_vectors = unitcell_init.lattice_vectors;
+    Eigen::Vector3d v1, v2, v3;
+    Eigen::Vector3d n;
+    Eigen::Vector3d total_buck_derv1;
+    Eigen::MatrixXd derv2(3*natom, 3*natom);
+    derv2.setZero();
+    n.setZero();
+    v1 = lattice_vectors.row(0);
+    v2 = lattice_vectors.row(1);
+    v3 = lattice_vectors.row(2);
+    Eigen::Vector3d a1 = unitcell_init.lattice_vectors.row(0);
+    Eigen::Vector3d a2 = unitcell_init.lattice_vectors.row(1);
+    Eigen::Vector3d a3 = unitcell_init.lattice_vectors.row(2);
+    const double toeV = 14.39964390675221758120;
+    Eigen::Vector3d g1 = unitcell_init.reciprocal_vectors.row(0);
+    Eigen::Vector3d g2 = unitcell_init.reciprocal_vectors.row(1);
+    Eigen::Vector3d g3 = unitcell_init.reciprocal_vectors.row(2);
+
+    double V = unitcell_init.volume;
+
+    double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+
+    for (const auto& elem : buck)
+    {
+        if (elem.cut_off2 > cutoff)
+        {
+            cutoff = elem.cut_off2;
+        }
+        else
+        {
+            continue;
+        }
+    }
+
+    //Max images in 3 directions;
+
+    double xmax = ceil(cutoff/v1.norm());
+    double ymax = ceil(cutoff/v2.norm());
+    double zmax = ceil(cutoff/v3.norm());
+
+    Eigen::Vector3d rij, rijn;
+    rij.setZero();
+    rijn.setZero();
+
+    for (int i = 0; i < atoms.size(); ++i)
+    {
+        Atom elem1 = atoms[i];
+        for (int j = 0; j < atoms.size(); ++j)
+        {
+            Atom elem2 = atoms[j];
+            rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+
+            for (int ii = -xmax; ii <= xmax; ++ii)
+            {
+                for (int jj = -ymax; jj <= ymax; ++jj)
+                {
+                    for (int kk = -zmax; kk <= zmax; ++kk)
+                    {
+                        n << ii, jj, kk;
+                        rijn = rij + n;
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    return result;
 }
