@@ -270,7 +270,7 @@ void internal_derv2_buck(UnitCell& unitcell_init)
         }
 
     }
-    std::cout << derv2 << std::endl;
+    // std::cout << derv2 << std::endl;
 
 //First derivative
     for (int i = 0; i <atoms.size(); ++i)
@@ -382,7 +382,7 @@ void calc_strain_deriv(UnitCell& unitcell_init)
     Eigen::Vector3d rij;
     Eigen::Vector3d n;
     Eigen::Vector3d rijn;
-
+    double test_result;
     for (auto& elem1 : atoms)
     {
         for (auto& elem2 : atoms)
@@ -402,7 +402,7 @@ void calc_strain_deriv(UnitCell& unitcell_init)
                         {
                             for (const auto& pot : unitcell_init.buckingham_potentials)
                             {
-                                double expterm = (-pot.A / pot.rho) * exp(-rij.norm()/pot.rho) + 6. * pot.C / pow(rij.norm(), 7.);
+                                double expterm = (-pot.A / pot.rho) * exp(-rij.norm()/pot.rho) + 6. * pot.C / pow(rij.norm(), 7.) ;
                                 // std::cout << expterm << std::endl;
                                 if (((pot.atom1_type == elem1.type) && (pot.atom1_label == elem1.label)) &&
                                         ((pot.atom2_type == elem2.type) && (pot.atom2_label == elem2.label)) &&
@@ -465,7 +465,7 @@ void calc_strain_deriv(UnitCell& unitcell_init)
         }
     }
     deriv = deriv * 0.5;
-    // std::cout << deriv << std::endl;
+    std::cout << deriv << std::endl;
 
     //Real contribution
     const double toeV = 14.39964390675221758120;
@@ -738,21 +738,21 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem3.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem3.q/rk_cbd;
                                         if (i != k)
                                         {
-                                        for (int ia = 0; ia < 3; ++ia)
-                                        {
-                                            for (int jb = 0; jb < 3; ++jb)
+                                            for (int ia = 0; ia < 3; ++ia)
                                             {
-                                                if (ia == jb)
+                                                for (int jb = 0; jb < 3; ++jb)
                                                 {
-                                                    // temp_diag(ia,jb) += 2.*((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
-                                                }
-                                                else
-                                                {
-                                                    // temp_diag(ia,jb) += 2.*((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    if (ia == jb)
+                                                    {
+                                                        // temp_diag(ia,jb) += 2.*((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    }
+                                                    else
+                                                    {
+                                                        // temp_diag(ia,jb) += 2.*((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
                                     }
                                 }
 
@@ -797,24 +797,23 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         val2 = 2. * exp(-kappa*kappa*rk_sqr) * kappa * kappa * kappa * elem1.q * elem3.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*rk_sqr) * kappa * elem1.q * elem3.q / sqrt(M_PI)/rk_sqr + erfc(kappa*rk_norm) * elem1.q * elem3.q/rk_cbd;
                                         if (i != k)
                                         {
-                                        for (int ia = 0; ia < 3; ++ia)
-                                        {
-                                            for (int jb = 0; jb < 3; ++jb)
+                                            for (int ia = 0; ia < 3; ++ia)
                                             {
-                                                if (ia == jb)
+                                                for (int jb = 0; jb < 3; ++jb)
                                                 {
-                                                    // temp_diag(ia,jb) += 2. * ((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
-                                                }
-                                                else
-                                                {
-                                                    // temp_diag(ia,jb) += 2. * ((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    if (ia == jb)
+                                                    {
+                                                        // temp_diag(ia,jb) += 2. * ((1. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    }
+                                                    else
+                                                    {
+                                                        // temp_diag(ia,jb) += 2. * ((0. * val1 / rk_norm) + ((rikn[ia] * rikn[jb]) / rk_sqr) * (val2 - val1 / rk_norm));
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                    }
                                 }
-
 
                             }
 
@@ -875,15 +874,15 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
                                         val2 = (2. * M_PI / V) * elem1.q * elem3.q * (exp(-k_sqr/4./kappa/kappa) * -cos(kvecs.dot(rik)));
                                         if (i != k)
                                         {
-                                        for (int ia = 0; ia < 3; ++ia)
-                                        {
-                                            for (int jb = 0; jb < 3; ++jb)
+                                            for (int ia = 0; ia < 3; ++ia)
                                             {
-                                            temp_diag(ia, jb) += 2.*(val2 * kvecs[ia] * kvecs[jb] / k_sqr);
+                                                for (int jb = 0; jb < 3; ++jb)
+                                                {
+                                                    temp_diag(ia, jb) += 2.*(val2 * kvecs[ia] * kvecs[jb] / k_sqr);
+                                                }
                                             }
                                         }
                                     }
-                                    }                                    
                                 }
                             }
 
@@ -919,7 +918,7 @@ Eigen::MatrixXd derv2_electrostatics(UnitCell unitcell_init)
             //     std::cout << toeV*temp << std::endl;
             // }
         }
-    // temp.setZero();
+        // temp.setZero();
 
     }
 
@@ -1200,7 +1199,7 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
 {
     Eigen::MatrixXd result(6,6);
 
-int natom = unitcell_init.coordinates_cart.size();
+    int natom = unitcell_init.coordinates_cart.size();
     std::vector<Atom> atoms = unitcell_init.coordinates_cart;
     double cutoff;
     //Max buck cut off
@@ -1250,7 +1249,10 @@ int natom = unitcell_init.coordinates_cart.size();
     Eigen::Vector3d rij, rijn;
     rij.setZero();
     rijn.setZero();
-
+    double temp_derv_1;
+    double temp_derv_2;
+    double intact[4];
+    double test_result;
     for (int i = 0; i < atoms.size(); ++i)
     {
         Atom elem1 = atoms[i];
@@ -1265,16 +1267,57 @@ int natom = unitcell_init.coordinates_cart.size();
                 {
                     for (int kk = -zmax; kk <= zmax; ++kk)
                     {
-                        n << ii, jj, kk;
+                        n = ii * a1 + jj * a2 + kk * a3;
                         rijn = rij + n;
+                        double r_norm = rijn.norm();
+                        double r_sqr = r_norm * r_norm;
+                        if (r_norm < cutoff)
+                        {
+                            if ( ii == 0 && jj == 0 && kk == 0)
+                            {
+
+                                if (i != j)
+                                {
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
+                                    temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
+                                }
+                                intact[1] = temp_derv_1 / rijn.norm() ; //V1 term
+
+                                intact[3] = (temp_derv_2 - intact[1]) / rijn.norm() / rijn.norm();//V2 term
+                                    // test_result += 0.25*(rijn[0] * rijn[0] + rijn[1] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
+                                    test_result +=  pow(rijn[0], 2.) * 2.* intact[1] + pow(rijn[0], 4.) * intact[3];
+                                }
+                            }
+                            else
+                            {
+
+                                for (const auto pot : buck)
+                                {
+                                    temp_derv_1 = derv1_scalar(elem1,elem2,n,pot);
+                                    temp_derv_2 = derv2_scalar(elem1,elem2,n,pot);
+                                }
+                                intact[1] = temp_derv_1 / rijn.norm(); //V1 term
+
+                                intact[3] = (temp_derv_2 - intact[1]) / rijn.norm()/rijn.norm();//V2 term
+                                    // test_result +=  (rijn[0] * rijn[0]) * intact[1] + rijn[0] * rijn[0] * rijn[0] * rijn[0] * intact[3];
+                                // test_result +=  0.25*(rijn[0] * rijn[0] + rijn[1] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
+                                    test_result +=  pow(rijn[0], 2.) * 2.* intact[1] + pow(rijn[0], 4.) * intact[3];
+
+                                
+                            }
+                        
+                        }
+
                     }
+
                 }
             }
+
         }
 
-
     }
-
-
+    std::cout <<0.5 * test_result << std::endl;
     return result;
 }
