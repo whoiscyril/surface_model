@@ -372,4 +372,3 @@ double coloumb_derv2_scalar_real(Atom atom1, Atom atom2, Eigen::Vector3d n, Eige
 
 
 
-
