@@ -1306,6 +1306,11 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                     result(1,4) += (rijn[0]  * rijn[2]) * (rijn[1] *rijn[1]) *intact[3];
                                     result(1,5) += (rijn[0]  * rijn[1]) * (rijn[1] *rijn[1]) *intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1] + rijn[0] * rijn[1]);
                                     result(2,3) += (rijn[1]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2] + rijn[1] * rijn[2]);   
+                                    result(2,4) += (rijn[0]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2] + rijn[0] * rijn[2]);
+                                    result(2,5) += (rijn[0]  * rijn[1]) * (rijn[2] * rijn[2]) * intact[3];
+                                    result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
+                                    result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
+                                    result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
                                 }
                             }
                             else
@@ -1332,12 +1337,16 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                     result(0,3) += intact[3] * rijn[0] * rijn[0] * rijn[1] * rijn[2];
                                     result(0,4) += 0.5*(rijn[2] * rijn[0] + rijn[0] * rijn[2]) * intact[1] + (rijn[0]  * rijn[2]) * (rijn[0] *rijn[0]) *intact[3];
                                     result(0,5) += 0.5*(rijn[1] * rijn[0] + rijn[0] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[0]) *intact[3];
-
                                     result(1,2) += intact[3] * rijn[1] * rijn[1] * rijn[2] * rijn[2];
                                     result(1,3) += intact[3] * rijn[1] * rijn[2] * rijn[1] * rijn[1];
                                     result(1,4) +=  (rijn[0]  * rijn[2]) * (rijn[1] *rijn[1]) *intact[3];
                                     result(1,5) += (rijn[0]  * rijn[1]) * (rijn[1] *rijn[1]) *intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1] + rijn[0] * rijn[1]);
                                     result(2,3) += (rijn[1]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2] + rijn[1] * rijn[2]);   
+                                    result(2,4) += (rijn[0]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2] + rijn[0] * rijn[2]);
+                                    result(2,5) += (rijn[0]  * rijn[1]) * (rijn[2] * rijn[2]) * intact[3];
+                                    result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
+                                    result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
+                                    result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
 
 
                                 
@@ -1352,6 +1361,16 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
 
         }
 
+    }
+    for (int i = 0; i < 6; ++i)
+    {
+        for (int j = 0; j < 6; ++j)
+        {
+            if (i != j)
+            {
+                result(j,i) = result(i,j);
+            }
+        }
     }
     std::cout <<0.5 * result << std::endl;
     return result;
