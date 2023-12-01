@@ -8,7 +8,7 @@ NumberOfSpecies      2
 
 LatticeConstant 1.0 Ang
 %block LatticeParameters
-    4.0000    5.0000    6.0000   60.0000   75.0000   90.0000
+    5.0000    5.0000    5.0000   90.0000   90.0000   90.0000
 %endblock LatticeParameters
 
 AtomicCoordinatesFormat Fractional

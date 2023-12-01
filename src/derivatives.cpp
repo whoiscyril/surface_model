@@ -1224,9 +1224,9 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
 
     double V = unitcell_init.volume;
 
-    double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
-    double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
-    double kcut = 2.*kappa*sqrt((-log(10E-17)));
+    // double kappa = pow(((natom * 1. * M_PI*M_PI*M_PI)/ V / V), 1./6.);
+    // double rcut = pow( -log(10E-17)/ (kappa * kappa),1./2.);
+    // double kcut = 2.*kappa*sqrt((-log(10E-17)));
 
     for (const auto& elem : buck)
     {
@@ -1245,6 +1245,20 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
     double xmax = ceil(cutoff/v1.norm());
     double ymax = ceil(cutoff/v2.norm());
     double zmax = ceil(cutoff/v3.norm());
+
+        double kappa = 0.164585;
+    double rcut = 12.956954;
+    double kcut = 4.265049;
+
+
+
+    int nmax_x = ceil(rcut/a1.norm());
+    int nmax_y = ceil(rcut/a2.norm());
+    int nmax_z = ceil(rcut/a3.norm());
+    int kmax_x = ceil(kcut/g1.norm());
+    int kmax_y = ceil(kcut/g2.norm());
+    int kmax_z = ceil(kcut/g3.norm());
+
 
     Eigen::Vector3d rij, rijn;
     rij.setZero();
@@ -1271,6 +1285,7 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                         rijn = rij + n;
                         double r_norm = rijn.norm();
                         double r_sqr = r_norm * r_norm;
+                        double r_cbd = r_norm * r_sqr;
                         if (r_norm < cutoff)
                         {
                             if ( ii == 0 && jj == 0 && kk == 0)
@@ -1288,6 +1303,7 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                 intact[3] = (temp_derv_2 - intact[1]) / rijn.norm() / rijn.norm();//V2 term
                                     // test_result += 0.25*(rijn[0] * rijn[0] + rijn[1] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
                                     // test_result +=  pow(rijn[0], 2.) * 2.* intact[1] + pow(rijn[0], 4.) * intact[3];
+
 
                                     //Hardcode strain-strain derivatives
                                     result(0,0) += intact[3] * pow(rijn[0], 4.) + rijn[0] * rijn[0] * intact[1] + 0.25 * intact[1] * (rijn[0] * rijn[0] * 4);
@@ -1311,6 +1327,10 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                     result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
                                     result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
                                     result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
+
+
+
+                                
                                 }
                             }
                             else
@@ -1326,6 +1346,7 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                 intact[3] = (temp_derv_2 - intact[1]) / rijn.norm()/rijn.norm();//V2 term
                                     // test_result +=  (rijn[0] * rijn[0]) * intact[1] + rijn[0] * rijn[0] * rijn[0] * rijn[0] * intact[3];
                                 // test_result +=  0.25*(rijn[0] * rijn[0] + rijn[1] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
+
                                     result(0,0) += intact[3] * pow(rijn[0], 4.) + rijn[0] * rijn[0] * intact[1] + 0.25 * intact[1] * (rijn[0] * rijn[0] * 4);
                                     result(1,1) += intact[3] * pow(rijn[1], 4.) + rijn[1] * rijn[1] * intact[1] + 0.25 * intact[1] * (rijn[1] * rijn[1] * 4);
                                     result(2,2) += intact[3] * pow(rijn[2], 4.) + rijn[2] * rijn[2] * intact[1] + 0.25 * intact[1] * (rijn[2] * rijn[2] * 4);
@@ -1346,10 +1367,7 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
                                     result(2,5) += (rijn[0]  * rijn[1]) * (rijn[2] * rijn[2]) * intact[3];
                                     result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
                                     result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
-                                    result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
-
-
-                                
+                                    result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);                                
                             }
                         
                         }
@@ -1362,16 +1380,115 @@ Eigen::MatrixXd strain_strain2(UnitCell unitcell_init)
         }
 
     }
-    for (int i = 0; i < 6; ++i)
+    std::cout <<0.5 * result << std::endl;
+
+//Now calculate real-part electrostatics contribution
+
+
+
+
+for (int i = 0; i < atoms.size(); ++i)
+{
+    Atom elem1 = atoms[i];
+    for (int j = 0; j < atoms.size(); ++j)
     {
-        for (int j = 0; j < 6; ++j)
+        Atom elem2 = atoms[j];
+        rij << elem1.x - elem2.x, elem1.y - elem2.y, elem1.z - elem2.z;
+        for (int ii = -nmax_x; ii <= nmax_x; ++ii)
         {
-            if (i != j)
+            for (int jj = -nmax_y; jj <= nmax_y; ++jj)
             {
-                result(j,i) = result(i,j);
+                for (int kk = -nmax_z; kk <= nmax_z; ++kk)
+                {
+                    n = ii * a1 + jj * a2 + kk * a3;
+                    rijn = rij + n;
+                    double r_norm = rijn.norm();
+                    double r_sqr = r_norm * r_norm;
+                    double r_cbd = r_norm * r_sqr;
+                    if (rijn.norm() <= rcut)
+                    {
+                        if (ii == 0 && jj == 0 && kk == 0)
+                        {
+                            if (i != j)
+                            {                                    
+                                // intact[1] = -exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / r_norm - erfc(kappa*r_norm) * elem1.q * elem2.q / 2. / r_sqr;
+                                // intact[3] = 2. * exp(-kappa*kappa*r_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/r_sqr + erfc(kappa*r_norm) * elem1.q * elem2.q/r_cbd;
+
+                                // intact[1] = -12. * 1000000 / pow(r_norm, 13.);
+                                // intact[3] = -12 * -13 * 1000000 / pow(r_norm, 14.);
+
+
+                                //     result(0,0) += intact[3] * pow(rijn[0], 4.) + rijn[0] * rijn[0] * intact[1] + 0.25 * intact[1] * (rijn[0] * rijn[0] * 4);
+                                //     result(1,1) += intact[3] * pow(rijn[1], 4.) + rijn[1] * rijn[1] * intact[1] + 0.25 * intact[1] * (rijn[1] * rijn[1] * 4);
+                                //     result(2,2) += intact[3] * pow(rijn[2], 4.) + rijn[2] * rijn[2] * intact[1] + 0.25 * intact[1] * (rijn[2] * rijn[2] * 4);
+                                //     result(3,3) += 0.5*(rijn[2] * rijn[2] + rijn[1] * rijn[1]) * intact[1] + (rijn[1]  * rijn[2]) * (rijn[1] *rijn[2]) *intact[3];
+                                //     result(4,4) += 0.5*(rijn[2] * rijn[2] + rijn[0] * rijn[0]) * intact[1] + (rijn[0]  * rijn[2]) * (rijn[0] *rijn[2]) *intact[3];
+                                //     result(5,5) += 0.5*(rijn[1] * rijn[1] + rijn[0] * rijn[0]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
+                                //     result(0,1) += intact[3] * rijn[0] * rijn[0] * rijn[1] * rijn[1];
+                                //     result(0,2) += intact[3] * rijn[0] * rijn[0] * rijn[2] * rijn[2];
+                                //     result(0,3) += intact[3] * rijn[0] * rijn[0] * rijn[1] * rijn[2];
+                                //     result(0,4) += 0.5*(rijn[2] * rijn[0] + rijn[0] * rijn[2]) * intact[1] + (rijn[0]  * rijn[2]) * (rijn[0] *rijn[0]) *intact[3];
+                                //     result(0,5) += 0.5*(rijn[1] * rijn[0] + rijn[0] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[0]) *intact[3];                                    
+                                //     result(1,2) += intact[3] * rijn[1] * rijn[1] * rijn[2] * rijn[2];
+                                //     result(1,3) += intact[3] * rijn[1] * rijn[2] * rijn[1] * rijn[1];
+                                //     result(1,4) += (rijn[0]  * rijn[2]) * (rijn[1] *rijn[1]) *intact[3];
+                                //     result(1,5) += (rijn[0]  * rijn[1]) * (rijn[1] *rijn[1]) *intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1] + rijn[0] * rijn[1]);
+                                //     result(2,3) += (rijn[1]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2] + rijn[1] * rijn[2]);   
+                                //     result(2,4) += (rijn[0]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2] + rijn[0] * rijn[2]);
+                                //     result(2,5) += (rijn[0]  * rijn[1]) * (rijn[2] * rijn[2]) * intact[3];
+                                //     result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
+                                //     result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
+                                //     result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
+                            }
+                        }
+                        else
+                        {
+                            // intact[1] = -exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI) / r_norm - erfc(kappa*r_norm) * elem1.q * elem2.q / 2. / r_sqr;
+                            // intact[3] =2. * exp(-kappa*kappa*r_sqr) * kappa * kappa * kappa * elem1.q * elem2.q / sqrt(M_PI) + 2. * exp(-kappa*kappa*r_sqr) * kappa * elem1.q * elem2.q / sqrt(M_PI)/r_sqr + erfc(kappa*r_norm) * elem1.q * elem2.q/r_cbd;
+
+                                // intact[1] = -12. * 1000000. / pow(r_norm, 13.);
+                                // intact[3] = -12 * -13 * 1000000 / pow(r_norm, 14.);
+                                //     result(0,0) += intact[3] * pow(rijn[0], 4.) + rijn[0] * rijn[0] * intact[1] + 0.25 * intact[1] * (rijn[0] * rijn[0] * 4);
+                                //     result(1,1) += intact[3] * pow(rijn[1], 4.) + rijn[1] * rijn[1] * intact[1] + 0.25 * intact[1] * (rijn[1] * rijn[1] * 4);
+                                //     result(2,2) += intact[3] * pow(rijn[2], 4.) + rijn[2] * rijn[2] * intact[1] + 0.25 * intact[1] * (rijn[2] * rijn[2] * 4);
+                                //     result(3,3) += 0.5*(rijn[2] * rijn[2] + rijn[1] * rijn[1]) * intact[1] + (rijn[1]  * rijn[2]) * (rijn[1] *rijn[2]) *intact[3];
+                                //     result(4,4) += 0.5*(rijn[2] * rijn[2] + rijn[0] * rijn[0]) * intact[1] + (rijn[0]  * rijn[2]) * (rijn[0] *rijn[2]) *intact[3];
+                                //     result(5,5) += 0.5*(rijn[1] * rijn[1] + rijn[0] * rijn[0]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[1]) *intact[3];
+                                //     result(0,1) += intact[3] * rijn[0] * rijn[0] * rijn[1] * rijn[1];
+                                //     result(0,2) += intact[3] * rijn[0] * rijn[0] * rijn[2] * rijn[2];
+                                //     result(0,3) += intact[3] * rijn[0] * rijn[0] * rijn[1] * rijn[2];
+                                //     result(0,4) += 0.5*(rijn[2] * rijn[0] + rijn[0] * rijn[2]) * intact[1] + (rijn[0]  * rijn[2]) * (rijn[0] *rijn[0]) *intact[3];
+                                //     result(0,5) += 0.5*(rijn[1] * rijn[0] + rijn[0] * rijn[1]) * intact[1] + (rijn[0]  * rijn[1]) * (rijn[0] *rijn[0]) *intact[3];                                    
+                                //     result(1,2) += intact[3] * rijn[1] * rijn[1] * rijn[2] * rijn[2];
+                                //     result(1,3) += intact[3] * rijn[1] * rijn[2] * rijn[1] * rijn[1];
+                                //     result(1,4) += (rijn[0]  * rijn[2]) * (rijn[1] *rijn[1]) *intact[3];
+                                //     result(1,5) += (rijn[0]  * rijn[1]) * (rijn[1] *rijn[1]) *intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1] + rijn[0] * rijn[1]);
+                                //     result(2,3) += (rijn[1]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2] + rijn[1] * rijn[2]);   
+                                //     result(2,4) += (rijn[0]  * rijn[2]) * (rijn[2] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2] + rijn[0] * rijn[2]);
+                                //     result(2,5) += (rijn[0]  * rijn[1]) * (rijn[2] * rijn[2]) * intact[3];
+                                //     result(3,4) += (rijn[0]  * rijn[2]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[1]);
+                                //     result(3,5) += (rijn[0]  * rijn[1]) * (rijn[1] * rijn[2]) * intact[3] + 0.5 * intact[1] * (rijn[0] * rijn[2]);
+                                //     result(4,5) += (rijn[0]  * rijn[2]) * (rijn[0] * rijn[1]) * intact[3] + 0.5 * intact[1] * (rijn[1] * rijn[2]);
+                        }
+                    }
+                }
             }
         }
     }
-    std::cout <<0.5 * result << std::endl;
+}
+
+
+
+
+    // for (int i = 0; i < 6; ++i)
+    // {
+    //     for (int j = 0; j < 6; ++j)
+    //     {
+    //         if (i != j)
+    //         {
+    //             result(j,i) = result(i,j);
+    //         }
+    //     }
+    // }
     return result;
 }
